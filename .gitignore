@@ -103,5 +103,13 @@ dist
 # TernJS port file
 .tern-port
 
+# Contracts
+artifacts
+cache
+typechain
+coverage.json
+gasReporterOutput.json
+
 # misc
 .DS_Store
+
