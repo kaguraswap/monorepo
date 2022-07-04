@@ -1,0 +1,12 @@
+{
+  "ropsten": {
+    "chainId": "3",
+    "explorer": "https://ropsten.etherscan.io/",
+    "protocol": "0x"
+  },
+  "rinkeby": {
+    "chainId": "4",
+    "explorer": "https://rinkeby.etherscan.io/",
+    "protocol": "seaport"
+  }
+}
