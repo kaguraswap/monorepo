@@ -1,17 +1,17 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
 
-import { assets } from "../../../../../common/utils/fixture";
-import { HomeTemplate as Component } from "./Home";
+import { Link as Component } from "./Link";
 
 export default {
-  title: "Templates/Home",
+  title: "Atoms/Link",
   component: Component,
 } as ComponentMeta<typeof Component>;
 
 const Template: ComponentStory<typeof Component> = (args) => <Component {...args} />;
 
-export const Home = Template.bind({});
-Home.args = {
-  assets,
+export const Link = Template.bind({});
+Link.args = {
+  href: "http://localhost:3000",
+  children: "Link",
 };

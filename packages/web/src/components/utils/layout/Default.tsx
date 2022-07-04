@@ -1,7 +1,9 @@
 import { Box } from "@chakra-ui/react";
 import React from "react";
 
-import { Head } from "../utils/Head";
+import { Footer } from "../../organisms/Footer";
+import { Header } from "../../organisms/Header";
+import { Head } from "../Head";
 
 export interface DefaultLayoutProps {
   children: React.ReactNode;
@@ -21,7 +23,9 @@ export const DefaultLayout: React.FC<DefaultLayoutProps> = ({
   return (
     <Box>
       <Head title={title} description={description} image={image} type={type} />
+      <Header />
       {children}
+      <Footer />
     </Box>
   );
 };

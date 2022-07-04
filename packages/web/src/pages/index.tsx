@@ -1,9 +1,18 @@
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 
-import { HomeTemplate } from "../components/templates/Home";
+import { assets } from "../../../common/utils/fixture";
+import { HomeTemplate, HomeTemplateProps } from "../components/templates/Home";
 
-const HomePage: NextPage = () => {
-  return <HomeTemplate />;
+const HomePage: NextPage<HomeTemplateProps> = ({ assets }) => {
+  return <HomeTemplate assets={assets} />;
 };
 
 export default HomePage;
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  return {
+    props: {
+      assets,
+    },
+  };
+};

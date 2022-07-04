@@ -4,11 +4,11 @@ import { Asset } from "../../../../../common/types/asset";
 import { AssetList } from "../../organisms/AssetList";
 import { DefaultLayout } from "../../utils/layout";
 
-export interface HomeTemplateProps {
+export interface PortofolioTemplateProps {
   assets: Asset[];
 }
 
-export const HomeTemplate: React.FC<HomeTemplateProps> = ({ assets }) => {
+export const PortofolioTemplate: React.FC<PortofolioTemplateProps> = ({ assets }) => {
   return (
     <DefaultLayout>
       <AssetList assets={assets} />
