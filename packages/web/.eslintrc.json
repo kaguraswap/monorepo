@@ -1,5 +1,5 @@
 {
-  "extends": ["next/core-web-vitals", "plugin:storybook/recommended", "../../.eslintrc.json"],
+  "extends": ["next/core-web-vitals"],
   "settings": {
     "next": {
       "rootDir": "packages/web"

@@ -1,9 +1,7 @@
 import { Box, Text } from "@chakra-ui/react";
-import NextLink from "next/link";
 import React from "react";
 
 import { Asset } from "../../../../../common/types/asset";
-import { Link } from "../../atoms/Link";
 
 export interface AssetListItemProps {
   asset: Asset;

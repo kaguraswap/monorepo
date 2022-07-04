@@ -9,7 +9,7 @@ const AssetPage: NextPage = () => {
 
 export default AssetPage;
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async () => {
   return {
     props: {
       asset,

@@ -9,7 +9,7 @@ const HomePage: NextPage<HomeTemplateProps> = ({ assets }) => {
 
 export default HomePage;
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async () => {
   return {
     props: {
       assets,

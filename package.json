@@ -15,7 +15,7 @@
     "fix:sol": "yarn lint:sol --fix",
     "lint": "run-p lint:*",
     "lint:prettier": "prettier '**/*.{json,md,sol}' --ignore-path .gitignore --check",
-    "lint:eslint": "eslint '**/*.{js,ts}' --ignore-path .gitignore",
+    "lint:eslint": "eslint '**/*.{js,ts,jsx,tsx}' --ignore-path .gitignore",
     "lint:sol": "solhint 'packages/contracts/**/*.sol' --ignore-path .gitignore",
     "test": "run-p test:*",
     "test:contracts": "yarn workspace @kaguraswap/contracts test",

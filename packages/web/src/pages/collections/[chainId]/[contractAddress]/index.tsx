@@ -9,7 +9,7 @@ const CollectionPage: NextPage<CollectionTemplateProps> = ({ collection }) => {
 
 export default CollectionPage;
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async () => {
   return {
     props: {
       collection,
