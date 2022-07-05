@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "license": "MIT",
   "private": true,
+  "engines": {
+    "node": "16"
+  },
   "workspaces": [
     "packages/**"
   ],
@@ -22,9 +25,12 @@
     "dev": "run-p dev:*",
     "dev:web": "yarn workspace @kaguraswap/web dev",
     "dev:storybook": "yarn workspace @kaguraswap/web storybook",
+    "dev:functions": "yarn workspace @kaguraswap/functions dev",
+    "dev:firebase": "firebase emulators:start --only auth,functions,firestore,pubsub",
     "build": "run-p build:*",
     "build:web": "yarn workspace @kaguraswap/web build",
-    "build:contracts": "yarn workspace @kaguraswap/contracts build"
+    "build:contracts": "yarn workspace @kaguraswap/contracts build",
+    "build:functions": "yarn workspace @kaguraswap/functions build"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.2.4",
@@ -40,6 +46,7 @@
     "eslint-plugin-prettier": "^3.4.1",
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-simple-import-sort": "^7.0.0",
+    "firebase-tools": "^11.2.0",
     "husky": "^8.0.1",
     "lint-staged": "^12.4.1",
     "npm-run-all": "^4.1.5",

@@ -3,7 +3,7 @@ import { RPCSubprovider, Web3ProviderEngine } from "@0x/subproviders";
 import { providerUtils } from "@0x/utils";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { Seaport } from "@opensea/seaport-js";
-import { NFTSwapV4 as ZeroEx } from "@traderxyz/nft-swap-sdk";
+import { NftSwapV4 as ZeroEx } from "@traderxyz/nft-swap-sdk";
 import { ZDK } from "@zoralabs/zdk";
 import { ethers } from "hardhat";
 

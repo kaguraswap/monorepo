@@ -103,6 +103,9 @@ dist
 # TernJS port file
 .tern-port
 
+# Firebase
+.firebase
+
 # Contracts
 artifacts
 cache
@@ -112,4 +115,3 @@ gasReporterOutput.json
 
 # misc
 .DS_Store
-
