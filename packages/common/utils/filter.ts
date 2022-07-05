@@ -1,33 +1,31 @@
-import { Asset } from "../types/asset";
 import { Collection } from "../types/collection";
+import { NFT } from "../types/nft";
 import { Order } from "../types/order";
 
-export const filterAndMergeAssetsWithCollection = (assets: Asset[], collection: Collection) => {
-  return assets
-    .filter((asset) => {
-      return asset.chainId === collection.chainId && asset.contractAddress === collection.contractAddress;
+export const filterAndMergeNFTsWithCollection = (nfts: NFT[], collection: Collection) => {
+  return nfts
+    .filter((nft) => {
+      return nft.chainId === collection.chainId && nft.contractAddress === collection.contractAddress;
     })
-    .map((asset) => {
+    .map((nft) => {
       return {
-        ...asset,
+        ...nft,
         collection,
       };
     });
 };
 
-export const filterAndMergeOrdersWithAsset = (orders: Order[], asset: Asset) => {
+export const filterAndMergeOrdersWithNFT = (orders: Order[], nft: NFT) => {
   return orders
     .filter((order) => {
       return (
-        order.chainId === asset.chainId &&
-        order.contractAddress === asset.contractAddress &&
-        order.tokenId === asset.tokenId
+        order.chainId === nft.chainId && order.contractAddress === nft.contractAddress && order.tokenId === nft.tokenId
       );
     })
     .map((order) => {
       return {
         ...order,
-        asset,
+        nft,
       };
     });
 };

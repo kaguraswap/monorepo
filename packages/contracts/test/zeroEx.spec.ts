@@ -24,7 +24,7 @@ describeWithSeaportFixture(
       zeroEx.signer = offerer;
       const { contractApproved: erc721ContractApproved } = await zeroEx.loadApprovalStatus(erc721, offerer.address);
       if (!erc721ContractApproved) {
-        const approvalTx = await zeroEx.approveTokenOrNftByAsset(erc721, offerer.address);
+        const approvalTx = await zeroEx.approveTokenOrNFTByNFT(erc721, offerer.address);
         await approvalTx.wait();
       }
       const order = zeroEx.buildOrder(erc721, weth, offerer.address);
@@ -33,7 +33,7 @@ describeWithSeaportFixture(
       zeroEx.signer = fulfiller;
       const { contractApproved: wethContractApproved } = await zeroEx.loadApprovalStatus(weth, fulfiller.address);
       if (!wethContractApproved) {
-        const approvalTx = await zeroEx.approveTokenOrNftByAsset(weth, fulfiller.address);
+        const approvalTx = await zeroEx.approveTokenOrNFTByNFT(weth, fulfiller.address);
         await approvalTx.wait();
       }
       const tx = await zeroEx.fillSignedOrder(signedOrder);
@@ -62,7 +62,7 @@ describeWithSeaportFixture(
       zeroEx.signer = offerer;
       const { contractApproved: wethContractApproved } = await zeroEx.loadApprovalStatus(weth, offerer.address);
       if (!wethContractApproved) {
-        const approvalTx = await zeroEx.approveTokenOrNftByAsset(weth, fulfiller.address);
+        const approvalTx = await zeroEx.approveTokenOrNFTByNFT(weth, fulfiller.address);
         await approvalTx.wait();
       }
       const order = zeroEx.buildOrder(weth, erc721, offerer.address);
@@ -71,7 +71,7 @@ describeWithSeaportFixture(
       zeroEx.signer = fulfiller;
       const { contractApproved: erc721ContractApproved } = await zeroEx.loadApprovalStatus(erc721, fulfiller.address);
       if (!erc721ContractApproved) {
-        const approvalTx = await zeroEx.approveTokenOrNftByAsset(erc721, offerer.address);
+        const approvalTx = await zeroEx.approveTokenOrNFTByNFT(erc721, offerer.address);
         await approvalTx.wait();
       }
       const tx = await zeroEx.fillSignedOrder(signedOrder);

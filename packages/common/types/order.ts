@@ -1,13 +1,13 @@
-import { Asset } from "./asset";
+import { NFT } from "./nft";
 
 export interface Order {
   type: "sell" | "buy";
-  chainId: number;
+  chainId: string;
   contractAddress: string;
   tokenId: string;
   currencyContractAddress: string;
   value: string;
   hash: string;
   signature: string;
-  asset?: Asset;
+  nft?: NFT;
 }

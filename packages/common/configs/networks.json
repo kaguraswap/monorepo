@@ -1,12 +1,57 @@
 {
-  "ropsten": {
-    "chainId": "3",
-    "explorer": "https://ropsten.etherscan.io/",
-    "protocol": "0x"
+  "1": {
+    "name": "Ethereum",
+    "chainId": 1,
+    "symbol": "ETH",
+    "type": "evm",
+    "env": "mainnet",
+    "explorer": "https://etherscan.io/",
+    "protocol": "seaport",
+    "api": "covalent"
   },
-  "rinkeby": {
-    "chainId": "4",
-    "explorer": "https://rinkeby.etherscan.io/",
-    "protocol": "seaport"
+  "42": {
+    "name": "Kovan",
+    "symbol": "ETH",
+    "type": "evm",
+    "env": "testnet",
+    "explorer": "https://kovan.etherscan.io/",
+    "protocol": "seaport",
+    "api": "covalent"
+  },
+  "137": {
+    "name": "Polygon",
+    "symbol": "MATIC",
+    "type": "evm",
+    "env": "mainnet",
+    "explorer": "https://polygonscan.com/",
+    "protocol": "seaport",
+    "api": "covalent"
+  },
+  "43113": {
+    "name": "Avalanche Fuji",
+    "symbol": "AVAX",
+    "type": "evm",
+    "env": "testnet",
+    "explorer": "https://testnet.snowtrace.io/",
+    "protocol": "seaport",
+    "api": "covalent"
+  },
+  "43114": {
+    "name": "Avalanche C-Chain",
+    "symbol": "AVAX",
+    "type": "evm",
+    "env": "mainnet",
+    "explorer": "https://snowtrace.io/",
+    "protocol": "seaport",
+    "api": "covalent"
+  },
+  "80001": {
+    "name": "Mumbai",
+    "symbol": "MATIC",
+    "type": "evm",
+    "env": "testnet",
+    "explorer": "https://mumbai.polygonscan.com/",
+    "protocol": "seaport",
+    "api": "covalent"
   }
 }

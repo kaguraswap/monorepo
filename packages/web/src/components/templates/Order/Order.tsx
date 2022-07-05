@@ -4,11 +4,11 @@ import { NFT } from "../../../../../common/types/nft";
 import { NFTList } from "../../organisms/NFTList";
 import { DefaultLayout } from "../../utils/layout";
 
-export interface HomeTemplateProps {
+export interface OrderTemplateProps {
   nfts: NFT[];
 }
 
-export const HomeTemplate: React.FC<HomeTemplateProps> = ({ nfts }) => {
+export const OrderTemplate: React.FC<OrderTemplateProps> = ({ nfts }) => {
   return (
     <DefaultLayout>
       <NFTList nfts={nfts} />

@@ -1,11 +1,11 @@
-import { Asset } from "./asset";
+import { NFT } from "./nft";
 
 export interface Collection {
-  chainId: number;
+  chainId: string;
   contractAddress: string;
   name: string;
   description: string;
   banner: string;
   logo: string;
-  assets?: Asset[];
+  nfts?: NFT[];
 }
