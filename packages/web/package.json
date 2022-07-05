@@ -18,6 +18,7 @@
     "next": "12.2.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-icons": "^4.4.0",
     "web3-react": "^5.0.5"
   },
   "devDependencies": {
