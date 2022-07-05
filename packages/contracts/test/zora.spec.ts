@@ -7,7 +7,7 @@ describeWithSeaportFixture(
   "Zora",
   (fixture) => {
     it.skip("ERC721 <=> ETH", async function () {
-      const { offerer, fulfiller, erc721Mock } = fixture;
+      const { offerer, fulfiller, erc721Mock, zora } = fixture;
       const tokenId = "0";
       const amount = "10000";
       await erc721Mock.mint(offerer.address, tokenId);
@@ -20,7 +20,7 @@ describeWithSeaportFixture(
     });
 
     it.skip("WETH <=> ERC721", async function () {
-      const { offerer, fulfiller, erc721Mock, wethMock } = fixture;
+      const { offerer, fulfiller, erc721Mock, wethMock, zora } = fixture;
       const tokenId = "0";
       const amount = "10000";
       await erc721Mock.mint(fulfiller.address, tokenId);

@@ -21,7 +21,6 @@ describeWithSeaportFixture(
         tokenAddress: wethMock.address,
         amount,
       };
-
       zeroEx.signer = offerer;
       const { contractApproved: erc721ContractApproved } = await zeroEx.loadApprovalStatus(erc721, offerer.address);
       if (!erc721ContractApproved) {

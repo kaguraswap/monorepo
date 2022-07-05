@@ -4,6 +4,7 @@ import { providerUtils } from "@0x/utils";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { Seaport } from "@opensea/seaport-js";
 import { NftSwapV4 as ZeroEx } from "@traderxyz/nft-swap-sdk";
+import { ZDK } from "@zoralabs/zdk";
 import { ethers } from "hardhat";
 
 import { TEST_CHAIN_ID } from "../../lib/constant";
@@ -20,12 +21,14 @@ interface Fixture {
   erc1155Mock: ERC1155Mock;
   seaport: Seaport;
   zeroEx: ZeroEx;
+  zora: ZDK;
 }
 
 interface Target {
   seaport?: boolean;
   zeroEx?: boolean;
   zora?: boolean;
+  kagura?: boolean;
 }
 
 export const describeWithSeaportFixture = (name: string, suiteCb: (fixture: Fixture) => unknown, target: Target) => {
@@ -84,6 +87,8 @@ export const describeWithSeaportFixture = (name: string, suiteCb: (fixture: Fixt
 
       if (target.zora) {
         // TODO:implement zora
+        // TODO:remove "as ZDK"
+        fixture.zora = {} as ZDK;
       }
 
       const ERC20MockFactory = await ethers.getContractFactory("ERC20Mock");

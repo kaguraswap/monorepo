@@ -32,5 +32,5 @@ describeWithSeaportFixture(
       expect(await erc721Mock.ownerOf(tokenId)).to.equal(offerer.address);
     });
   },
-  { seaport: true, zeroEx: true, zora: true }
+  { kagura: true }
 );

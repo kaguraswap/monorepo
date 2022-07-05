@@ -30,7 +30,6 @@ describeWithSeaportFixture(
         },
         offerer.address
       );
-
       const order = await executeAllOfferActions();
       const { executeAllActions: executeAllFulfillActions } = await seaport.fulfillOrders({
         fulfillOrderDetails: [{ order }],
