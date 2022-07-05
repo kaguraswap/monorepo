@@ -5,7 +5,9 @@ import "hardhat-gas-reporter";
 import "solidity-coverage";
 
 import * as dotenv from "dotenv";
-import { HardhatUserConfig, task } from "hardhat/config";
+import { HardhatUserConfig } from "hardhat/config";
+
+import { TEST_CHAIN_ID } from "./lib/constant";
 
 dotenv.config();
 
@@ -21,11 +23,32 @@ const config: HardhatUserConfig = {
           },
         },
       },
+      {
+        version: "0.6.12",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200,
+          },
+        },
+      },
+      {
+        version: "0.4.22",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200,
+          },
+        },
+      },
     ],
   },
   networks: {
     hardhat: {
-      chainId: 1,
+      chainId: TEST_CHAIN_ID,
+      // forking: {
+      //   url: "https://rpc.ankr.com/eth",
+      // },
     },
   },
   gasReporter: {
