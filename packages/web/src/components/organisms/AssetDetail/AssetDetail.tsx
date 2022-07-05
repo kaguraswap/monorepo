@@ -14,7 +14,7 @@ export const AssetDetail: React.FC<AssetDetailProps> = ({ asset }) => {
     <Box>
       <Box maxW="7xl" mx="auto" px={{ base: "4", md: "8", lg: "12" }} py={{ base: "6", md: "8", lg: "12" }}>
         <Stack direction={{ base: "column", lg: "row" }} spacing={{ base: "6", lg: "12", xl: "16" }}>
-          <Image src={asset.image} alt={asset.name}></Image>
+          <Image src={asset.image} alt={asset.name} width={"xl"}></Image>
           <Stack spacing={{ base: "6", lg: "8" }} maxW={{ lg: "sm" }} justify="center">
             <Stack spacing={{ base: "3", md: "4" }}>
               <Stack spacing="3">
@@ -38,7 +38,6 @@ export const AssetDetail: React.FC<AssetDetailProps> = ({ asset }) => {
                   {asset.name}
                 </Heading>
               </Stack>
-              {/* <PriceTag price={229} currency="GBP" rootProps={{ fontSize: 'xl' }} /> */}
               <Text color={useColorModeValue("gray.600", "gray.400")}>{asset.description}</Text>
             </Stack>
             <Stack direction={{ base: "column", md: "row" }} spacing={{ base: "6", md: "8" }}>

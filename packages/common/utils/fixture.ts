@@ -28,7 +28,8 @@ export const _assets: Asset[] = [
     contractAddress: ADDRESS_1,
     tokenId: "0",
     name: "asset name",
-    description: "asset description",
+    description:
+      "With a sleek design and a captivating essence, this is a modern Classic made for every occasion.asset description",
     image: "https://via.placeholder.com/350",
   },
   {
@@ -36,7 +37,8 @@ export const _assets: Asset[] = [
     contractAddress: ADDRESS_1,
     tokenId: "1",
     name: "asset name",
-    description: "asset description",
+    description:
+      "With a sleek design and a captivating essence, this is a modern Classic made for every occasion.asset description",
     image: "https://via.placeholder.com/350",
   },
   {
