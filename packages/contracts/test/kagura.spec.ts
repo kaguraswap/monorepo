@@ -4,7 +4,7 @@ import { ethers } from "hardhat";
 import { describeWithSeaportFixture } from "./utils/setup";
 
 describeWithSeaportFixture(
-  "Zora",
+  "Kagura",
   (fixture) => {
     it.skip("ERC721 <=> ETH", async function () {
       const { offerer, fulfiller, erc721Mock } = fixture;
@@ -32,5 +32,5 @@ describeWithSeaportFixture(
       expect(await erc721Mock.ownerOf(tokenId)).to.equal(offerer.address);
     });
   },
-  { zora: true }
+  { seaport: true, zeroEx: true, zora: true }
 );
