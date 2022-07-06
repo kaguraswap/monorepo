@@ -12,11 +12,10 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { useAddress, useBalance, useDisconnect } from "@thirdweb-dev/react";
+import { useAccount, useAddress, useBalance, useDisconnect } from "@thirdweb-dev/react";
 import React from "react";
 import { IoCopy, IoWalletOutline } from "react-icons/io5";
 import { RiMoneyDollarCircleLine } from "react-icons/ri";
-import { useAccount } from "wagmi";
 
 interface ConnectedWalletProps {
   tokenAddress?: string;

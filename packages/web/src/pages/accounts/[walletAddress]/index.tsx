@@ -13,13 +13,13 @@ export interface AccountPageProps {
 
 const AccountPage: NextPage<AccountPageProps> = ({ walletAddress }) => {
   const [syncedNFTsState, setSyncedNFTsState] = React.useState([]);
-  const [data] = useCollectionData(query(collection(db, "nfts"), where("holder", "==", walletAddress)));
+  const [nftDocs] = useCollectionData(query(collection(db, "nfts"), where("holder", "==", walletAddress)));
   React.useEffect(() => {
-    if (!data) {
+    if (!nftDocs) {
       return;
     }
-    setSyncedNFTsState(data as any);
-  }, [data]);
+    setSyncedNFTsState(nftDocs as any);
+  }, [nftDocs]);
 
   return <AccountTemplate nfts={syncedNFTsState} />;
 };

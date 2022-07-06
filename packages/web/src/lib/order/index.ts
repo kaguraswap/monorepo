@@ -1,15 +1,14 @@
 import canonicalize from "canonicalize";
 
+import { NFT } from "../../../../common/types/nft";
 import { Order } from "../../../../common/types/order";
 import { order } from "../../../../common/utils/fixture";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const Hash = require("ipfs-only-hash");
 
-// TODO: implement
-export const createOrder = () => {
-  console.log(order);
-  return { ...order, raw: { ...order } };
+export const createOrder = (chainId: string, nftContractAddress: string, nftTokenId: string) => {
+  return { ...order, chainId, nftContractAddress, nftTokenId };
 };
 
 export const toHash = async (order: Order) => {

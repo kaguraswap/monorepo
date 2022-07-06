@@ -1,7 +1,7 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
 
-import { nft } from "../../../../../common/utils/fixture";
+import { nft, orders } from "../../../../../common/utils/fixture";
 import { NFTDetail as Component } from "./NFTDetail";
 
 export default {
@@ -15,4 +15,5 @@ export const NFTDetail = Template.bind({});
 
 NFTDetail.args = {
   nft,
+  orders,
 };
