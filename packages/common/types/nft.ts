@@ -12,7 +12,8 @@ export interface NFT {
   chainId: string;
   contractAddress: string;
   tokenId: string;
-  metadata: NFTMetadata;
+  holder?: string;
+  metadata?: NFTMetadata;
   collection?: Collection;
   orders?: Order[];
 }

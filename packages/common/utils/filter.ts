@@ -19,7 +19,9 @@ export const filterAndMergeOrdersWithNFT = (orders: Order[], nft: NFT) => {
   return orders
     .filter((order) => {
       return (
-        order.chainId === nft.chainId && order.contractAddress === nft.contractAddress && order.tokenId === nft.tokenId
+        order.chainId === nft.chainId &&
+        order.nftContractAddress === nft.contractAddress &&
+        order.nftTokenId === nft.tokenId
       );
     })
     .map((order) => {

@@ -1,12 +1,19 @@
 import { ethers } from "ethers";
 import type { GetServerSideProps, NextPage } from "next";
+import React from "react";
 
 import { isChainId } from "../../../../../../common/types/chainId";
-import { NFTTemplate, NFTTemplateProps } from "../../../../components/templates/NFT";
-import { getNFT } from "../../../../lib/nft";
+import { NFT } from "../../../../../../common/types/nft";
+import { NFTTemplate } from "../../../../components/templates/NFT";
+import { useNFT } from "../../../../hooks/useNFT";
 
-const NFTPage: NextPage<NFTTemplateProps> = ({ nft }) => {
-  return <NFTTemplate nft={nft} />;
+export interface NFTPageProps {
+  nft: NFT;
+}
+
+const NFTPage: NextPage<NFTPageProps> = ({ nft }) => {
+  const { nftState } = useNFT(nft);
+  return <NFTTemplate nft={nftState} />;
 };
 
 export default NFTPage;
@@ -24,10 +31,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       notFound: true,
     };
   }
-  const nft = await getNFT(context.params.chainId, context.params.contractAddress, context.params.tokenId);
   return {
     props: {
-      nft,
+      nft: {
+        chainId: context.params.chainId,
+        contractAddress: context.params.contractAddress,
+        tokenId: context.params.tokenId,
+      },
     },
   };
 };

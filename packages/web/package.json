@@ -15,10 +15,14 @@
     "@emotion/styled": "^11",
     "@opensea/seaport-js": "^1.0.2",
     "axios": "^0.27.2",
+    "canonicalize": "^1.0.8",
+    "firebase": "^9.8.4",
     "framer-motion": "^6",
+    "ipfs-only-hash": "^4.0.0",
     "next": "12.2.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-firebase-hooks": "^5.0.3",
     "web3-react": "^5.0.5"
   },
   "devDependencies": {

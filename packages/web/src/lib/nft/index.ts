@@ -12,7 +12,6 @@ export const validateChainId = (chainId: ChainId) => {
 
 export const getNFT = (chainId: ChainId, contractAddress: string, tokenId: string) => {
   validateChainId(chainId);
-
   return covelant.getNFT(chainId, contractAddress, tokenId);
 };
 

@@ -1,13 +1,17 @@
 import { NFT } from "./nft";
 
 export interface Order {
-  type: "sell" | "buy";
+  direction: "sell" | "buy";
+  type: "seaport";
   chainId: string;
-  contractAddress: string;
-  tokenId: string;
+  nftContractAddress: string;
+  nftTokenId: string;
   currencyContractAddress: string;
   value: string;
-  hash: string;
-  signature: string;
+  taker: string;
+  maker: string;
+  startTime: string;
+  endTime: string;
+  raw: any;
   nft?: NFT;
 }

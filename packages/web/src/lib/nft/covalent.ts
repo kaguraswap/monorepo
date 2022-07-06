@@ -7,6 +7,7 @@ export interface Item {
   contract_address: string;
   nft_data: {
     token_id: string;
+    owner: string;
     external_data: { name: string; description: string; image: string; animation_url: string };
   }[];
 }
@@ -58,6 +59,7 @@ export class Covelant {
     return {
       contractAddress: item.contract_address,
       tokenId: nftData.token_id,
+      holder: nftData.owner,
       metadata: {
         name: externalData.name,
         description: externalData.description,
