@@ -1,28 +1,8 @@
-import { Collection } from "../types/collection";
 import { NFT } from "../types/nft";
 import { Order } from "../types/order";
 import { ADDRESS_1, UINT256_MAX, UINT256_MIN } from "./constant";
-import { filterAndMergeNFTsWithCollection, filterAndMergeOrdersWithNFT } from "./filter";
 
-export const _collections: Collection[] = [
-  {
-    chainId: "1",
-    contractAddress: ADDRESS_1,
-    name: "collection name",
-    description: "collection description",
-    logo: "https://via.placeholder.com/350x350",
-    banner: "https://via.placeholder.com/350x150",
-  },
-  {
-    chainId: "42",
-    contractAddress: ADDRESS_1,
-    name: "collection name",
-    description: "collection description",
-    logo: "https://via.placeholder.com/350x350",
-    banner: "https://via.placeholder.com/350x150",
-  },
-];
-export const _nfts: NFT[] = [
+export const nfts: NFT[] = [
   {
     chainId: "1",
     contractAddress: ADDRESS_1,
@@ -128,7 +108,7 @@ const _order4 = {
   raw: "",
 };
 
-export const _orders: Order[] = [
+export const orders: Order[] = [
   {
     ..._order1,
     raw: {
@@ -155,20 +135,5 @@ export const _orders: Order[] = [
   },
 ];
 
-export const collections = _collections.map((collection) => {
-  return {
-    ...collection,
-    nfts: filterAndMergeNFTsWithCollection(_nfts, collection).map((nft) => {
-      return {
-        ...nft,
-        orders: filterAndMergeOrdersWithNFT(_orders, nft),
-      };
-    }),
-  };
-});
-
-export const [collection] = collections;
-export const nfts = collection.nfts;
 export const [nft] = nfts;
-export const orders = nft.orders;
 export const [order] = orders;

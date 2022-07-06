@@ -1,5 +1,3 @@
-import { NFT } from "./nft";
-
 export interface Order {
   direction: "sell" | "buy";
   type: "seaport";
@@ -13,5 +11,4 @@ export interface Order {
   startTime: string;
   endTime: string;
   raw: any;
-  nft?: NFT;
 }

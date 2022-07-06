@@ -1,9 +1,3 @@
-import { ethers } from "ethers";
-
-import { isChainId } from "./chainId";
-import { Collection } from "./collection";
-import { Order } from "./order";
-
 export interface SupportsInterface {
   isERC165?: boolean;
   isERC721?: boolean;
@@ -25,6 +19,4 @@ export interface NFT {
   tokenURI?: string;
   supportsInterface?: SupportsInterface;
   metadata?: NFTMetadata;
-  collection?: Collection;
-  orders?: Order[];
 }

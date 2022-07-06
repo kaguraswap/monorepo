@@ -10,6 +10,7 @@
   "main": "dist/functions/src/index.js",
   "dependencies": {
     "axios": "^0.27.2",
+    "ethers": "^5.6.9",
     "firebase-admin": "^10.0.2",
     "firebase-functions": "^3.18.0"
   },
