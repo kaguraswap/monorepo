@@ -4,7 +4,7 @@ import React from "react";
 import { FiClock, FiHeart } from "react-icons/fi";
 
 import { NFT } from "../../../../../common/types/nft";
-import { getFirebaseApp } from "../../../lib/firebase";
+import { db } from "../../../lib/firebase";
 import { createOrder, toHash } from "../../../lib/order";
 import { Link } from "../../atoms/Link";
 
@@ -15,9 +15,8 @@ export interface NFTDetailProps {
 export const NFTDetail: React.FC<NFTDetailProps> = ({ nft }) => {
   const submitOrder = async () => {
     const order = createOrder();
-    const app = getFirebaseApp();
     const hash = await toHash(order);
-    await setDoc(doc(getFirestore(app), "orders", hash), order);
+    await setDoc(doc(db, "orders", hash), order);
     console.log(hash);
   };
 

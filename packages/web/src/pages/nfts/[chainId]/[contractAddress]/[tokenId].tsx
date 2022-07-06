@@ -1,43 +1,47 @@
-import { ethers } from "ethers";
+import { doc } from "firebase/firestore";
+import { httpsCallable } from "firebase/functions";
 import type { GetServerSideProps, NextPage } from "next";
 import React from "react";
+import { useDocumentData } from "react-firebase-hooks/firestore";
 
-import { isChainId } from "../../../../../../common/types/chainId";
 import { NFT } from "../../../../../../common/types/nft";
+import { toKey, validate } from "../../../../../../common/utils/nft";
 import { NFTTemplate } from "../../../../components/templates/NFT";
-import { useNFT } from "../../../../hooks/useNFT";
+import { db, functions } from "../../../../lib/firebase";
 
 export interface NFTPageProps {
   nft: NFT;
 }
 
 const NFTPage: NextPage<NFTPageProps> = ({ nft }) => {
-  const { nftState } = useNFT(nft);
-  return <NFTTemplate nft={nftState} />;
+  const [syncedNFTState, setSyncedNFTState] = React.useState(nft);
+  const key = toKey(nft);
+  const [data] = useDocumentData(doc(db, "nfts", key));
+  React.useEffect(() => {
+    if (!data) {
+      return;
+    }
+    setSyncedNFTState({
+      ...nft,
+      ...data,
+    });
+  }, [nft, data]);
+  return <NFTTemplate nft={syncedNFTState} />;
 };
 
 export default NFTPage;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  if (
-    !context.params ||
-    typeof context.params.chainId !== "string" ||
-    typeof context.params.contractAddress !== "string" ||
-    typeof context.params.tokenId !== "string" ||
-    !isChainId(context.params.chainId) ||
-    !ethers.utils.isAddress(context.params.contractAddress)
-  ) {
+  const nft = validate(context.params);
+  if (!nft) {
     return {
       notFound: true,
     };
   }
+  httpsCallable(functions, "nft-sync")(nft);
   return {
     props: {
-      nft: {
-        chainId: context.params.chainId,
-        contractAddress: context.params.contractAddress,
-        tokenId: context.params.tokenId,
-      },
+      nft,
     },
   };
 };

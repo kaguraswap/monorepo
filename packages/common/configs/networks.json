@@ -5,6 +5,7 @@
     "symbol": "ETH",
     "type": "evm",
     "env": "mainnet",
+    "rpc": "https://rpc.ankr.com/eth",
     "explorer": "https://etherscan.io/",
     "protocol": "seaport",
     "api": "covalent"
@@ -14,6 +15,7 @@
     "symbol": "ETH",
     "type": "evm",
     "env": "testnet",
+    "rpc": "https://kovan.infura.io/v3/{INFURA_PROJECT_KEY}",
     "explorer": "https://kovan.etherscan.io/",
     "protocol": "seaport",
     "api": "covalent"
@@ -23,6 +25,7 @@
     "symbol": "MATIC",
     "type": "evm",
     "env": "mainnet",
+    "rpc": "https://rpc-mainnet.maticvigil.com/",
     "explorer": "https://polygonscan.com/",
     "protocol": "seaport",
     "api": "covalent"
@@ -32,6 +35,7 @@
     "symbol": "AVAX",
     "type": "evm",
     "env": "testnet",
+    "rpc": "https://api.avax-test.network/ext/bc/C/rpc",
     "explorer": "https://testnet.snowtrace.io/",
     "protocol": "seaport",
     "api": "covalent"
@@ -41,6 +45,7 @@
     "symbol": "AVAX",
     "type": "evm",
     "env": "mainnet",
+    "rpc": "https://api.avax.network/ext/bc/C/rpc",
     "explorer": "https://snowtrace.io/",
     "protocol": "seaport",
     "api": "covalent"
@@ -50,6 +55,7 @@
     "symbol": "MATIC",
     "type": "evm",
     "env": "testnet",
+    "rpc": "https://rpc-mumbai.maticvigil.com/",
     "explorer": "https://mumbai.polygonscan.com/",
     "protocol": "seaport",
     "api": "covalent"
