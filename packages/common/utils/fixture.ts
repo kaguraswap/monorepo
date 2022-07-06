@@ -30,7 +30,8 @@ export const _nfts: NFT[] = [
     holder: ADDRESS_1,
     metadata: {
       name: "nft name",
-      description: "nft description",
+      description:
+        "With a sleek design and a captivating essence, this is a modern Classic made for every occasion.asset description",
       image: "https://via.placeholder.com/350x350",
     },
   },
@@ -41,7 +42,8 @@ export const _nfts: NFT[] = [
     holder: ADDRESS_1,
     metadata: {
       name: "nft name",
-      description: "nft description",
+      description:
+        "With a sleek design and a captivating essence, this is a modern Classic made for every occasion.asset description",
       image: "https://via.placeholder.com/350x350",
     },
   },

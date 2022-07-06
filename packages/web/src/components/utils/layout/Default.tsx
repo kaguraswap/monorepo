@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import React from "react";
 
 import { Footer } from "../../organisms/Footer";
@@ -21,7 +21,7 @@ export const DefaultLayout: React.FC<DefaultLayoutProps> = ({
   type = "summary_large_image",
 }) => {
   return (
-    <Box>
+    <Box minHeight={"100vh"}>
       <Head title={title} description={description} image={image} type={type} />
       <Header />
       {children}
