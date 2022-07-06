@@ -1,7 +1,10 @@
 import { FirebaseApp, getApps, initializeApp } from "firebase/app";
-import { connectFirestoreEmulator, getFirestore } from "firebase/firestore";
+import { connectFirestoreEmulator, Firestore, getFirestore } from "firebase/firestore";
+import { connectFunctionsEmulator, Functions, getFunctions } from "firebase/functions";
 
-export const firebaseConfig = {
+import firebase from "../../../../../firebase.json";
+
+const firebaseConfig = {
   apiKey: "AIzaSyCvRHg3s1glB0I-axzeO2Jchv9oaW0ILQk",
   authDomain: "kaguraswap-prod.firebaseapp.com",
   projectId: "kaguraswap-prod",
@@ -11,19 +14,22 @@ export const firebaseConfig = {
   measurementId: "G-QYDVED6CLB",
 };
 
-export const getFirebaseApp = (): FirebaseApp => {
+const getFirebaseApp = (): { app: FirebaseApp; db: Firestore; functions: Functions } => {
   const apps = getApps();
-
-  if (apps.length > 0) {
-    const [app] = apps;
-    return app;
+  const initialized = apps.length > 0;
+  let app;
+  if (initialized) {
+    [app] = apps;
   } else {
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    if (process.env.NODE_ENV !== "production") {
-      connectFirestoreEmulator(db, "localhost", 8080);
-    }
-
-    return app;
+    app = initializeApp(firebaseConfig);
   }
+  const db = getFirestore(app);
+  const functions = getFunctions(app);
+  if (!initialized && process.env.NODE_ENV !== "production") {
+    connectFirestoreEmulator(db, "localhost", firebase.emulators.firestore.port);
+    connectFunctionsEmulator(functions, "localhost", firebase.emulators.functions.port);
+  }
+  return { app, db, functions };
 };
+
+export const { app, db, functions } = getFirebaseApp();

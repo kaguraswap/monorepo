@@ -15,7 +15,7 @@ export enum ItemType {
 describeWithSeaportFixture(
   "Seaport",
   (fixture) => {
-    it("ERC721 <=> ETH", async function () {
+    it.skip("ERC721 <=> ETH", async function () {
       const { offerer, fulfiller, erc721Mock, seaport } = fixture;
       const tokenId = "0";
       const amount = "10000";
@@ -49,7 +49,7 @@ describeWithSeaportFixture(
       expect(await ethers.provider.getBalance(offerer.address)).to.equal(previousBalanceOfOfferer.add(amount));
     });
 
-    it("WETH <=> ERC721", async function () {
+    it.skip("WETH <=> ERC721", async function () {
       const { offerer, fulfiller, erc721Mock, seaport, wethMock } = fixture;
       const tokenId = "0";
       const amount = "10000";

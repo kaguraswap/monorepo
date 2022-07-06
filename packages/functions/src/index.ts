@@ -7,8 +7,7 @@ interface Files {
 }
 
 const files: Files = {
-  // aggregate: "./handlers/aggregate",
-  // api: "./handlers/api",
+  nft: "./handlers/nft",
 };
 
 const loadFunctions = (filesObj: Files) => {
