@@ -1,19 +1,31 @@
+import { doc } from "firebase/firestore";
 import { httpsCallable } from "firebase/functions";
 import type { GetServerSideProps, NextPage } from "next";
 import React from "react";
+import { useDocumentData } from "react-firebase-hooks/firestore";
 
 import { NFT } from "../../../../../../common/types/nft";
-import { validate } from "../../../../../../common/utils/nft";
+import { toKey, validate } from "../../../../../../common/utils/nft";
 import { NFTTemplate } from "../../../../components/templates/NFT";
-import { useSyncedNFTState } from "../../../../hooks/useSyncedNFTState";
-import { functions } from "../../../../lib/firebase";
+import { db, functions } from "../../../../lib/firebase";
 
 export interface NFTPageProps {
   nft: NFT;
 }
 
 const NFTPage: NextPage<NFTPageProps> = ({ nft }) => {
-  const { syncedNFTState } = useSyncedNFTState(nft);
+  const [syncedNFTState, setSyncedNFTState] = React.useState(nft);
+  const key = toKey(nft);
+  const [data] = useDocumentData(doc(db, "nfts", key));
+  React.useEffect(() => {
+    if (!data) {
+      return;
+    }
+    setSyncedNFTState({
+      ...nft,
+      ...data,
+    });
+  }, [nft, data]);
   return <NFTTemplate nft={syncedNFTState} />;
 };
 
