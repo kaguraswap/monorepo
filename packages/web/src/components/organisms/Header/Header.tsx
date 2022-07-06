@@ -1,11 +1,11 @@
 import { Box, Flex, HStack, IconButton, Text, useBreakpointValue, useColorModeValue } from "@chakra-ui/react";
 import React from "react";
 import { FiMenu } from "react-icons/fi";
+import { ConnectButton } from "web3uikit";
 
 import { Link } from "../../atoms/Link";
 import { DropdownMyMenu } from "../../molecules/DropdownMyMenu";
 import { DropdownSelectNetwork } from "../../molecules/DropdownSelectNetwork";
-import { ModalConnectWallet } from "../../molecules/ModalConnectWallet";
 
 export const Header: React.FC = () => {
   const isDesktop = useBreakpointValue({ base: false, lg: true });
@@ -29,7 +29,8 @@ export const Header: React.FC = () => {
               <>
                 <HStack spacing="3">
                   <DropdownSelectNetwork />
-                  <ModalConnectWallet />
+                  {/* <ModalConnectWallet /> */}
+                  <ConnectButton moralisAuth={false} chainId={1} />
                   <DropdownMyMenu />
                 </HStack>
               </>
