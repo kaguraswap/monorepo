@@ -1,7 +1,7 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
 
-import { nfts } from "../../../../../common/utils/fixture";
+import { order } from "../../../../../common/utils/fixture";
 import { OrderTemplate as Component } from "./Order";
 
 export default {
@@ -13,5 +13,5 @@ const Template: ComponentStory<typeof Component> = (args) => <Component {...args
 
 export const Order = Template.bind({});
 Order.args = {
-  nfts,
+  order,
 };
