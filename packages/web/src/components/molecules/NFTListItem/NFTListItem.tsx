@@ -23,7 +23,6 @@ export const NFTListItem: React.FC<NFTListItemProps> = ({ nft }) => {
           </Tag>
         </HStack>
       </Box>
-      {nft.collection && <Text>{nft.collection.name}</Text>}
       {nft.metadata && <Text fontWeight="semibold">{nft.metadata.name}</Text>}
     </Stack>
   );

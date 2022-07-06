@@ -11,7 +11,6 @@ import { NFT } from "../../../../../common/types/nft";
 import { Order } from "../../../../../common/types/order";
 import { db } from "../../../lib/firebase";
 import { createOrder, toHash } from "../../../lib/order";
-import { Link } from "../../atoms/Link";
 
 export interface NFTDetailProps {
   nft: NFT;
@@ -85,18 +84,6 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
                 <Text fontSize="sm" fontWeight="medium" color={useColorModeValue("gray.600", "gray.400")}>
                   {nft.chainId}
                 </Text>
-                <HStack alignSelf="baseline">
-                  {/* <Rating defaultValue={4} size="sm" /> */}
-
-                  <Text fontSize="sm" fontWeight="medium" color={useColorModeValue("gray.600", "gray.400")}>
-                    {nft.collection && (
-                      <Link href={`/collections/${nft.collection.chainId}/${nft.collection.contractAddress}`}>
-                        {nft.collection.name}
-                      </Link>
-                    )}
-                    {" #" + nft.tokenId}
-                  </Text>
-                </HStack>
                 {nft.metadata && (
                   <Heading size="lg" fontWeight="medium">
                     {nft.metadata.name}
