@@ -1,23 +1,76 @@
 import { Box, Button, Heading, HStack, Icon, Image, Stack, Text, useColorModeValue } from "@chakra-ui/react";
-import { doc, getFirestore, setDoc } from "firebase/firestore";
+import { Seaport } from "@opensea/seaport-js";
+import { ItemType } from "@opensea/seaport-js/lib/constants";
+import { ethers } from "ethers";
+import { doc, setDoc } from "firebase/firestore";
 import React from "react";
 import { FiClock, FiHeart } from "react-icons/fi";
+import { useAccount, useSigner } from "wagmi";
 
 import { NFT } from "../../../../../common/types/nft";
+import { Order } from "../../../../../common/types/order";
 import { db } from "../../../lib/firebase";
 import { createOrder, toHash } from "../../../lib/order";
 import { Link } from "../../atoms/Link";
 
 export interface NFTDetailProps {
   nft: NFT;
+  orders: Order[];
 }
 
-export const NFTDetail: React.FC<NFTDetailProps> = ({ nft }) => {
+export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
+  const [signer] = useSigner();
+  const [account] = useAccount();
+
   const submitOrder = async () => {
-    const order = createOrder();
+    if (!signer.data || !account.data) {
+      return;
+    }
+    const { address } = account.data;
+    const provider = signer.data.provider as ethers.providers.JsonRpcProvider;
+    const amount = "10000";
+    const seaport = new Seaport(provider);
+    const { executeAllActions: executeAllOfferActions } = await seaport.createOrder(
+      {
+        offer: [
+          {
+            itemType: ItemType.ERC721,
+            token: nft.contractAddress,
+            identifier: nft.tokenId,
+          },
+        ],
+        consideration: [
+          {
+            amount,
+            recipient: address,
+          },
+        ],
+      },
+      address
+    );
+
+    const seaportOrder = await executeAllOfferActions();
+    const order = createOrder(nft.chainId, nft.contractAddress, nft.tokenId);
+    order.raw = seaportOrder;
     const hash = await toHash(order);
     await setDoc(doc(db, "orders", hash), order);
     console.log(hash);
+  };
+
+  const fulfillOrder = async () => {
+    if (!signer.data || !account.data) {
+      return;
+    }
+    const [order] = orders;
+
+    const { address } = account.data;
+    const provider = signer.data.provider as ethers.providers.JsonRpcProvider;
+    const seaport = new Seaport(provider);
+    const { executeAllActions: executeAllFulfillActions } = await seaport.fulfillOrders({
+      fulfillOrderDetails: [{ order: order.raw }],
+      accountAddress: address,
+    });
+    await executeAllFulfillActions();
   };
 
   return (
@@ -79,6 +132,9 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft }) => {
             </HStack>
             <Button colorScheme="blue" size="lg" onClick={submitOrder}>
               Create Order
+            </Button>
+            <Button colorScheme="blue" size="lg" onClick={fulfillOrder}>
+              Fulfiill Order
             </Button>
           </Stack>
         </Stack>
