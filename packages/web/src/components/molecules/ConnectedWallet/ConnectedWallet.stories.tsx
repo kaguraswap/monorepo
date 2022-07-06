@@ -1,14 +1,14 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
 
-import { DropdownMyMenu as Component } from "./DropdownMyMenu";
+import { ConnectedWallet as Component } from "./ConnectedWallet";
 
 export default {
-  title: "Molecules/DropdownMyMenu",
+  title: "Molecules/ConnectedWallet",
   component: Component,
 } as ComponentMeta<typeof Component>;
 
 const Template: ComponentStory<typeof Component> = (args) => <Component {...args} />;
 
-export const DropdownMyMenu = Template.bind({});
-DropdownMyMenu.args = {};
+export const ConnectedWallet = Template.bind({});
+ConnectedWallet.args = {};

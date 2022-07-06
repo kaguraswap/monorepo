@@ -1,5 +1,6 @@
-import { Button, Icon, Link, Popover, PopoverContent, PopoverTrigger, SimpleGrid, Stack, Text } from "@chakra-ui/react";
-import React, { useState } from "react";
+import { Button, Flex, Icon, Popover, PopoverContent, PopoverTrigger } from "@chakra-ui/react";
+import { useNetwork } from "@thirdweb-dev/react";
+import React from "react";
 import { FiBarChart, FiRepeat } from "react-icons/fi";
 
 import { PopoverIcon } from "../../atoms/PopoverIcon";
@@ -8,23 +9,26 @@ import { PopoverIcon } from "../../atoms/PopoverIcon";
 const networks = [
   {
     name: "Rinkeby",
-    chainId: "0x4",
+    chainId: 4,
     icon: FiBarChart,
   },
   {
     name: "Goerli",
-    chainId: "0x5",
+    chainId: 5,
     icon: FiRepeat,
   },
 ];
 
 export const DropdownSelectNetwork: React.FC = () => {
-  const switchNetwork = async (chainId: string) => {
-    const { ethereum } = window;
-    await ethereum.request({
-      method: "wallet_switchEthereumChain",
-      params: [{ chainId }],
-    });
+  const [
+    {
+      data: { chain: activeChain },
+    },
+    switchNetwork,
+  ] = useNetwork();
+  const handleSwitchNetwork = async (chainId: number) => {
+    if (!switchNetwork) return;
+    await switchNetwork(chainId);
   };
 
   return (
@@ -32,21 +36,25 @@ export const DropdownSelectNetwork: React.FC = () => {
       {({ isOpen }) => (
         <>
           <PopoverTrigger>
-            <Button variant="link" rightIcon={<PopoverIcon isOpen={isOpen} />}>
-              Select Network
+            <Button size="sm" color="gray.800" rightIcon={<PopoverIcon isOpen={isOpen} />}>
+              {activeChain?.name}
             </Button>
           </PopoverTrigger>
-          <PopoverContent p="5" width={{ base: "sm", md: "xl" }}>
-            <SimpleGrid columns={{ base: 1, md: 2 }} columnGap="6" rowGap="2">
+          <PopoverContent p="5" width={{ base: "sm", md: "md" }}>
+            <Flex direction={{ base: "column", md: "column" }} gap={2} px={3}>
               {networks.map((network, id) => (
-                <Stack spacing="4" direction="row" p="3" key={id}>
-                  <Button variant="menu" onClick={() => switchNetwork(network.chainId)}>
-                    <Icon as={network.icon} boxSize="6" color="accent" />
-                    <Text fontWeight="medium">{network.name}</Text>
-                  </Button>
-                </Stack>
+                <Button
+                  flexGrow={1}
+                  size="sm"
+                  color="black"
+                  key={id}
+                  onClick={() => handleSwitchNetwork(network.chainId)}
+                  leftIcon={<Icon as={network.icon} boxSize="6" color="accent" />}
+                >
+                  {network.name}
+                </Button>
               ))}
-            </SimpleGrid>
+            </Flex>
           </PopoverContent>
         </>
       )}
