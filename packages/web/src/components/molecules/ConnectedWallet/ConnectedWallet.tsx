@@ -1,16 +1,11 @@
 import {
   Button,
-  ButtonGroup,
   Flex,
-  Heading,
   Icon,
   IconButton,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalHeader,
-  ModalOverlay,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
   Stack,
   Text,
   useClipboard,
@@ -89,60 +84,50 @@ export const ConnectedWallet: React.FC<ConnectedWalletProps> = ({ tokenAddress }
               </Text>
             </Stack>
           )}
-          <Button
-            // variant="outline"
-            size="sm"
-            color="gray.800"
-            leftIcon={<Icon as={IoWalletOutline} color="gray.500" boxSize={4} />}
-            onClick={onOpen}
-          >
-            {shortenAddress(address)}
-          </Button>
+          <Popover trigger="hover" openDelay={0} placement="bottom" defaultIsOpen={false} gutter={12}>
+            {({ isOpen }) => (
+              <>
+                <PopoverTrigger>
+                  <Button
+                    size="sm"
+                    color="gray.800"
+                    leftIcon={<Icon as={IoWalletOutline} color="gray.500" boxSize={4} />}
+                    onClick={onOpen}
+                  >
+                    {shortenAddress(address)}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent p="5" width={{ base: "sm", md: "sm" }}>
+                  <Flex direction={{ base: "column", md: "column" }} gap={2} px={3}>
+                    <Flex width="full">
+                      <IconButton
+                        onClick={copyAddress}
+                        mr="-px"
+                        borderRight="none"
+                        aria-label="Add to friends"
+                        variant="outline"
+                        size="sm"
+                        icon={<Icon as={IoCopy} />}
+                      />
+                      <Button size="sm" variant="outline" width="full" onClick={copyAddress}>
+                        {shortenAddress(address) || ""}
+                      </Button>
+                    </Flex>
+                    {data?.connector?.getProvider()?.isMetaMask && (
+                      <Button size="sm" color="gray.400" onClick={switchWallet}>
+                        Switch
+                      </Button>
+                    )}
+                    <Button onClick={disconnectWallet} colorScheme="red" size="sm">
+                      Disconnect
+                    </Button>
+                  </Flex>
+                </PopoverContent>
+              </>
+            )}
+          </Popover>
         </>
       )}
-
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
-        <ModalOverlay />
-        <ModalContent pb={4} bg="gray.50">
-          <ModalCloseButton />
-
-          <ModalHeader>
-            <Heading size="label.lg">Account Details</Heading>
-          </ModalHeader>
-
-          <ModalBody>
-            <Flex direction="column" gap={5}>
-              <Stack>
-                <Text size="label.md" display={{ base: "flex", md: "none" }}>
-                  Connected Wallet
-                </Text>
-                <ButtonGroup isAttached>
-                  <IconButton
-                    onClick={copyAddress}
-                    mr="-px"
-                    borderRight="none"
-                    aria-label="Add to friends"
-                    variant="outline"
-                    size="sm"
-                    icon={<Icon as={IoCopy} />}
-                  />
-                  <Button size="sm" variant="outline" width="120px" onClick={copyAddress}>
-                    {shortenAddress(address || "")}
-                  </Button>
-                  {data?.connector?.getProvider()?.isMetaMask && (
-                    <Button size="sm" color="gray.400" onClick={switchWallet}>
-                      Switch
-                    </Button>
-                  )}
-                  <Button onClick={disconnectWallet} colorScheme="red" size="sm">
-                    Disconnect
-                  </Button>
-                </ButtonGroup>
-              </Stack>
-            </Flex>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
     </Flex>
   );
 };

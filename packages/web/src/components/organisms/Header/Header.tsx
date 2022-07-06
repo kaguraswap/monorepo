@@ -6,7 +6,6 @@ import { useAccount } from "wagmi";
 import { Link } from "../../atoms/Link";
 import { ConnectedWallet } from "../../molecules/ConnectedWallet";
 import { ConnectWalletButton } from "../../molecules/ConnectWalletButton";
-import { DropdownMyMenu } from "../../molecules/DropdownMyMenu";
 import { DropdownSelectNetwork } from "../../molecules/DropdownSelectNetwork";
 
 export const Header: React.FC = () => {
@@ -31,12 +30,8 @@ export const Header: React.FC = () => {
             {isDesktop ? (
               <>
                 <HStack spacing="3">
-                  <Box mr="2">
-                    <DropdownSelectNetwork />
-                  </Box>
+                  <Box mr="2">{data ? <DropdownSelectNetwork /> : <></>}</Box>
                   {data ? <ConnectedWallet /> : <ConnectWalletButton expectedChainId={1} />}
-
-                  <DropdownMyMenu />
                 </HStack>
               </>
             ) : (
