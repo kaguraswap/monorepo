@@ -1,8 +1,16 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { ItemType } from "../lib/seaport/constant";
 import { describeWithSeaportFixture } from "./utils/setup";
+
+export enum ItemType {
+  NATIVE = 0,
+  ERC20 = 1,
+  ERC721 = 2,
+  ERC1155 = 3,
+  ERC721_WITH_CRITERIA = 4,
+  ERC1155_WITH_CRITERIA = 5,
+}
 
 describeWithSeaportFixture(
   "Seaport",

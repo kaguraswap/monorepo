@@ -2,16 +2,17 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
 
 import { nfts } from "../../../../../common/utils/fixture";
-import { HomeTemplate as Component } from "./Home";
+import { NFTList as Component } from "./NFTList";
 
 export default {
-  title: "Templates/Home",
+  title: "Organisms/NFTList",
   component: Component,
 } as ComponentMeta<typeof Component>;
 
 const Template: ComponentStory<typeof Component> = (args) => <Component {...args} />;
 
-export const Home = Template.bind({});
-Home.args = {
+export const NFTList = Template.bind({});
+
+NFTList.args = {
   nfts,
 };

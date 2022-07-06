@@ -2,7 +2,7 @@ import { Text } from "@chakra-ui/react";
 import React from "react";
 
 import { Collection } from "../../../../../common/types/collection";
-import { AssetList } from "../../organisms/AssetList";
+import { NFTList } from "../../organisms/NFTList";
 import { DefaultLayout } from "../../utils/layout";
 
 export interface CollectionTemplateProps {
@@ -16,7 +16,7 @@ export const CollectionTemplate: React.FC<CollectionTemplateProps> = ({ collecti
       <Text>{collection.description}</Text>
       <Text>{collection.banner}</Text>
       <Text>{collection.logo}</Text>
-      {collection.assets && <AssetList assets={collection.assets} />}
+      {collection.nfts && <NFTList nfts={collection.nfts} />}
     </DefaultLayout>
   );
 };
