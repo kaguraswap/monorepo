@@ -10,10 +10,13 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
+    "@3rdweb/react": "^1.9.3",
     "@chakra-ui/react": "^2.2.1",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
     "@opensea/seaport-js": "^1.0.2",
+    "@thirdweb-dev/react": "^2.4.7",
+    "@thirdweb-dev/sdk": "^2.3.23",
     "@walletconnect/web3-provider": "^1.7.8",
     "axios": "^0.27.2",
     "canonicalize": "^1.0.8",

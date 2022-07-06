@@ -1,7 +1,7 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
 
-import { ModalConnectWallet as Component } from "./ModalConnectWallet";
+import { ConnectWalletButton as Component } from "./ConnectWalletButton";
 
 export default {
   title: "Molecules/ModalConnectWallet",

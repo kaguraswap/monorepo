@@ -1,14 +1,17 @@
 import { Box, Flex, HStack, IconButton, Text, useBreakpointValue, useColorModeValue } from "@chakra-ui/react";
 import React from "react";
 import { FiMenu } from "react-icons/fi";
+import { useAccount } from "wagmi";
 
 import { Link } from "../../atoms/Link";
+import { ConnectedWallet } from "../../molecules/ConnectedWallet";
+import { ConnectWalletButton } from "../../molecules/ConnectWalletButton";
 import { DropdownMyMenu } from "../../molecules/DropdownMyMenu";
 import { DropdownSelectNetwork } from "../../molecules/DropdownSelectNetwork";
-import { ModalConnectWallet } from "../../molecules/ModalConnectWallet";
 
 export const Header: React.FC = () => {
   const isDesktop = useBreakpointValue({ base: false, lg: true });
+  const [{ data }] = useAccount();
   return (
     <Box as="section">
       <Box
@@ -28,8 +31,11 @@ export const Header: React.FC = () => {
             {isDesktop ? (
               <>
                 <HStack spacing="3">
-                  <DropdownSelectNetwork />
-                  <ModalConnectWallet />
+                  <Box mr="2">
+                    <DropdownSelectNetwork />
+                  </Box>
+                  {data ? <ConnectedWallet /> : <ConnectWalletButton expectedChainId={1} />}
+
                   <DropdownMyMenu />
                 </HStack>
               </>
