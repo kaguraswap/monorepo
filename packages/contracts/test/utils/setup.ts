@@ -4,7 +4,8 @@ import { providerUtils } from "@0x/utils";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { Seaport } from "@opensea/seaport-js";
 import { NftSwapV4 as ZeroEx } from "@traderxyz/nft-swap-sdk";
-import { ZDK } from "@zoralabs/zdk";
+import rinkebyZoraAddresses from "@zoralabs/v3/dist/addresses/4.json"; // Rinkeby addresses, 1.json would be Mainnet Testnet
+import { AsksV11__factory as AsksV11Factory } from "@zoralabs/v3/dist/typechain/factories/AsksV11__factory";
 import { ethers } from "hardhat";
 
 import { TEST_CHAIN_ID } from "../../lib/constant";
@@ -15,13 +16,14 @@ interface Fixture {
   offerer: SignerWithAddress;
   fulfiller: SignerWithAddress;
   attacker: SignerWithAddress;
+  resistrar: SignerWithAddress;
   wethMock: WETHMock;
   erc20Mock: ERC20Mock;
   erc721Mock: ERC721Mock;
   erc1155Mock: ERC1155Mock;
   seaport: Seaport;
   zeroEx: ZeroEx;
-  zora: ZDK;
+  zora: AsksV11Factory;
 }
 
 interface Target {
@@ -36,7 +38,7 @@ export const describeWithSeaportFixture = (name: string, suiteCb: (fixture: Fixt
     const fixture: Partial<Fixture> = {};
 
     beforeEach(async () => {
-      const [owner, offerer, fulfiller, attacker] = await ethers.getSigners();
+      const [owner, offerer, fulfiller, attacker, resistrar] = await ethers.getSigners();
 
       const provider = ethers.provider;
 
@@ -86,9 +88,7 @@ export const describeWithSeaportFixture = (name: string, suiteCb: (fixture: Fixt
       }
 
       if (target.zora) {
-        // TODO:implement zora
-        // TODO:remove "as ZDK"
-        fixture.zora = {} as ZDK;
+        // a
       }
 
       const ERC20MockFactory = await ethers.getContractFactory("ERC20Mock");
@@ -104,6 +104,7 @@ export const describeWithSeaportFixture = (name: string, suiteCb: (fixture: Fixt
       fixture.offerer = offerer;
       fixture.fulfiller = fulfiller;
       fixture.attacker = attacker;
+      fixture.resistrar = resistrar;
       fixture.wethMock = wethMock;
       fixture.erc20Mock = erc20Mock;
       fixture.erc721Mock = erc721Mock;
