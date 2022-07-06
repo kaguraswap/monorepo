@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "prepare": "husky install",
-    "ci": "run-p lint test build",
+    "ci": "run-p lint build",
     "fix": "run-p fix:*",
     "fix:prettier": "yarn lint:prettier --write",
     "fix:eslint": "yarn lint:eslint --fix",
