@@ -45,6 +45,7 @@
     "@types/react-dom": "18.0.5",
     "assert": "^2.0.0",
     "babel-loader": "^8.2.5",
+    "chromatic": "^6.7.0",
     "crypto-browserify": "^3.12.0",
     "https-browserify": "^1.0.0",
     "os-browserify": "^0.3.0",
@@ -53,5 +54,7 @@
     "stream-http": "^3.2.0",
     "typescript": "4.7.4",
     "url": "^0.11.0"
-  }
+  },
+  "readme": "ERROR: No README data found!",
+  "_id": "@kaguraswap/web@0.0.1"
 }
