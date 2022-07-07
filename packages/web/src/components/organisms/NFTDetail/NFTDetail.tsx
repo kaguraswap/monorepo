@@ -164,7 +164,7 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
                     <Button width="full" onClick={onCreateOrderClose}>
                       Cancel
                     </Button>
-                    <Button colorScheme="blue" width="full" mr={3} onClick={submitOrder}>
+                    <Button colorScheme="blue" width="full" onClick={submitOrder}>
                       List
                     </Button>
                   </Stack>
@@ -207,7 +207,7 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
                     <Button width="full" onClick={onMakeOfferClose}>
                       Cancel
                     </Button>
-                    <Button colorScheme="blue" width="full" mr={3} onClick={submitOrder}>
+                    <Button colorScheme="blue" width="full" onClick={submitOrder}>
                       Make Offer
                     </Button>
                   </Stack>
