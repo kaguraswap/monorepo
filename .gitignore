@@ -106,6 +106,9 @@ dist
 # Firebase
 .firebase
 
+# Web
+storybook-static
+
 # Contracts
 artifacts
 cache
@@ -115,3 +118,4 @@ gasReporterOutput.json
 
 # misc
 .DS_Store
+
