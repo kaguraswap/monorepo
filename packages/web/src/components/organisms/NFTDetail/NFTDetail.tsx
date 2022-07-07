@@ -32,6 +32,7 @@ import React, { useState } from "react";
 import { FiExternalLink } from "react-icons/fi";
 import { useAccount, useSigner } from "wagmi";
 
+import { BSP, FEE_RECIPIENT } from "../../../../../common/configs/app";
 import { NFT } from "../../../../../common/types/nft";
 import { Order } from "../../../../../common/types/order";
 import { db } from "../../../lib/firebase";
@@ -50,13 +51,16 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
   const [amountString, setAmount] = useState("0");
   const [youGetAmount, setYouGetAmount] = useState(0);
 
+  const fees = [{ recipient: FEE_RECIPIENT, basisPoints: BSP }];
+
   const shortenAddress = (str: string) => {
     return `${str.substring(0, 6)}...${str.substring(str.length - 4)}`;
   };
 
   const handleAmount = (amount: string) => {
     setAmount(amount);
-    setYouGetAmount(Number(amount));
+    const fee = (Number(amount) * BSP) / 10000;
+    setYouGetAmount(Number(amount) - fee);
   };
 
   const submitOrder = async () => {
@@ -82,6 +86,7 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
             recipient: address,
           },
         ],
+        fees,
       },
       address
     );
@@ -195,7 +200,7 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
                   </Flex>
                   <Flex alignItems="center" justify="space-between" my="4">
                     <Text fontWeight="semibold">Fees</Text>
-                    <Text>0%</Text>
+                    <Text>2.5%</Text>
                   </Flex>
                   <Flex alignItems="center" justify="space-between" my="4">
                     <Text fontWeight="semibold">Total Cost</Text>
