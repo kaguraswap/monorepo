@@ -7,7 +7,8 @@
     "dev": "next dev",
     "build": "next build",
     "storybook": "start-storybook -p 6006 --ci",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "chromatic": "chromatic --exit-zero-on-changes"
   },
   "dependencies": {
     "@3rdweb/react": "^1.9.3",
@@ -54,7 +55,5 @@
     "stream-http": "^3.2.0",
     "typescript": "4.7.4",
     "url": "^0.11.0"
-  },
-  "readme": "ERROR: No README data found!",
-  "_id": "@kaguraswap/web@0.0.1"
+  }
 }
