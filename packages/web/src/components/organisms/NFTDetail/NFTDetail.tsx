@@ -63,7 +63,7 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
     setYouGetAmount(Number(amount) - fee);
   };
 
-  const submitOrder = async () => {
+  const sell = async () => {
     if (!signer.data || !account.data) {
       return;
     }
@@ -90,13 +90,24 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
       },
       address
     );
-
     const seaportOrder = await executeAllOfferActions();
     const order = createOrder(nft.chainId, nft.contractAddress, nft.tokenId);
     order.raw = seaportOrder;
     const hash = await toHash(order);
     await setDoc(doc(db, "orders", hash), order);
     console.log(hash);
+  };
+
+  const cancelOrder = async () => {
+    if (!signer.data || !account.data) {
+      return;
+    }
+    const [order] = orders;
+    const { address } = account.data;
+    const provider = signer.data.provider as ethers.providers.JsonRpcProvider;
+    const seaport = new Seaport(provider);
+    const cancel = await seaport.cancelOrders([{ offerer: address, ...order.raw.parameters }], address);
+    await cancel.transact();
   };
 
   const fulfillOrder = async () => {
@@ -139,6 +150,9 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
             <Button colorScheme="blue" size="lg" onClick={onCreateOrderOpen}>
               Create Order
             </Button>
+            <Button colorScheme="blue" size="lg" onClick={cancelOrder}>
+              Cancel
+            </Button>
             <Modal isOpen={isCreateOrderOpen} onClose={onCreateOrderClose}>
               <ModalOverlay />
               <ModalContent p="4">
@@ -169,7 +183,7 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
                     <Button width="full" onClick={onCreateOrderClose}>
                       Cancel
                     </Button>
-                    <Button colorScheme="blue" width="full" onClick={submitOrder}>
+                    <Button colorScheme="blue" width="full" onClick={sell}>
                       List
                     </Button>
                   </Stack>
@@ -212,7 +226,7 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
                     <Button width="full" onClick={onMakeOfferClose}>
                       Cancel
                     </Button>
-                    <Button colorScheme="blue" width="full" onClick={submitOrder}>
+                    <Button colorScheme="blue" width="full" onClick={sell}>
                       Make Offer
                     </Button>
                   </Stack>
