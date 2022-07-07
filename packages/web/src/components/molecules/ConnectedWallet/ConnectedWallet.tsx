@@ -14,6 +14,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useAccount, useAddress, useBalance, useDisconnect } from "@thirdweb-dev/react";
+import router from "next/router";
 import React from "react";
 import { IoCopy, IoWalletOutline } from "react-icons/io5";
 import { RiMoneyDollarCircleLine } from "react-icons/ri";
@@ -99,6 +100,9 @@ export const ConnectedWallet: React.FC<ConnectedWalletProps> = ({ tokenAddress }
               <PopoverContent p="5" width={{ base: "sm", md: "sm" }}>
                 <Flex direction={{ base: "column", md: "column" }} gap={2} px={3}>
                   <Flex width="full">
+                    <Button size="sm" variant="outline" width="full" onClick={copyAddress}>
+                      {shortenAddress(address) || ""}
+                    </Button>
                     <IconButton
                       onClick={copyAddress}
                       mr="-px"
@@ -108,13 +112,18 @@ export const ConnectedWallet: React.FC<ConnectedWalletProps> = ({ tokenAddress }
                       size="sm"
                       icon={<Icon as={IoCopy} />}
                     />
-                    <Button size="sm" variant="outline" width="full" onClick={copyAddress}>
-                      {shortenAddress(address) || ""}
-                    </Button>
                   </Flex>
+                  <Button
+                    color="gray.600"
+                    onClick={() => {
+                      router.push(`/accounts/${address}`);
+                    }}
+                  >
+                    MyPage
+                  </Button>
                   {data?.connector?.getProvider()?.isMetaMask && (
-                    <Button size="sm" color="gray.400" onClick={switchWallet}>
-                      Switch
+                    <Button size="sm" color="gray.600" onClick={switchWallet}>
+                      Switch Wallet
                     </Button>
                   )}
                   <Button onClick={disconnectWallet} colorScheme="red" size="sm">
