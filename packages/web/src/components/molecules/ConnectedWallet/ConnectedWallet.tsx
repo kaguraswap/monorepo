@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Flex,
   Icon,
@@ -27,7 +28,7 @@ function shortenAddress(str: string) {
 
 export const ConnectedWallet: React.FC<ConnectedWalletProps> = ({ tokenAddress }) => {
   const toast = useToast();
-  const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: false });
+  const { onOpen, onClose } = useDisclosure({ defaultIsOpen: false });
   const [{ data }] = useAccount();
   const address = useAddress();
   const disconnect = useDisconnect();
@@ -84,46 +85,44 @@ export const ConnectedWallet: React.FC<ConnectedWalletProps> = ({ tokenAddress }
             </Stack>
           )}
           <Popover trigger="hover" openDelay={0} placement="bottom" defaultIsOpen={false} gutter={12}>
-            {({ isOpen }) => (
-              <>
-                <PopoverTrigger>
-                  <Button
-                    size="sm"
-                    color="gray.800"
-                    leftIcon={<Icon as={IoWalletOutline} color="gray.500" boxSize={4} />}
-                    onClick={onOpen}
-                  >
-                    {shortenAddress(address)}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent p="5" width={{ base: "sm", md: "sm" }}>
-                  <Flex direction={{ base: "column", md: "column" }} gap={2} px={3}>
-                    <Flex width="full">
-                      <IconButton
-                        onClick={copyAddress}
-                        mr="-px"
-                        borderRight="none"
-                        aria-label="Add to friends"
-                        variant="outline"
-                        size="sm"
-                        icon={<Icon as={IoCopy} />}
-                      />
-                      <Button size="sm" variant="outline" width="full" onClick={copyAddress}>
-                        {shortenAddress(address) || ""}
-                      </Button>
-                    </Flex>
-                    {data?.connector?.getProvider()?.isMetaMask && (
-                      <Button size="sm" color="gray.400" onClick={switchWallet}>
-                        Switch
-                      </Button>
-                    )}
-                    <Button onClick={disconnectWallet} colorScheme="red" size="sm">
-                      Disconnect
+            <Box>
+              <PopoverTrigger>
+                <Button
+                  size="sm"
+                  color="gray.800"
+                  leftIcon={<Icon as={IoWalletOutline} color="gray.500" boxSize={4} />}
+                  onClick={onOpen}
+                >
+                  {shortenAddress(address)}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent p="5" width={{ base: "sm", md: "sm" }}>
+                <Flex direction={{ base: "column", md: "column" }} gap={2} px={3}>
+                  <Flex width="full">
+                    <IconButton
+                      onClick={copyAddress}
+                      mr="-px"
+                      borderRight="none"
+                      aria-label="Add to friends"
+                      variant="outline"
+                      size="sm"
+                      icon={<Icon as={IoCopy} />}
+                    />
+                    <Button size="sm" variant="outline" width="full" onClick={copyAddress}>
+                      {shortenAddress(address) || ""}
                     </Button>
                   </Flex>
-                </PopoverContent>
-              </>
-            )}
+                  {data?.connector?.getProvider()?.isMetaMask && (
+                    <Button size="sm" color="gray.400" onClick={switchWallet}>
+                      Switch
+                    </Button>
+                  )}
+                  <Button onClick={disconnectWallet} colorScheme="red" size="sm">
+                    Disconnect
+                  </Button>
+                </Flex>
+              </PopoverContent>
+            </Box>
           </Popover>
         </>
       )}

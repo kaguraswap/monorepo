@@ -1,6 +1,5 @@
 import canonicalize from "canonicalize";
 
-import { NFT } from "../../../../common/types/nft";
 import { Order } from "../../../../common/types/order";
 import { order } from "../../../../common/utils/fixture";
 
