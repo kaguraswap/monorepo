@@ -17,8 +17,7 @@ export const Header: React.FC = () => {
         alignItems={"center"}
         bg="bg-surface"
         boxShadow={useColorModeValue("sm", "sm-dark")}
-        py="4"
-        px="4"
+        p="4"
       >
         <HStack spacing="10" justify="space-between">
           <Text>
