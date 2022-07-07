@@ -1,23 +1,9 @@
-import { Button, Flex, Icon, Popover, PopoverContent, PopoverTrigger, Text } from "@chakra-ui/react";
+import { Button, Flex, Icon, Image, Popover, PopoverContent, PopoverTrigger, SimpleGrid, Text } from "@chakra-ui/react";
 import { useNetwork } from "@thirdweb-dev/react";
 import React from "react";
-import { FiBarChart, FiRepeat } from "react-icons/fi";
 
+import config from "../../../../../common/configs/networks.json";
 import { PopoverIcon } from "../../atoms/PopoverIcon";
-
-// TODO networkはcontractsから取る
-const networks = [
-  {
-    name: "Rinkeby",
-    chainId: 4,
-    icon: FiBarChart,
-  },
-  {
-    name: "Goerli",
-    chainId: 5,
-    icon: FiRepeat,
-  },
-];
 
 export const DropdownSelectNetwork: React.FC = () => {
   const [
@@ -26,9 +12,9 @@ export const DropdownSelectNetwork: React.FC = () => {
     },
     switchNetwork,
   ] = useNetwork();
-  const handleSwitchNetwork = async (chainId: number) => {
+  const handleSwitchNetwork = async (chainId: string) => {
     if (!switchNetwork) return;
-    await switchNetwork(chainId);
+    await switchNetwork(Number(chainId));
   };
 
   return (
@@ -46,20 +32,21 @@ export const DropdownSelectNetwork: React.FC = () => {
             </Button>
           </PopoverTrigger>
           <PopoverContent p="5" width={{ base: "sm", md: "md" }}>
-            <Flex direction={{ base: "column", md: "column" }} gap={2} px={3}>
-              {networks.map((network, id) => (
+            <SimpleGrid columns={2} gap={2} px={3}>
+              {Object.entries(config).map(([id, network]) => (
                 <Button
                   flexGrow={1}
-                  size="sm"
+                  size="md"
+                  fontSize="sm"
                   color="black"
                   key={id}
-                  onClick={() => handleSwitchNetwork(network.chainId)}
-                  leftIcon={<Icon as={network.icon} boxSize="6" color="accent" />}
+                  onClick={() => handleSwitchNetwork(id)}
+                  leftIcon={<Image src={`/icon/${id}.svg`} rounded="full" alt="logo" width="4" />}
                 >
                   {network.name}
                 </Button>
               ))}
-            </Flex>
+            </SimpleGrid>
           </PopoverContent>
         </>
       )}
