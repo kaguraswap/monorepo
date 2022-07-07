@@ -1,4 +1,4 @@
-import { Button, Flex, Icon, Popover, PopoverContent, PopoverTrigger } from "@chakra-ui/react";
+import { Button, Flex, Icon, Popover, PopoverContent, PopoverTrigger, Text } from "@chakra-ui/react";
 import { useNetwork } from "@thirdweb-dev/react";
 import React from "react";
 import { FiBarChart, FiRepeat } from "react-icons/fi";
@@ -36,8 +36,13 @@ export const DropdownSelectNetwork: React.FC = () => {
       {({ isOpen }) => (
         <>
           <PopoverTrigger>
-            <Button size="sm" color="gray.800" rightIcon={<PopoverIcon isOpen={isOpen} />}>
-              {activeChain?.name}
+            <Button
+              size="sm"
+              color="gray.800"
+              rightIcon={<PopoverIcon isOpen={isOpen} />}
+              maxWidth={{ base: "24", md: "none" }}
+            >
+              <Text overflow={"hidden"}> {activeChain?.name}</Text>
             </Button>
           </PopoverTrigger>
           <PopoverContent p="5" width={{ base: "sm", md: "md" }}>
