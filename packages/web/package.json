@@ -7,7 +7,8 @@
     "dev": "next dev",
     "build": "next build",
     "storybook": "start-storybook -p 6006 --ci",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "chromatic": "chromatic --exit-zero-on-changes"
   },
   "dependencies": {
     "@3rdweb/react": "^1.9.3",
@@ -45,6 +46,7 @@
     "@types/react-dom": "18.0.5",
     "assert": "^2.0.0",
     "babel-loader": "^8.2.5",
+    "chromatic": "^6.7.0",
     "crypto-browserify": "^3.12.0",
     "https-browserify": "^1.0.0",
     "os-browserify": "^0.3.0",
