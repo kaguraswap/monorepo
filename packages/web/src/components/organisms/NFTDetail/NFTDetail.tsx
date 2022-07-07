@@ -78,7 +78,7 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
         ],
         consideration: [
           {
-            amount,
+            amount: amount.toString(),
             recipient: address,
           },
         ],
