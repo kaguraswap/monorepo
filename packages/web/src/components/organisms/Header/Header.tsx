@@ -1,4 +1,4 @@
-import { Box, Flex, HStack, Text, useColorModeValue } from "@chakra-ui/react";
+import { Box, Flex, HStack, Image, Text, useColorModeValue } from "@chakra-ui/react";
 import React from "react";
 import { useAccount } from "wagmi";
 
@@ -17,13 +17,12 @@ export const Header: React.FC = () => {
         alignItems={"center"}
         bg="bg-surface"
         boxShadow={useColorModeValue("sm", "sm-dark")}
-        py="4"
-        px="4"
+        p="4"
       >
         <HStack spacing="10" justify="space-between">
-          <Text>
-            <Link href="/">Logo</Link>
-          </Text>
+          <Link href="/">
+            <Image src={"/brand/logo_transparent.png"} alt={"logo"} draggable="false" w="12" h="12" />
+          </Link>
           <Flex gap={"1"}>
             <HStack spacing="3">
               {data ? <DropdownSelectNetwork /> : <></>}

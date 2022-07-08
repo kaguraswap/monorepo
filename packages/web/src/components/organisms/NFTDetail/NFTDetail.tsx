@@ -32,6 +32,7 @@ import React, { useState } from "react";
 import { FiExternalLink } from "react-icons/fi";
 import { useAccount, useSigner } from "wagmi";
 
+import { BSP, FEE_RECIPIENT } from "../../../../../common/configs/app";
 import { NFT } from "../../../../../common/types/nft";
 import { Order } from "../../../../../common/types/order";
 import { db } from "../../../lib/firebase";
@@ -51,16 +52,19 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
   const [amountString, setAmount] = useState("0");
   const [youGetAmount, setYouGetAmount] = useState(0);
 
+  const fees = [{ recipient: FEE_RECIPIENT, basisPoints: BSP }];
+
   const shortenAddress = (str: string) => {
     return `${str.substring(0, 6)}...${str.substring(str.length - 4)}`;
   };
 
   const handleAmount = (amount: string) => {
     setAmount(amount);
-    setYouGetAmount(Number(amount));
+    const fee = (Number(amount) * BSP) / 10000;
+    setYouGetAmount(Number(amount) - fee);
   };
 
-  const submitOrder = async () => {
+  const sell = async () => {
     if (!signer.data || !account.data) {
       return;
     }
@@ -83,16 +87,28 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
             recipient: address,
           },
         ],
+        fees,
       },
       address
     );
-
     const seaportOrder = await executeAllOfferActions();
     const order = createOrder(nft.chainId, nft.contractAddress, nft.tokenId);
     order.raw = seaportOrder;
     const hash = await toHash(order);
     await setDoc(doc(db, "orders", hash), order);
     console.log(hash);
+  };
+
+  const cancelOrder = async () => {
+    if (!signer.data || !account.data) {
+      return;
+    }
+    const [order] = orders;
+    const { address } = account.data;
+    const provider = signer.data.provider as ethers.providers.JsonRpcProvider;
+    const seaport = new Seaport(provider);
+    const cancel = await seaport.cancelOrders([{ offerer: address, ...order.raw.parameters }], address);
+    await cancel.transact();
   };
 
   const fulfillOrder = async () => {
@@ -139,7 +155,9 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
             ) : (
               <ConnectWalletButton size="lg" />
             )}
-
+            <Button colorScheme="blue" size="lg" onClick={cancelOrder}>
+              Cancel
+            </Button>
             <Modal isOpen={isCreateOrderOpen} onClose={onCreateOrderClose}>
               <ModalOverlay />
               <ModalContent p="4">
@@ -170,7 +188,7 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
                     <Button width="full" onClick={onCreateOrderClose}>
                       Cancel
                     </Button>
-                    <Button colorScheme="blue" width="full" onClick={submitOrder}>
+                    <Button colorScheme="blue" width="full" onClick={sell}>
                       List
                     </Button>
                   </Stack>
@@ -205,7 +223,7 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
                   </Flex>
                   <Flex alignItems="center" justify="space-between" my="4">
                     <Text fontWeight="semibold">Fees</Text>
-                    <Text>0%</Text>
+                    <Text>2.5%</Text>
                   </Flex>
                   <Flex alignItems="center" justify="space-between" my="4">
                     <Text fontWeight="semibold">Total Cost</Text>
@@ -217,7 +235,7 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
                     <Button width="full" onClick={onMakeOfferClose}>
                       Cancel
                     </Button>
-                    <Button colorScheme="blue" width="full" onClick={submitOrder}>
+                    <Button colorScheme="blue" width="full" onClick={sell}>
                       Make Offer
                     </Button>
                   </Stack>
