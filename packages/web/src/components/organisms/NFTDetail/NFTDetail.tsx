@@ -36,6 +36,7 @@ import { NFT } from "../../../../../common/types/nft";
 import { Order } from "../../../../../common/types/order";
 import { db } from "../../../lib/firebase";
 import { createOrder, toHash } from "../../../lib/order";
+import { ConnectWalletButton } from "../../molecules/ConnectWalletButton";
 
 export interface NFTDetailProps {
   nft: NFT;
@@ -131,9 +132,14 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
                 {nft.metadata ? nft.metadata.description : ""}
               </Text>
             </Stack>
-            <Button colorScheme="blue" size="lg" onClick={onCreateOrderOpen}>
-              Create Order
-            </Button>
+            {account.data ? (
+              <Button colorScheme="blue" size="lg" onClick={onCreateOrderOpen}>
+                Create Order
+              </Button>
+            ) : (
+              <ConnectWalletButton size="lg" />
+            )}
+
             <Modal isOpen={isCreateOrderOpen} onClose={onCreateOrderClose}>
               <ModalOverlay />
               <ModalContent p="4">
@@ -174,9 +180,13 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
             <Button colorScheme="blue" size="lg" onClick={fulfillOrder}>
               Fulfill Order
             </Button>
-            <Button colorScheme="blue" size="lg" onClick={onMakeOfferOpen}>
-              Make Offer
-            </Button>
+            {account.data ? (
+              <Button colorScheme="blue" size="lg" onClick={onMakeOfferOpen}>
+                Make Offer
+              </Button>
+            ) : (
+              <ConnectWalletButton size="lg" />
+            )}
             <Modal isOpen={isMakeOfferOpen} onClose={onMakeOfferClose}>
               <ModalOverlay />
               <ModalContent p="4">

@@ -27,7 +27,7 @@ export const Header: React.FC = () => {
           <Flex gap={"1"}>
             <HStack spacing="3">
               {data ? <DropdownSelectNetwork /> : <></>}
-              {data ? <ConnectedWallet /> : <ConnectWalletButton expectedChainId={1} />}
+              {data ? <ConnectedWallet /> : <ConnectWalletButton size="sm" />}
             </HStack>
           </Flex>
         </HStack>
