@@ -1,8 +1,9 @@
-import { Button, Image, Popover, PopoverContent, PopoverTrigger, SimpleGrid, Text } from "@chakra-ui/react";
+import { Button, Icon, Popover, PopoverContent, PopoverTrigger, SimpleGrid, Text } from "@chakra-ui/react";
 import { useNetwork } from "@thirdweb-dev/react";
 import React from "react";
 
 import config from "../../../../../common/configs/networks.json";
+import { chainIdToIcon } from "../../../lib/icons";
 import { PopoverIcon } from "../../atoms/PopoverIcon";
 
 export const DropdownSelectNetwork: React.FC = () => {
@@ -41,7 +42,7 @@ export const DropdownSelectNetwork: React.FC = () => {
                   color="black"
                   key={id}
                   onClick={() => handleSwitchNetwork(id)}
-                  leftIcon={<Image src={`/icon/${id}.svg`} rounded="full" alt="logo" width="4" />}
+                  leftIcon={<Icon as={chainIdToIcon(id)} rounded="full" width="4" />}
                 >
                   {network.name}
                 </Button>
