@@ -94,173 +94,137 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
     await httpsCallable(functions, "order-create")({ type: "seaport", nft, order });
   };
 
-  const cancelOrder = async () => {
-    const [order] = orders;
-    if (!signer.data || !account.data || !order.raw) {
-      return;
-    }
-    const { address } = account.data;
-    const provider = signer.data.provider as ethers.providers.JsonRpcProvider;
-    const seaport = new Seaport(provider);
-    const cancel = await seaport.cancelOrders([order.raw.parameters], address);
-    await cancel.transact();
-  };
-
-  const fulfillOrder = async () => {
-    const [order] = orders;
-    if (!signer.data || !account.data || !order.raw) {
-      return;
-    }
-
-    const { address } = account.data;
-    const provider = signer.data.provider as ethers.providers.JsonRpcProvider;
-    const seaport = new Seaport(provider);
-    const { executeAllActions: executeAllFulfillActions } = await seaport.fulfillOrders({
-      fulfillOrderDetails: [{ order: order.raw }],
-      accountAddress: address,
-    });
-    await executeAllFulfillActions();
-  };
-
   return (
-    <Box>
-      <Box maxW="7xl" mx="auto" px={{ base: "4", md: "8", lg: "12" }} py={{ base: "6", md: "8", lg: "12" }}>
-        <Stack direction={{ base: "column", lg: "row" }} spacing={{ base: "6", lg: "12", xl: "16" }}>
-          {nft.metadata && <Image src={nft.metadata.image} alt={nft.metadata.name} width={"xl"}></Image>}
-          <Stack spacing={{ base: "6", lg: "8" }} maxW={{ lg: "sm" }} justify="center">
-            <Stack spacing={{ base: "3", md: "4" }}>
-              <Stack spacing="3">
-                <Text fontSize="sm" fontWeight="medium" color={useColorModeValue("gray.600", "gray.400")}>
-                  {nft.chainId}
-                </Text>
-                {nft.metadata && (
-                  <Heading size="lg" fontWeight="medium">
-                    {nft.metadata.name}
-                  </Heading>
-                )}
-              </Stack>
-              <Text color={useColorModeValue("gray.600", "gray.400")}>
-                {nft.metadata ? nft.metadata.description : ""}
+    <Box maxW="7xl" mx="auto" px={{ base: "4", md: "8", lg: "12" }} py={{ base: "6", md: "8", lg: "12" }}>
+      <Stack direction={{ base: "column", lg: "row" }} spacing={{ base: "6", lg: "12", xl: "16" }}>
+        {nft.metadata && <Image src={nft.metadata.image} alt={nft.metadata.name} width={"xl"}></Image>}
+        <Stack spacing={{ base: "6", lg: "8" }} maxW={{ lg: "sm" }} justify="center">
+          <Stack spacing={{ base: "3", md: "4" }}>
+            <Stack spacing="3">
+              <Text fontSize="sm" fontWeight="medium" color={useColorModeValue("gray.600", "gray.400")}>
+                {nft.chainId}
               </Text>
+              {nft.metadata && (
+                <Heading size="lg" fontWeight="medium">
+                  {nft.metadata.name}
+                </Heading>
+              )}
             </Stack>
-            {account.data ? (
-              <>
-                <Button colorScheme="blue" size="lg" onClick={onCreateOrderOpen}>
-                  Create Order
-                </Button>
-                <Button colorScheme="blue" size="lg" onClick={cancelOrder}>
-                  Cancel
-                </Button>
-                <Button colorScheme="blue" size="lg" onClick={onMakeOfferOpen}>
-                  Make Offer
-                </Button>
-                <Button colorScheme="blue" size="lg" onClick={fulfillOrder}>
-                  Fulfill Order
-                </Button>
-              </>
-            ) : (
-              <ConnectWalletButton size="lg" />
-            )}
-
-            <Modal isOpen={isCreateOrderOpen} onClose={onCreateOrderClose}>
-              <ModalOverlay />
-              <ModalContent p="4">
-                <ModalHeader>List Token for Sale</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
-                  <Flex alignItems="center" justify="space-between" my="2">
-                    <Text fontWeight="semibold">Price</Text>
-                    <NumberInput step={0.01} min={0} onChange={(amount) => handleAmount(amount)}>
-                      <NumberInputField placeholder="Amount" />
-                      <NumberInputStepper>
-                        <NumberIncrementStepper />
-                        <NumberDecrementStepper />
-                      </NumberInputStepper>
-                    </NumberInput>
-                  </Flex>
-                  <Flex alignItems="center" justify="space-between" my="4">
-                    <Text fontWeight="semibold">Fees</Text>
-                    <Text>0%</Text>
-                  </Flex>
-                  <Flex alignItems="center" justify="space-between" my="4">
-                    <Text fontWeight="semibold">You get</Text>
-                    <Text>{youGetAmount}</Text>
-                  </Flex>
-                </ModalBody>
-                <ModalFooter>
-                  <Stack width="full" direction={{ base: "column", lg: "row" }}>
-                    <Button width="full" onClick={onCreateOrderClose}>
-                      Cancel
-                    </Button>
-                    <Button colorScheme="blue" width="full" onClick={sell}>
-                      List
-                    </Button>
-                  </Stack>
-                </ModalFooter>
-              </ModalContent>
-            </Modal>
-            <Modal isOpen={isMakeOfferOpen} onClose={onMakeOfferClose}>
-              <ModalOverlay />
-              <ModalContent p="4">
-                <ModalHeader>Make a Token Offer</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
-                  <Flex alignItems="center" justify="space-between" my="2">
-                    <Text fontWeight="semibold">Price (wETH)</Text>
-                    <NumberInput step={0.01} min={0} onChange={(amount) => handleAmount(amount)}>
-                      <NumberInputField placeholder="Amount" />
-                      <NumberInputStepper>
-                        <NumberIncrementStepper />
-                        <NumberDecrementStepper />
-                      </NumberInputStepper>
-                    </NumberInput>
-                  </Flex>
-                  <Flex alignItems="center" justify="space-between" my="4">
-                    <Text fontWeight="semibold">Fees</Text>
-                    <Text>2.5%</Text>
-                  </Flex>
-                  <Flex alignItems="center" justify="space-between" my="4">
-                    <Text fontWeight="semibold">Total Cost</Text>
-                    <Text>{youGetAmount}</Text>
-                  </Flex>
-                </ModalBody>
-                <ModalFooter>
-                  <Stack width="full" direction={{ base: "column", lg: "row" }}>
-                    <Button width="full" onClick={onMakeOfferClose}>
-                      Cancel
-                    </Button>
-                    <Button colorScheme="blue" width="full" onClick={sell}>
-                      Make Offer
-                    </Button>
-                  </Stack>
-                </ModalFooter>
-              </ModalContent>
-            </Modal>
-            <Box border="1px" borderColor="gray.200" borderRadius="md" p="6">
-              <Heading size="md" mb="4">
-                Token Info
-              </Heading>
-              <Flex alignItems="center" justify="space-between">
-                <Text>Contract Address</Text>
-                <Link href={``}>
-                  <HStack>
-                    <Text color={"blue.500"}>{shortenAddress(nft.contractAddress)}</Text>
-                    <Icon as={FiExternalLink} color="blue.500" />
-                  </HStack>
-                </Link>
-              </Flex>
-              <Flex alignItems="center" justify="space-between">
-                <Text>Token ID</Text>
-                <Text>{nft.tokenId}</Text>
-              </Flex>
-              <Flex alignItems="center" justify="space-between">
-                <Text>Token Standard</Text>
-                {nft.supportsInterface?.isERC721 ? <Text>ERC721</Text> : <Text>undefined</Text>}
-              </Flex>
-            </Box>
+            <Text color={useColorModeValue("gray.600", "gray.400")}>
+              {nft.metadata ? nft.metadata.description : ""}
+            </Text>
           </Stack>
+          {account.data ? (
+            <>
+              <Button colorScheme="blue" size="lg" onClick={onCreateOrderOpen}>
+                Sell
+              </Button>
+              <Button colorScheme="blue" size="lg" onClick={onMakeOfferOpen}>
+                Offer
+              </Button>
+            </>
+          ) : (
+            <ConnectWalletButton size="lg" />
+          )}
+
+          <Modal isOpen={isCreateOrderOpen} onClose={onCreateOrderClose}>
+            <ModalOverlay />
+            <ModalContent p="4">
+              <ModalHeader>List Token for Sale</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <Flex alignItems="center" justify="space-between" my="2">
+                  <Text fontWeight="semibold">Price</Text>
+                  <NumberInput step={0.01} min={0} onChange={(amount) => handleAmount(amount)}>
+                    <NumberInputField placeholder="Amount" />
+                    <NumberInputStepper>
+                      <NumberIncrementStepper />
+                      <NumberDecrementStepper />
+                    </NumberInputStepper>
+                  </NumberInput>
+                </Flex>
+                <Flex alignItems="center" justify="space-between" my="4">
+                  <Text fontWeight="semibold">Fees</Text>
+                  <Text>0%</Text>
+                </Flex>
+                <Flex alignItems="center" justify="space-between" my="4">
+                  <Text fontWeight="semibold">You get</Text>
+                  <Text>{youGetAmount}</Text>
+                </Flex>
+              </ModalBody>
+              <ModalFooter>
+                <Stack width="full" direction={{ base: "column", lg: "row" }}>
+                  <Button width="full" onClick={onCreateOrderClose}>
+                    Cancel
+                  </Button>
+                  <Button colorScheme="blue" width="full" onClick={sell}>
+                    List
+                  </Button>
+                </Stack>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+          <Modal isOpen={isMakeOfferOpen} onClose={onMakeOfferClose}>
+            <ModalOverlay />
+            <ModalContent p="4">
+              <ModalHeader>Make a Token Offer</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <Flex alignItems="center" justify="space-between" my="2">
+                  <Text fontWeight="semibold">Price (wETH)</Text>
+                  <NumberInput step={0.01} min={0} onChange={(amount) => handleAmount(amount)}>
+                    <NumberInputField placeholder="Amount" />
+                    <NumberInputStepper>
+                      <NumberIncrementStepper />
+                      <NumberDecrementStepper />
+                    </NumberInputStepper>
+                  </NumberInput>
+                </Flex>
+                <Flex alignItems="center" justify="space-between" my="4">
+                  <Text fontWeight="semibold">Fees</Text>
+                  <Text>2.5%</Text>
+                </Flex>
+                <Flex alignItems="center" justify="space-between" my="4">
+                  <Text fontWeight="semibold">Total Cost</Text>
+                  <Text>{youGetAmount}</Text>
+                </Flex>
+              </ModalBody>
+              <ModalFooter>
+                <Stack width="full" direction={{ base: "column", lg: "row" }}>
+                  <Button width="full" onClick={onMakeOfferClose}>
+                    Cancel
+                  </Button>
+                  <Button colorScheme="blue" width="full" onClick={sell}>
+                    Make Offer
+                  </Button>
+                </Stack>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+          <Box border="1px" borderColor="gray.200" borderRadius="md" p="6">
+            <Heading size="md" mb="4">
+              Token Info
+            </Heading>
+            <Flex alignItems="center" justify="space-between">
+              <Text>Contract Address</Text>
+              <Link href={``}>
+                <HStack>
+                  <Text color={"blue.500"}>{shortenAddress(nft.contractAddress)}</Text>
+                  <Icon as={FiExternalLink} color="blue.500" />
+                </HStack>
+              </Link>
+            </Flex>
+            <Flex alignItems="center" justify="space-between">
+              <Text>Token ID</Text>
+              <Text>{nft.tokenId}</Text>
+            </Flex>
+            <Flex alignItems="center" justify="space-between">
+              <Text>Token Standard</Text>
+              {nft.supportsInterface?.isERC721 ? <Text>ERC721</Text> : <Text>undefined</Text>}
+            </Flex>
+          </Box>
         </Stack>
-      </Box>
+      </Stack>
     </Box>
   );
 };
