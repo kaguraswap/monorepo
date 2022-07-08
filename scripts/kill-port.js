@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const kill = require("kill-port");
-const firebase = require("./firebase.json");
+const firebase = require("../firebase.json");
 
 const main = () => {
   for (const { port } of Object.values(firebase.emulators)) {
