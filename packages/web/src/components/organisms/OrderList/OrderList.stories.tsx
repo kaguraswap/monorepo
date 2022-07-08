@@ -3,18 +3,18 @@ import React from "react";
 
 import { nft } from "../../../../../common/entities/nft";
 import { orders } from "../../../../../common/entities/order";
-import { NFTTemplate as Component } from "./NFT";
+import { OrderList as Component } from "./OrderList";
 
 export default {
-  title: "Templates/NFT",
+  title: "Organisms/OrderList",
   component: Component,
 } as ComponentMeta<typeof Component>;
 
 const Template: ComponentStory<typeof Component> = (args) => <Component {...args} />;
 
-export const NFT = Template.bind({});
-NFT.args = {
-  nft,
+export const OrderList = Template.bind({});
+
+OrderList.args = {
   orders: orders.map((order) => {
     return {
       ...order,

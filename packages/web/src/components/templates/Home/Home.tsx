@@ -1,17 +1,17 @@
 import React from "react";
 
-import { NFT } from "../../../../../common/entities/nft";
-import { NFTList } from "../../organisms/NFTList";
+import { Order } from "../../../../../common/entities/order";
+import { OrderList } from "../../organisms/OrderList";
 import { DefaultLayout } from "../../utils/layout";
 
 export interface HomeTemplateProps {
-  nfts: NFT[];
+  orders: Order[];
 }
 
-export const HomeTemplate: React.FC<HomeTemplateProps> = ({ nfts }) => {
+export const HomeTemplate: React.FC<HomeTemplateProps> = ({ orders }) => {
   return (
     <DefaultLayout>
-      <NFTList nfts={nfts} />
+      <OrderList orders={orders} />
     </DefaultLayout>
   );
 };
