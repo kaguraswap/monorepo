@@ -1,7 +1,7 @@
 import React from "react";
 
-import { NFT } from "../../../../../common/types/nft";
-import { Order } from "../../../../../common/types/order";
+import { NFT } from "../../../../../common/entities/nft";
+import { Order } from "../../../../../common/entities/order";
 import { NFTDetail } from "../../organisms/NFTDetail";
 import { DefaultLayout } from "../../utils/layout";
 

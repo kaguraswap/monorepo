@@ -1,3 +1,5 @@
+import { OrderWithCounter as SeaportOrder } from "@opensea/seaport-js/lib/types";
+
 export interface Order {
   direction: "sell" | "buy";
   type: "seaport";
@@ -10,5 +12,7 @@ export interface Order {
   maker: string;
   startTime: string;
   endTime: string;
-  raw: any;
+  isValid?: boolean;
+  hash?: string;
+  raw?: SeaportOrder;
 }

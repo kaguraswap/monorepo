@@ -1,4 +1,4 @@
-import networks from "../configs/networks.json";
+import networks from "../../configs/networks.json";
 
 type Networks = typeof networks;
 export type ChainId = keyof Networks;

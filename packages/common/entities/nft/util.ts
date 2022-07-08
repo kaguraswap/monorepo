@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 
-import { isChainId } from "../types/chainId";
-import { NFT } from "../types/nft";
+import { isChainId } from "../network";
+import { NFT } from "./type";
 
 export const toKey = (nft: NFT) => {
   return `${nft.chainId}:${nft.contractAddress}:${nft.tokenId}`;

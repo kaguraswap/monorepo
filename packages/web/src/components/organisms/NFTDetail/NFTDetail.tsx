@@ -27,15 +27,14 @@ import { Seaport } from "@opensea/seaport-js";
 import { ItemType } from "@opensea/seaport-js/lib/constants";
 import { Link } from "components/atoms/Link";
 import { ethers } from "ethers";
-import { doc, setDoc } from "firebase/firestore";
+import { httpsCallable } from "firebase/functions";
 import React, { useState } from "react";
 import { FiExternalLink } from "react-icons/fi";
 import { useAccount, useSigner } from "wagmi";
 
-import { NFT } from "../../../../../common/types/nft";
-import { Order } from "../../../../../common/types/order";
-import { db } from "../../../lib/firebase";
-import { createOrder, toHash } from "../../../lib/order";
+import { NFT } from "../../../../../common/entities/nft";
+import { Order } from "../../../../../common/entities/order";
+import { functions } from "../../../lib/firebase";
 
 export interface NFTDetailProps {
   nft: NFT;
@@ -86,19 +85,21 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
       address
     );
 
-    const seaportOrder = await executeAllOfferActions();
-    const order = createOrder(nft.chainId, nft.contractAddress, nft.tokenId);
-    order.raw = seaportOrder;
-    const hash = await toHash(order);
-    await setDoc(doc(db, "orders", hash), order);
-    console.log(hash);
+    const order = await executeAllOfferActions();
+
+    // console.log({ type: "seaport", seaportOrder });
+    await httpsCallable(functions, "order-create")({ type: "seaport", nft, order });
+
+    // const hash = await toHash(order);
+    // await setDoc(doc(db, "orders", hash), order);
+    // console.log(hash);
   };
 
   const fulfillOrder = async () => {
-    if (!signer.data || !account.data) {
+    const [order] = orders;
+    if (!signer.data || !account.data || !order.raw) {
       return;
     }
-    const [order] = orders;
 
     const { address } = account.data;
     const provider = signer.data.provider as ethers.providers.JsonRpcProvider;

@@ -1,7 +1,7 @@
 import { Box, SimpleGrid } from "@chakra-ui/react";
 import React from "react";
 
-import { NFT } from "../../../../../common/types/nft";
+import { NFT } from "../../../../../common/entities/nft";
 import { Link } from "../../atoms/Link";
 import { NFTListItem } from "../../molecules/NFTListItem";
 

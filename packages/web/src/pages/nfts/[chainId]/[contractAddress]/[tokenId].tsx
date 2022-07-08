@@ -4,8 +4,7 @@ import type { GetServerSideProps, NextPage } from "next";
 import React from "react";
 import { useCollectionData, useDocumentData } from "react-firebase-hooks/firestore";
 
-import { NFT } from "../../../../../../common/types/nft";
-import { toKey, validate } from "../../../../../../common/utils/nft";
+import { NFT, toKey, validate } from "../../../../../../common/entities/nft";
 import { NFTTemplate } from "../../../../components/templates/NFT";
 import { db, functions } from "../../../../lib/firebase";
 
