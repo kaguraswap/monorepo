@@ -36,6 +36,7 @@ import { BSP, FEE_RECIPIENT } from "../../../../../common/configs/app";
 import { NFT } from "../../../../../common/entities/nft";
 import { Order } from "../../../../../common/entities/order";
 import { functions } from "../../../lib/firebase";
+import { ConnectWalletButton } from "../../molecules/ConnectWalletButton";
 
 export interface NFTDetailProps {
   nft: NFT;
@@ -142,12 +143,25 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
                 {nft.metadata ? nft.metadata.description : ""}
               </Text>
             </Stack>
-            <Button colorScheme="blue" size="lg" onClick={onCreateOrderOpen}>
-              Create Order
-            </Button>
-            <Button colorScheme="blue" size="lg" onClick={cancelOrder}>
-              Cancel
-            </Button>
+            {account.data ? (
+              <>
+                <Button colorScheme="blue" size="lg" onClick={onCreateOrderOpen}>
+                  Create Order
+                </Button>
+                <Button colorScheme="blue" size="lg" onClick={cancelOrder}>
+                  Cancel
+                </Button>
+                <Button colorScheme="blue" size="lg" onClick={onMakeOfferOpen}>
+                  Make Offer
+                </Button>
+                <Button colorScheme="blue" size="lg" onClick={fulfillOrder}>
+                  Fulfill Order
+                </Button>
+              </>
+            ) : (
+              <ConnectWalletButton size="lg" />
+            )}
+
             <Modal isOpen={isCreateOrderOpen} onClose={onCreateOrderClose}>
               <ModalOverlay />
               <ModalContent p="4">
@@ -185,12 +199,6 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
                 </ModalFooter>
               </ModalContent>
             </Modal>
-            <Button colorScheme="blue" size="lg" onClick={fulfillOrder}>
-              Fulfill Order
-            </Button>
-            <Button colorScheme="blue" size="lg" onClick={onMakeOfferOpen}>
-              Make Offer
-            </Button>
             <Modal isOpen={isMakeOfferOpen} onClose={onMakeOfferClose}>
               <ModalOverlay />
               <ModalContent p="4">
