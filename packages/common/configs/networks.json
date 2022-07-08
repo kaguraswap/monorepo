@@ -15,7 +15,7 @@
     "symbol": "ETH",
     "type": "evm",
     "env": "testnet",
-    "rpc": "https://kovan.infura.io/v3/{INFURA_PROJECT_KEY}",
+    "rpc": "https://kovan.infura.io/v3/95f65ab099894076814e8526f52c9149",
     "explorer": "https://kovan.etherscan.io/",
     "protocol": "seaport",
     "api": "covalent"

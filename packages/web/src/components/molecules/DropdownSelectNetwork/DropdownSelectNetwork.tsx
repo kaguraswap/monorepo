@@ -1,4 +1,4 @@
-import { Button, Flex, Icon, Image, Popover, PopoverContent, PopoverTrigger, SimpleGrid, Text } from "@chakra-ui/react";
+import { Button, Image, Popover, PopoverContent, PopoverTrigger, SimpleGrid, Text } from "@chakra-ui/react";
 import { useNetwork } from "@thirdweb-dev/react";
 import React from "react";
 

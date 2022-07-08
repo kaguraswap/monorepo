@@ -1,7 +1,7 @@
 import { AspectRatio, Box, HStack, Image, Skeleton, Stack, Tag, Text } from "@chakra-ui/react";
 import React from "react";
 
-import { NFT } from "../../../../../common/types/nft";
+import { NFT } from "../../../../../common/entities/nft";
 
 export interface NFTListItemProps {
   nft: NFT;

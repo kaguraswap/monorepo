@@ -5,9 +5,8 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { Seaport } from "@opensea/seaport-js";
 import { NftSwapV4 as ZeroEx } from "@traderxyz/nft-swap-sdk";
 import { ZDK } from "@zoralabs/zdk";
-import { ethers } from "hardhat";
+import { ethers, network } from "hardhat";
 
-import { TEST_CHAIN_ID } from "../../lib/constant";
 import { ERC20Mock, ERC721Mock, ERC1155Mock, WETHMock } from "../../typechain";
 
 interface Fixture {
@@ -79,7 +78,7 @@ export const describeWithSeaportFixture = (name: string, suiteCb: (fixture: Fixt
           erc721OrdersFeature.interface.getSighash("migrate"),
           owner.address
         );
-        const zeroEx = new ZeroEx(provider, owner, TEST_CHAIN_ID, {
+        const zeroEx = new ZeroEx(provider, owner, network.config.chainId, {
           zeroExExchangeProxyContractAddress: zeroExContract.address,
         });
         fixture.zeroEx = zeroEx;
