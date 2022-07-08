@@ -26,7 +26,7 @@
     "dev:web": "yarn workspace @kaguraswap/web dev",
     "dev:storybook": "yarn workspace @kaguraswap/web storybook",
     "dev:functions": "yarn workspace @kaguraswap/functions dev",
-    "dev:firebase": "node kill-port.js && firebase emulators:start --only auth,functions,firestore,pubsub",
+    "dev:firebase": "firebase emulators:start --only auth,functions,firestore,pubsub",
     "prebuild": "yarn workspace @kaguraswap/contracts build",
     "build": "yarn build:contracts && run-p build:web build:functions",
     "build:contracts": "yarn workspace @kaguraswap/contracts build",
