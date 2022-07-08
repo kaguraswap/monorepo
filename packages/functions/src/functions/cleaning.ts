@@ -26,7 +26,10 @@ export const order = functions.pubsub.schedule(SPAN_SYNC_BLOCKCHAIN).onRun(async
         .callStatic()
         .catch(() => false);
       if (!isValid) {
-        await db.collection("orders").doc(doc.id).set({ isValid }, { merge: true });
+        await db
+          .collection("orders")
+          .doc(doc.id)
+          .set({ isValid, updatedAt: admin.firestore.FieldValue.serverTimestamp() }, { merge: true });
       }
     }
   }

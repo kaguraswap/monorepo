@@ -32,7 +32,15 @@ export const create = functions.https.onRequest(async (req, res) => {
       throw new Error(ORDER_VERIFICATION_FAILED);
     }
     const hash = seaport.getOrderHash(order.parameters);
-    const orderDoc = { type, chainId, nft, hash, isValid, raw: order };
+    const orderDoc = {
+      type,
+      chainId,
+      nft,
+      hash,
+      isValid,
+      raw: order,
+      createdAt: admin.firestore.FieldValue.serverTimestamp(),
+    };
     const key = await toHash(order);
     await db.collection("orders").doc(key).set(orderDoc, { merge: true });
     res.send({ status: true, data: orderDoc });
