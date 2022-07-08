@@ -30,6 +30,7 @@ import { ethers } from "ethers";
 import { httpsCallable } from "firebase/functions";
 import React, { useState } from "react";
 import { FiExternalLink } from "react-icons/fi";
+import BeatLoader from "react-spinners/BeatLoader";
 import { useAccount, useSigner } from "wagmi";
 
 import { BSP, FEE_RECIPIENT } from "../../../../../common/configs/app";
@@ -94,17 +95,31 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
   return (
     <Box maxW="7xl" mx="auto" px={{ base: "4", md: "8", lg: "12" }} py={{ base: "6", md: "8", lg: "12" }}>
       <Stack direction={{ base: "column", lg: "row" }} spacing={{ base: "6", lg: "12", xl: "16" }}>
-        {nft.metadata && <Image src={nft.metadata.image} alt={nft.metadata.name} width={"xl"}></Image>}
+        {nft.metadata?.image ? (
+          <Image src={nft.metadata.image} alt={nft.metadata.name} width={"xl"}></Image>
+        ) : (
+          <Image src="/image_placeholder.png" alt="placeholder" width={"xl"}></Image>
+        )}
         <Stack spacing={{ base: "6", lg: "8" }} maxW={{ lg: "sm" }} justify="center">
           <Stack spacing={{ base: "3", md: "4" }}>
             <Stack spacing="3">
               <Text fontSize="sm" fontWeight="medium" color={useColorModeValue("gray.600", "gray.400")}>
                 {nft.chainId}
               </Text>
-              {nft.metadata && (
-                <Heading size="lg" fontWeight="medium">
-                  {nft.metadata.name}
-                </Heading>
+              {nft.metadata ? (
+                <>
+                  {nft.metadata.name ? (
+                    <Heading size="lg" fontWeight="medium">
+                      {nft.metadata.name}
+                    </Heading>
+                  ) : (
+                    <Heading size="lg" fontWeight="medium">
+                      # {nft.tokenId}
+                    </Heading>
+                  )}
+                </>
+              ) : (
+                <BeatLoader size={16} />
               )}
             </Stack>
             <Text color={useColorModeValue("gray.600", "gray.400")}>
