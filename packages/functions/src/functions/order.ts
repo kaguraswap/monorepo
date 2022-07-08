@@ -5,7 +5,6 @@ import * as functions from "firebase-functions";
 
 import networks from "../../../common/configs/networks.json";
 import { isChainId } from "../../../common/entities/network";
-import { toHash } from "../../../common/entities/order";
 import { INVALID_ARGUMENT, NOT_IMPLEMENTED, ORDER_VERIFICATION_FAILED } from "../../../common/utils/error";
 import { cors } from "../lib/cors";
 
@@ -41,8 +40,7 @@ export const create = functions.https.onRequest(async (req, res) => {
       raw: order,
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
     };
-    const key = await toHash(order);
-    await db.collection("orders").doc(key).set(orderDoc, { merge: true });
+    await db.collection("orders").doc(hash).set(orderDoc, { merge: true });
     res.send({ status: true, data: orderDoc });
   });
 });

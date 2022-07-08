@@ -1,3 +1,4 @@
+import { OrderList } from "components/organisms/OrderList";
 import React from "react";
 
 import { NFT } from "../../../../../common/entities/nft";
@@ -14,6 +15,7 @@ export const NFTTemplate: React.FC<NFTTemplateProps> = ({ nft, orders }) => {
   return (
     <DefaultLayout>
       <NFTDetail nft={nft} orders={orders} />
+      <OrderList orders={orders} />
     </DefaultLayout>
   );
 };
