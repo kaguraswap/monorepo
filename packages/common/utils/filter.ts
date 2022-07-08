@@ -1,5 +1,5 @@
-import { NFT } from "../types/nft";
-import { Order } from "../types/order";
+import { NFT } from "../entities/nft";
+import { Order } from "../entities/order";
 
 export const filterAndMergeOrdersWithNFT = (orders: Order[], nft: NFT) => {
   return orders

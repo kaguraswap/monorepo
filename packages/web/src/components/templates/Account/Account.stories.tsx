@@ -1,7 +1,7 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
 
-import { nfts } from "../../../../../common/utils/fixture";
+import { nfts } from "../../../../../common/entities/nft";
 import { AccountTemplate as Component } from "./Account";
 
 export default {

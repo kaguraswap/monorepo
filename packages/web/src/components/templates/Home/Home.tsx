@@ -1,6 +1,6 @@
 import React from "react";
 
-import { NFT } from "../../../../../common/types/nft";
+import { NFT } from "../../../../../common/entities/nft";
 import { NFTList } from "../../organisms/NFTList";
 import { DefaultLayout } from "../../utils/layout";
 

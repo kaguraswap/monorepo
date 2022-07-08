@@ -3,7 +3,7 @@ import { useConnect } from "@thirdweb-dev/react";
 import React from "react";
 
 interface ConnectWalletButtonProps {
-  expectedChainId: number;
+  size: string;
 }
 
 const connectorIdToImageUrl: Record<string, string> = {
@@ -13,13 +13,13 @@ const connectorIdToImageUrl: Record<string, string> = {
   Injected: "https://thirdweb.com//logos/wallet.png",
 };
 
-export const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = () => {
+export const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({ size }) => {
   const [{ data, loading }, connect] = useConnect();
 
   return (
     <Popover trigger="hover" openDelay={0} placement="bottom" defaultIsOpen={false} gutter={12}>
       <PopoverTrigger>
-        <Button size="sm" color="gray.800">
+        <Button size={size} color="gray.800">
           Connect Wallet
         </Button>
       </PopoverTrigger>

@@ -7,8 +7,6 @@ import "solidity-coverage";
 import * as dotenv from "dotenv";
 import { HardhatUserConfig } from "hardhat/config";
 
-import { TEST_CHAIN_ID } from "./lib/constant";
-
 dotenv.config();
 
 const config: HardhatUserConfig = {
@@ -45,7 +43,7 @@ const config: HardhatUserConfig = {
   },
   networks: {
     hardhat: {
-      chainId: TEST_CHAIN_ID,
+      chainId: 1,
       // forking: {
       //   url: "https://rpc.ankr.com/eth",
       // },
