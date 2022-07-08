@@ -1,6 +1,6 @@
 import type { GetServerSideProps, NextPage } from "next";
 
-import { nfts } from "../../../common/utils/fixture";
+import { nfts } from "../../../common/entities/nft";
 import { HomeTemplate, HomeTemplateProps } from "../components/templates/Home";
 
 const HomePage: NextPage<HomeTemplateProps> = ({ nfts }) => {
