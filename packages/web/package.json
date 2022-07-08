@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "storybook": "start-storybook -p 6006 --ci",
+    "storybook": "start-storybook -p 6006 --ci -s public",
     "build-storybook": "build-storybook",
     "chromatic": "chromatic --exit-zero-on-changes"
   },
