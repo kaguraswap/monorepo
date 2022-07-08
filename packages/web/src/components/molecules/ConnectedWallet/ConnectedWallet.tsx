@@ -19,12 +19,10 @@ import React from "react";
 import { IoCopy, IoWalletOutline } from "react-icons/io5";
 import { RiMoneyDollarCircleLine } from "react-icons/ri";
 
+import { shortenAddress } from "../../../../../common/utils/wallet";
+
 interface ConnectedWalletProps {
   tokenAddress?: string;
-}
-
-function shortenAddress(str: string) {
-  return `${str.substring(0, 6)}...${str.substring(str.length - 4)}`;
 }
 
 export const ConnectedWallet: React.FC<ConnectedWalletProps> = ({ tokenAddress }) => {
