@@ -149,15 +149,24 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
               </Text>
             </Stack>
             {account.data ? (
-              <Button colorScheme="blue" size="lg" onClick={onCreateOrderOpen}>
-                Create Order
-              </Button>
+              <>
+                <Button colorScheme="blue" size="lg" onClick={onCreateOrderOpen}>
+                  Create Order
+                </Button>
+                <Button colorScheme="blue" size="lg" onClick={cancelOrder}>
+                  Cancel
+                </Button>
+                <Button colorScheme="blue" size="lg" onClick={onMakeOfferOpen}>
+                  Make Offer
+                </Button>
+                <Button colorScheme="blue" size="lg" onClick={fulfillOrder}>
+                  Fulfill Order
+                </Button>
+              </>
             ) : (
               <ConnectWalletButton size="lg" />
             )}
-            <Button colorScheme="blue" size="lg" onClick={cancelOrder}>
-              Cancel
-            </Button>
+
             <Modal isOpen={isCreateOrderOpen} onClose={onCreateOrderClose}>
               <ModalOverlay />
               <ModalContent p="4">
@@ -195,16 +204,6 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
                 </ModalFooter>
               </ModalContent>
             </Modal>
-            <Button colorScheme="blue" size="lg" onClick={fulfillOrder}>
-              Fulfill Order
-            </Button>
-            {account.data ? (
-              <Button colorScheme="blue" size="lg" onClick={onMakeOfferOpen}>
-                Make Offer
-              </Button>
-            ) : (
-              <ConnectWalletButton size="lg" />
-            )}
             <Modal isOpen={isMakeOfferOpen} onClose={onMakeOfferClose}>
               <ModalOverlay />
               <ModalContent p="4">
