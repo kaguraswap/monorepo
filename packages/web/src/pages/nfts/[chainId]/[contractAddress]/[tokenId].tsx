@@ -20,9 +20,9 @@ const NFTPage: NextPage<NFTPageProps> = ({ nft }) => {
   const [orderDocs] = useCollectionData(
     query(
       collection(db, "orders"),
-      where("chainId", "==", nft.chainId),
-      where("nftContractAddress", "==", nft.contractAddress),
-      where("nftTokenId", "==", nft.tokenId)
+      where("nft.chainId", "==", nft.chainId),
+      where("nft.contractAddress", "==", nft.contractAddress),
+      where("nft.tokenId", "==", nft.tokenId)
     )
   );
   React.useEffect(() => {
@@ -34,6 +34,7 @@ const NFTPage: NextPage<NFTPageProps> = ({ nft }) => {
       ...nftDoc,
     });
     if (orderDocs) {
+      console.log(orderDocs);
       setSynceOrdersState(orderDocs as any);
     }
   }, [nft, nftDoc, orderDocs]);

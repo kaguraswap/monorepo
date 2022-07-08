@@ -1,3 +1,5 @@
+import { ChainId } from "../network";
+
 export interface SupportsInterface {
   isERC165?: boolean;
   isERC721?: boolean;
@@ -12,7 +14,7 @@ export interface NFTMetadata {
 }
 
 export interface NFT {
-  chainId: string;
+  chainId: ChainId;
   contractAddress: string;
   tokenId: string;
   holder?: string;

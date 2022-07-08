@@ -35,6 +35,7 @@ import { useAccount, useSigner } from "wagmi";
 import { BSP, FEE_RECIPIENT } from "../../../../../common/configs/app";
 import { NFT } from "../../../../../common/entities/nft";
 import { Order } from "../../../../../common/entities/order";
+import { shortenAddress } from "../../../../../common/utils/wallet";
 import { functions } from "../../../lib/firebase";
 import { ConnectWalletButton } from "../../molecules/ConnectWalletButton";
 
@@ -52,10 +53,6 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
   const [youGetAmount, setYouGetAmount] = useState(0);
 
   const fees = [{ recipient: FEE_RECIPIENT, basisPoints: BSP }];
-
-  const shortenAddress = (str: string) => {
-    return `${str.substring(0, 6)}...${str.substring(str.length - 4)}`;
-  };
 
   const handleAmount = (amount: string) => {
     setAmount(amount);

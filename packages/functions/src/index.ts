@@ -7,8 +7,9 @@ interface Files {
 }
 
 const files: Files = {
-  nft: "./handlers/nft",
-  order: "./handlers/order",
+  nft: "./functions/nft",
+  order: "./functions/order",
+  cleaning: "./functions/cleaning",
 };
 
 const loadFunctions = (filesObj: Files) => {
