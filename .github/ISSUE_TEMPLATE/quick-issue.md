@@ -1,10 +1,9 @@
 ---
 name: Quick issue
 about: This is quick issue template
-title: ''
-labels: ''
-assignees: ''
-
+title: ""
+labels: ""
+assignees: ""
 ---
 
 ## Overview
