@@ -1,4 +1,5 @@
-import { Box, Flex, HStack, Image, Text, useColorModeValue } from "@chakra-ui/react";
+import { Box, Flex, HStack, useColorModeValue } from "@chakra-ui/react";
+import Image from "next/image";
 import React from "react";
 import { useAccount } from "wagmi";
 
@@ -21,7 +22,7 @@ export const Header: React.FC = () => {
       >
         <HStack spacing="10" justify="space-between">
           <Link href="/">
-            <Image src={"/brand/logo_transparent.png"} alt={"logo"} draggable="false" w="12" h="12" />
+            <Image src={"/brand/logo_transparent.png"} alt={"logo"} width="48px" height="48px" />
           </Link>
           <Flex gap={"1"}>
             <HStack spacing="3">
