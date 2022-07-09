@@ -1,12 +1,12 @@
 import { Seaport } from "@opensea/seaport-js";
 import { ethers } from "ethers";
 import * as admin from "firebase-admin";
-import * as functions from "firebase-functions";
 
 import networks from "../../../common/configs/networks.json";
 import { isChainId } from "../../../common/entities/network";
 import { INVALID_ARGUMENT, NOT_IMPLEMENTED, ORDER_VERIFICATION_FAILED } from "../../../common/utils/error";
 import { cors } from "../lib/cors";
+import { functions } from "../lib/functions";
 
 const db = admin.firestore();
 

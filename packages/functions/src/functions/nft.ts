@@ -1,7 +1,6 @@
 import axios from "axios";
 import { ethers } from "ethers";
 import * as admin from "firebase-admin";
-import * as functions from "firebase-functions";
 
 import networks from "../../../common/configs/networks.json";
 import { NFTMetadata, SupportsInterface, toKey, validate } from "../../../common/entities/nft";
@@ -11,6 +10,7 @@ import IERC721Artifact from "../../../contracts/artifacts/@openzeppelin/contract
 import IERC165Artifact from "../../../contracts/artifacts/@openzeppelin/contracts/utils/introspection/IERC165.sol/IERC165.json";
 import { IERC165, IERC721, IERC721Metadata } from "../../../contracts/typechain";
 import { cors } from "../lib/cors";
+import { functions } from "../lib/functions";
 
 const db = admin.firestore();
 
