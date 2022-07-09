@@ -1,11 +1,11 @@
 import { Seaport } from "@opensea/seaport-js";
 import { ethers } from "ethers";
 import * as admin from "firebase-admin";
-import * as functions from "firebase-functions";
 
 import { SPAN_SYNC_BLOCKCHAIN } from "../../../common/configs/app";
 import networks from "../../../common/configs/networks.json";
 import { Order } from "../../../common/entities/order";
+import { functions } from "../lib/functions";
 
 const db = admin.firestore();
 

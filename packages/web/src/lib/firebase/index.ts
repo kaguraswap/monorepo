@@ -3,6 +3,7 @@ import { connectFirestoreEmulator, Firestore, getFirestore } from "firebase/fire
 import { connectFunctionsEmulator, Functions, getFunctions } from "firebase/functions";
 
 import firebase from "../../../../../firebase.json";
+import { FIREBASE_REGION } from "../../../../common/configs/app";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCvRHg3s1glB0I-axzeO2Jchv9oaW0ILQk",
@@ -24,7 +25,7 @@ const getFirebaseApp = (): { app: FirebaseApp; db: Firestore; functions: Functio
     app = initializeApp(firebaseConfig);
   }
   const db = getFirestore(app);
-  const functions = getFunctions(app);
+  const functions = getFunctions(app, FIREBASE_REGION);
   if (!initialized && process.env.NODE_ENV !== "production") {
     connectFirestoreEmulator(db, "localhost", firebase.emulators.firestore.port);
     connectFunctionsEmulator(functions, "localhost", firebase.emulators.functions.port);
