@@ -45,9 +45,7 @@ export const OrderDetail: React.FC<OrderDetailProps> = ({ order }) => {
     <Box>
       <Box maxW="7xl" mx="auto" px={{ base: "4", md: "8", lg: "12" }} py={{ base: "6", md: "8", lg: "12" }}>
         <Stack direction={{ base: "column", lg: "row" }} spacing={{ base: "6", lg: "12", xl: "16" }}>
-          {order.nft.metadata && (
-            <Image src={order.nft.metadata.image} alt={order.nft.metadata.name} width={"xl"}></Image>
-          )}
+          {order.nft.metadata && <Image src={order.nft.metadata.image} alt={order.nft.metadata.name} width={"xl"} />}
           <Stack spacing={{ base: "6", lg: "8" }} maxW={{ lg: "sm" }} justify="center">
             <Stack spacing={{ base: "3", md: "4" }}>
               <Stack spacing="3">
