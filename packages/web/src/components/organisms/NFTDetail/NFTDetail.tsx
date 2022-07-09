@@ -38,6 +38,7 @@ import { NFT } from "../../../../../common/entities/nft";
 import { Order } from "../../../../../common/entities/order";
 import { shortenAddress } from "../../../../../common/utils/wallet";
 import { functions } from "../../../lib/firebase";
+import { chainIdToIcon } from "../../../lib/icons";
 import { ConnectWalletButton } from "../../molecules/ConnectWalletButton";
 
 export interface NFTDetailProps {
@@ -104,7 +105,7 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
           <Stack spacing={{ base: "3", md: "4" }}>
             <Stack spacing="3">
               <Text fontSize="sm" fontWeight="medium" color={useColorModeValue("gray.600", "gray.400")}>
-                {nft.chainId}
+                <Icon as={chainIdToIcon(nft.chainId)} rounded="full" width="8" height="8" />
               </Text>
               {nft.metadata ? (
                 <>
@@ -157,7 +158,7 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
                 </Flex>
                 <Flex alignItems="center" justify="space-between" my="4">
                   <Text fontWeight="semibold">Fees</Text>
-                  <Text>0%</Text>
+                  <Text>2.5%</Text>
                 </Flex>
                 <Flex alignItems="center" justify="space-between" my="4">
                   <Text fontWeight="semibold">You get</Text>

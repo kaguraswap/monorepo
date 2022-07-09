@@ -16,6 +16,7 @@
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
     "@opensea/seaport-js": "^1.0.2",
+    "@thirdweb-dev/chain-icons": "^1.0.4",
     "@thirdweb-dev/react": "^2.4.7",
     "@thirdweb-dev/sdk": "^2.3.23",
     "@walletconnect/web3-provider": "^1.7.8",

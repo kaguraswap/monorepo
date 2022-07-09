@@ -6105,6 +6105,11 @@
   dependencies:
     "@babel/runtime" "^7.12.5"
 
+"@thirdweb-dev/chain-icons@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@thirdweb-dev/chain-icons/-/chain-icons-1.0.4.tgz#5b8b88995f71628885d8e72b679fe0631d281036"
+  integrity sha512-veUEsYonSUH3d+OF71eAUnwngDRzaveKbSZqcHNR6MpZExAMYMMnnVW8gsR+S6GLyLGQHahoUnsxqWZZN7Bx2w==
+
 "@thirdweb-dev/contracts@2.4.3":
   version "2.4.3"
   resolved "https://registry.yarnpkg.com/@thirdweb-dev/contracts/-/contracts-2.4.3.tgz#23d277729b6e267ae7340bcdd991e66b7ef45d52"
