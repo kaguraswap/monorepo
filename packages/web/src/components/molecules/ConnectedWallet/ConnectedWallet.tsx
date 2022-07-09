@@ -26,45 +26,45 @@ interface ConnectedWalletProps {
 }
 
 export const ConnectedWallet: React.FC<ConnectedWalletProps> = ({ tokenAddress }) => {
-  const toast = useToast();
-  const { onOpen, onClose } = useDisclosure({ defaultIsOpen: false });
-  const [{ data }] = useAccount();
-  const address = useAddress();
-  const disconnect = useDisconnect();
-  const { onCopy } = useClipboard(address || "");
-  const { data: balance } = useBalance(tokenAddress);
+  // const toast = useToast();
+  // const { onOpen, onClose } = useDisclosure({ defaultIsOpen: false });
+  // const [{ data }] = useAccount();
+  // const address = useAddress();
+  // const disconnect = useDisconnect();
+  // const { onCopy } = useClipboard(address || "");
+  // const { data: balance } = useBalance(tokenAddress);
 
-  const switchWallet = async () => {
-    const provider = data?.connector?.getProvider();
-    if (!provider?.isMetaMask || !provider.request) {
-      return;
-    }
+  // const switchWallet = async () => {
+  //   const provider = data?.connector?.getProvider();
+  //   if (!provider?.isMetaMask || !provider.request) {
+  //     return;
+  //   }
 
-    await provider.request({
-      method: "wallet_requestPermissions",
-      params: [{ eth_accounts: {} }],
-    });
-    onClose();
-  };
+  //   await provider.request({
+  //     method: "wallet_requestPermissions",
+  //     params: [{ eth_accounts: {} }],
+  //   });
+  //   onClose();
+  // };
 
-  const disconnectWallet = () => {
-    disconnect();
-    onClose();
-  };
+  // const disconnectWallet = () => {
+  //   disconnect();
+  //   onClose();
+  // };
 
-  const copyAddress = () => {
-    onCopy();
-    toast({
-      title: "Address copied to clipboard",
-      status: "success",
-      duration: 5000,
-      isClosable: true,
-    });
-  };
+  // const copyAddress = () => {
+  //   onCopy();
+  //   toast({
+  //     title: "Address copied to clipboard",
+  //     status: "success",
+  //     duration: 5000,
+  //     isClosable: true,
+  //   });
+  // };
 
   return (
     <Flex align="center" gap={2}>
-      {address && (
+      {/* {address && (
         <>
           {balance && (
             <Stack
@@ -132,7 +132,7 @@ export const ConnectedWallet: React.FC<ConnectedWalletProps> = ({ tokenAddress }
             </Box>
           </Popover>
         </>
-      )}
+      )} */}
     </Flex>
   );
 };

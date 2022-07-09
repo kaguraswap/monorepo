@@ -1,5 +1,5 @@
 import { Button, Icon, Popover, PopoverContent, PopoverTrigger, SimpleGrid, Text } from "@chakra-ui/react";
-import { useNetwork } from "@thirdweb-dev/react";
+// import { useNetwork } from "@thirdweb-dev/react";
 import React from "react";
 
 import config from "../../../../../common/configs/networks.json";
@@ -7,22 +7,22 @@ import { chainIdToIcon } from "../../../lib/icons";
 import { PopoverIcon } from "../../atoms/PopoverIcon";
 
 export const DropdownSelectNetwork: React.FC = () => {
-  const [
-    {
-      data: { chain: activeChain },
-    },
-    switchNetwork,
-  ] = useNetwork();
-  const handleSwitchNetwork = async (chainId: string) => {
-    if (!switchNetwork) return;
-    await switchNetwork(Number(chainId));
-  };
+  // const [
+  //   {
+  //     data: { chain: activeChain },
+  //   },
+  //   switchNetwork,
+  // ] = useNetwork();
+  // const handleSwitchNetwork = async (chainId: string) => {
+  //   if (!switchNetwork) return;
+  //   await switchNetwork(Number(chainId));
+  // };
 
   return (
     <Popover trigger="hover" openDelay={0} placement="bottom" defaultIsOpen={false} gutter={12}>
       {({ isOpen }) => (
         <>
-          <PopoverTrigger>
+          {/* <PopoverTrigger>
             <Button
               size="sm"
               color="gray.800"
@@ -48,7 +48,7 @@ export const DropdownSelectNetwork: React.FC = () => {
                 </Button>
               ))}
             </SimpleGrid>
-          </PopoverContent>
+          </PopoverContent> */}
         </>
       )}
     </Popover>

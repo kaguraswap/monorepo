@@ -1,4 +1,4 @@
-import { Box, Flex, HStack, Image, Text, useColorModeValue } from "@chakra-ui/react";
+import { Box, Flex, HStack, Image, useColorModeValue } from "@chakra-ui/react";
 import React from "react";
 import { useAccount } from "wagmi";
 
@@ -8,7 +8,11 @@ import { ConnectWalletButton } from "../../molecules/ConnectWalletButton";
 import { DropdownSelectNetwork } from "../../molecules/DropdownSelectNetwork";
 
 export const Header: React.FC = () => {
-  const [{ data }] = useAccount();
+  const [isConnectedState, setIsConnectedState] = React.useState(false);
+  const { isConnected } = useAccount();
+
+  React.useEffect(() => setIsConnectedState(isConnected), [isConnected]);
+
   return (
     <Box as="section">
       <Box
@@ -25,8 +29,9 @@ export const Header: React.FC = () => {
           </Link>
           <Flex gap={"1"}>
             <HStack spacing="3">
-              {data ? <DropdownSelectNetwork /> : <></>}
-              {data ? <ConnectedWallet /> : <ConnectWalletButton size="sm" />}
+              {/* {isConnectedState ? <DropdownSelectNetwork /> : <></>}
+              {isConnectedState ? <ConnectedWallet /> : <ConnectWalletButton size="sm" />} */}
+              <ConnectWalletButton />
             </HStack>
           </Flex>
         </HStack>
