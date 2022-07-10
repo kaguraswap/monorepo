@@ -1,4 +1,5 @@
 import { Seaport } from "@opensea/seaport-js";
+import { NftSwapV4 as ZeroEx } from "@traderxyz/nft-swap-sdk";
 import { ethers } from "ethers";
 import * as admin from "firebase-admin";
 
@@ -13,24 +14,35 @@ const db = admin.firestore();
 export const create = functions.https.onRequest(async (req, res) => {
   return cors(req, res, async () => {
     const { type, nft, order } = req.body.data;
-    if (type !== "seaport") {
-      throw new Error(NOT_IMPLEMENTED);
-    }
+
     const { chainId } = nft;
     if (!isChainId(chainId)) {
       throw new Error(INVALID_ARGUMENT);
     }
     const { rpc } = networks[chainId];
     const provider = new ethers.providers.JsonRpcProvider(rpc);
-    const seaport = new Seaport(provider);
-    const isValid = await seaport
-      .validate([order], nft.holder)
-      .callStatic()
-      .catch(() => false);
+
+    let isValid;
+    let hash;
+
+    if (type === "seaport") {
+      const seaport = new Seaport(provider);
+      isValid = await seaport
+        .validate([order], nft.holder)
+        .callStatic()
+        .catch(() => false);
+      hash = seaport.getOrderHash(order.parameters);
+    } else if (type === "zeroEx") {
+      isValid = true;
+      hash = "hash";
+    } else {
+      throw new Error(NOT_IMPLEMENTED);
+    }
+
     if (!isValid) {
       throw new Error(ORDER_VERIFICATION_FAILED);
     }
-    const hash = seaport.getOrderHash(order.parameters);
+
     const orderDoc = {
       type,
       chainId,

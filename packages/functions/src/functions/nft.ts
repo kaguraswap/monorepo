@@ -5,10 +5,10 @@ import * as admin from "firebase-admin";
 import networks from "../../../common/configs/networks.json";
 import { NFTMetadata, SupportsInterface, toKey, validate } from "../../../common/entities/nft";
 import { ERC165_ID, ERC721_ID, ERC721_METADATA_ID } from "../../../common/utils/constant";
-import IERC721MetadataArtifact from "../../../contracts/artifacts/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol/IERC721Metadata.json";
-import IERC721Artifact from "../../../contracts/artifacts/@openzeppelin/contracts/token/ERC721/IERC721.sol/IERC721.json";
-import IERC165Artifact from "../../../contracts/artifacts/@openzeppelin/contracts/utils/introspection/IERC165.sol/IERC165.json";
-import { IERC165, IERC721, IERC721Metadata } from "../../../contracts/typechain";
+import IERC721MetadataArtifact from "../../../sdk/artifacts/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol/IERC721Metadata.json";
+import IERC721Artifact from "../../../sdk/artifacts/@openzeppelin/contracts/token/ERC721/IERC721.sol/IERC721.json";
+import IERC165Artifact from "../../../sdk/artifacts/@openzeppelin/contracts/utils/introspection/IERC165.sol/IERC165.json";
+import { IERC165, IERC721, IERC721Metadata } from "../../../sdk/typechain";
 import { cors } from "../lib/cors";
 import { functions } from "../lib/functions";
 
