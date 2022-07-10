@@ -8,7 +8,22 @@
     "rpc": "https://rpc.ankr.com/eth",
     "explorer": "https://etherscan.io/",
     "protocol": "seaport",
-    "api": "covalent"
+    "contract": {
+      "wrapped": ""
+    }
+  },
+  "4": {
+    "name": "Rinkeby",
+    "chainId": 4,
+    "symbol": "ETH",
+    "type": "evm",
+    "env": "testnet",
+    "rpc": "https://rinkeby.infura.io/v3/95f65ab099894076814e8526f52c9149",
+    "explorer": "https://rinkeby.etherscan.io/",
+    "protocol": "zeroEx",
+    "contract": {
+      "wrapped": "0xc778417e063141139fce010982780140aa0cd5ab"
+    }
   },
   "42": {
     "name": "Kovan",
@@ -18,7 +33,9 @@
     "rpc": "https://kovan.infura.io/v3/95f65ab099894076814e8526f52c9149",
     "explorer": "https://kovan.etherscan.io/",
     "protocol": "seaport",
-    "api": "covalent"
+    "contract": {
+      "wrapped": "0xd0a1e359811322d97991e03f863a0c30c2cf029c"
+    }
   },
   "137": {
     "name": "Polygon",
@@ -28,7 +45,9 @@
     "rpc": "https://rpc-mainnet.maticvigil.com/",
     "explorer": "https://polygonscan.com/",
     "protocol": "seaport",
-    "api": "covalent"
+    "contract": {
+      "wrapped": ""
+    }
   },
   "43113": {
     "name": "Avalanche Fuji",
@@ -38,7 +57,9 @@
     "rpc": "https://api.avax-test.network/ext/bc/C/rpc",
     "explorer": "https://testnet.snowtrace.io/",
     "protocol": "seaport",
-    "api": "covalent"
+    "contract": {
+      "wrapped": ""
+    }
   },
   "43114": {
     "name": "Avalanche C-Chain",
@@ -48,7 +69,9 @@
     "rpc": "https://api.avax.network/ext/bc/C/rpc",
     "explorer": "https://snowtrace.io/",
     "protocol": "seaport",
-    "api": "covalent"
+    "contract": {
+      "wrapped": ""
+    }
   },
   "80001": {
     "name": "Mumbai",
@@ -58,6 +81,8 @@
     "rpc": "https://rpc-mumbai.maticvigil.com/",
     "explorer": "https://mumbai.polygonscan.com/",
     "protocol": "seaport",
-    "api": "covalent"
+    "contract": {
+      "wrapped": ""
+    }
   }
 }

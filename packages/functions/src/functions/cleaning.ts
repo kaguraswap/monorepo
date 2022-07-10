@@ -1,4 +1,5 @@
 import { Seaport } from "@opensea/seaport-js";
+import { OrderWithCounter } from "@opensea/seaport-js/lib/types";
 import { ethers } from "ethers";
 import * as admin from "firebase-admin";
 
@@ -18,6 +19,7 @@ export const order = functions.pubsub.schedule(SPAN_SYNC_BLOCKCHAIN).onRun(async
       return;
     }
     if (order.type === "seaport") {
+      order.raw = order.raw as OrderWithCounter;
       const { rpc } = networks[order.chainId];
       const provider = new ethers.providers.JsonRpcProvider(rpc);
       const seaport = new Seaport(provider);

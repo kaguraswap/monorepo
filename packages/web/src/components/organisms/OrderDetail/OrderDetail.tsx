@@ -1,10 +1,10 @@
 import { Box, Button, Heading, Image, Stack, Text, useColorModeValue } from "@chakra-ui/react";
-import { Seaport } from "@opensea/seaport-js";
 import { ethers } from "ethers";
 import React from "react";
 import { useAccount, useSigner } from "wagmi";
 
 import { Order } from "../../../../../common/entities/order";
+import { fulfillOrder as _fulfillOrder } from "../../../../../sdk/lib";
 import { ConnectWalletButton } from "../../molecules/ConnectWalletButton";
 
 export interface OrderDetailProps {
@@ -20,25 +20,19 @@ export const OrderDetail: React.FC<OrderDetailProps> = ({ order }) => {
       return;
     }
     const { address } = account.data;
-    const provider = signer.data.provider as ethers.providers.JsonRpcProvider;
-    const seaport = new Seaport(provider);
-    const cancel = await seaport.cancelOrders([order.raw.parameters], address);
-    await cancel.transact();
+    // const provider = signer.data.provider as ethers.providers.JsonRpcProvider;
+    // const seaport = new Seaport(provider);
+    // const cancel = await seaport.cancelOrders([order.raw.parameters], address);
+    // await cancel.transact();
   };
 
   const fulfillOrder = async () => {
     if (!signer.data || !account.data || !order.raw) {
       return;
     }
-
     const { address } = account.data;
     const provider = signer.data.provider as ethers.providers.JsonRpcProvider;
-    const seaport = new Seaport(provider);
-    const { executeAllActions: executeAllFulfillActions } = await seaport.fulfillOrders({
-      fulfillOrderDetails: [{ order: order.raw }],
-      accountAddress: address,
-    });
-    await executeAllFulfillActions();
+    await _fulfillOrder(provider, order.type, order.raw, address);
   };
 
   return (

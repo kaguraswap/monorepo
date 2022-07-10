@@ -1,26 +1,24 @@
 import { fullMigrateAsync } from "@0x/contracts-zero-ex";
-import { RPCSubprovider, Web3ProviderEngine } from "@0x/subproviders";
-import { providerUtils } from "@0x/utils";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { Seaport } from "@opensea/seaport-js";
 import { NftSwapV4 as ZeroEx } from "@traderxyz/nft-swap-sdk";
-import { ZDK } from "@zoralabs/zdk";
-import { ethers, network } from "hardhat";
+import { ethers, network, web3 } from "hardhat";
 
-import { ERC20Mock, ERC721Mock, ERC1155Mock, WETHMock } from "../../typechain";
+import { ERC20Mock, ERC721Mock, ERC1155Mock } from "../../typechain";
 
 interface Fixture {
   owner: SignerWithAddress;
   offerer: SignerWithAddress;
   fulfiller: SignerWithAddress;
   attacker: SignerWithAddress;
-  wethMock: WETHMock;
   erc20Mock: ERC20Mock;
   erc721Mock: ERC721Mock;
   erc1155Mock: ERC1155Mock;
   seaport: Seaport;
-  zeroEx: ZeroEx;
-  zora: ZDK;
+  zeroEx: {
+    offerer: ZeroEx;
+    fulfiller: ZeroEx;
+  };
 }
 
 interface Target {
@@ -39,9 +37,15 @@ export const describeWithSeaportFixture = (name: string, suiteCb: (fixture: Fixt
 
       const provider = ethers.provider;
 
-      const WETHMockFactory = await ethers.getContractFactory("WETHMock");
-      const wethMock = await WETHMockFactory.deploy();
-      await wethMock.deployed();
+      const ERC20MockFactory = await ethers.getContractFactory("ERC20Mock");
+      const erc20Mock = await ERC20MockFactory.deploy();
+      await erc20Mock.deployed();
+      const ERC721MockFactory = await ethers.getContractFactory("ERC721Mock");
+      const erc721Mock = await ERC721MockFactory.deploy();
+      await erc721Mock.deployed();
+      const ERC1155MockFactory = await ethers.getContractFactory("ERC1155Mock");
+      const erc1155Mock = await ERC1155MockFactory.deploy();
+      await erc1155Mock.deployed();
 
       if (target.seaport) {
         const ConduitControllerFactory = await ethers.getContractFactory("ConduitController");
@@ -59,18 +63,22 @@ export const describeWithSeaportFixture = (name: string, suiteCb: (fixture: Fixt
       }
 
       if (target.zeroEx) {
-        const providerEngine = new Web3ProviderEngine();
-        providerEngine.addProvider(new RPCSubprovider("http://localhost:8545/"));
-        providerUtils.startProviderEngine(providerEngine);
+        const _consoleLog = console.log;
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        console.log = () => {};
+        const _provider = web3.currentProvider as any;
         const zeroExContract = await fullMigrateAsync(
           owner.address,
-          providerEngine,
+          {
+            sendAsync: (a, b) => _provider.send(a, b),
+          },
           { from: owner.address },
           {},
-          { wethAddress: wethMock.address }
+          { wethAddress: erc20Mock.address }
         );
+        console.log = _consoleLog;
         const ERC721OrdersFeatureFactory = await ethers.getContractFactory("ERC721OrdersFeature");
-        const erc721OrdersFeature = await ERC721OrdersFeatureFactory.deploy(zeroExContract.address, wethMock.address);
+        const erc721OrdersFeature = await ERC721OrdersFeatureFactory.deploy(zeroExContract.address, erc20Mock.address);
         const OwnableFeatureFactory = await ethers.getContractFactory("OwnableFeature");
         const ownableFeature = await OwnableFeatureFactory.attach(zeroExContract.address);
         await ownableFeature.migrate(
@@ -78,32 +86,21 @@ export const describeWithSeaportFixture = (name: string, suiteCb: (fixture: Fixt
           erc721OrdersFeature.interface.getSighash("migrate"),
           owner.address
         );
-        const zeroEx = new ZeroEx(provider, owner, network.config.chainId, {
-          zeroExExchangeProxyContractAddress: zeroExContract.address,
-        });
+        const zeroEx = {
+          offerer: new ZeroEx(provider, offerer, network.config.chainId, {
+            zeroExExchangeProxyContractAddress: zeroExContract.address,
+          }),
+          fulfiller: new ZeroEx(provider, fulfiller, network.config.chainId, {
+            zeroExExchangeProxyContractAddress: zeroExContract.address,
+          }),
+        };
         fixture.zeroEx = zeroEx;
       }
 
-      if (target.zora) {
-        // TODO:implement zora
-        // TODO:remove "as ZDK"
-        fixture.zora = {} as ZDK;
-      }
-
-      const ERC20MockFactory = await ethers.getContractFactory("ERC20Mock");
-      const erc20Mock = await ERC20MockFactory.deploy();
-      await erc20Mock.deployed();
-      const ERC721MockFactory = await ethers.getContractFactory("ERC721Mock");
-      const erc721Mock = await ERC721MockFactory.deploy();
-      await erc721Mock.deployed();
-      const ERC1155MockFactory = await ethers.getContractFactory("ERC1155Mock");
-      const erc1155Mock = await ERC1155MockFactory.deploy();
-      await erc1155Mock.deployed();
       fixture.owner = owner;
       fixture.offerer = offerer;
       fixture.fulfiller = fulfiller;
       fixture.attacker = attacker;
-      fixture.wethMock = wethMock;
       fixture.erc20Mock = erc20Mock;
       fixture.erc721Mock = erc721Mock;
       fixture.erc1155Mock = erc1155Mock;
