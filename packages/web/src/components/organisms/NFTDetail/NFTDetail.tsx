@@ -26,6 +26,7 @@ import {
 import { Link } from "components/atoms/Link";
 import { ethers } from "ethers";
 import { httpsCallable } from "firebase/functions";
+import router from "next/router";
 import React, { useState } from "react";
 import { FiExternalLink } from "react-icons/fi";
 import BeatLoader from "react-spinners/BeatLoader";
@@ -82,7 +83,9 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
       address,
       fees
     );
-    await httpsCallable(functions, "order-create")({ type: "zeroEx", nft, order });
+    const { data } = await httpsCallable(functions, "order-create")({ type: "zeroEx", nft, order });
+    const result = data as Order;
+    router.push(`/orders/${result.hash}`);
   };
 
   return (
