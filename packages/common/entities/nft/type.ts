@@ -1,3 +1,4 @@
+import { Record } from "../../value-objects/record";
 import { ChainId } from "../network";
 
 export interface SupportsInterface {
@@ -13,7 +14,7 @@ export interface NFTMetadata {
   animationUrl?: string;
 }
 
-export interface NFT {
+export interface NFT extends Record {
   chainId: ChainId;
   contractAddress: string;
   tokenId: string;

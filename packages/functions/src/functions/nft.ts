@@ -65,21 +65,18 @@ export const sync = functions.https.onRequest(async (req, res) => {
         metadata.animationUrl = data.animation_url || "";
       }
     }
-    await db
-      .collection("nfts")
-      .doc(key)
-      .set(
-        {
-          ...nft,
-          isContract,
-          supportsInterface,
-          holder,
-          tokenURI,
-          metadata,
-          createdAt: admin.firestore.FieldValue.serverTimestamp(),
-        },
-        { merge: true }
-      );
-    res.send({ status: true, data: "ok" });
+    const nftDoc = {
+      ...nft,
+      isContract,
+      supportsInterface,
+      holder,
+      tokenURI,
+      metadata,
+      id: key,
+      createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+    };
+    await db.collection("nfts").doc(key).set(nftDoc, { merge: true });
+    res.send({ status: true, data: { nftDoc } });
   });
 });

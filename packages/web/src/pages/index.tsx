@@ -16,7 +16,6 @@ const HomePage: NextPage<HomeTemplateProps> = () => {
     }
     setSynceOrdersState(orderDocs as any);
   }, [orderDocs]);
-
   return <HomeTemplate orders={syncedOrdersState} />;
 };
 
