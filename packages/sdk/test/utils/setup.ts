@@ -5,10 +5,10 @@ import { NftSwapV4 as ZeroEx } from "@traderxyz/nft-swap-sdk";
 import { ethers, network, web3 } from "hardhat";
 
 import { KaguraSDK } from "../../lib";
+import { Overrides } from "../../lib/order";
 import { ERC20Mock, ERC721Mock, ERC1155Mock } from "../../typechain";
 
 interface Fixture {
-  sdk: KaguraSDK;
   owner: SignerWithAddress;
   offerer: SignerWithAddress;
   fulfiller: SignerWithAddress;
@@ -16,12 +16,11 @@ interface Fixture {
   erc721Mock: ERC721Mock;
   erc1155Mock: ERC1155Mock;
   seaport: Seaport;
-  seaportContractAddress: string;
   zeroEx: {
     offerer: ZeroEx;
     fulfiller: ZeroEx;
   };
-  zeroExContractAddress: string;
+  sdk: KaguraSDK;
 }
 
 interface Target {
@@ -37,7 +36,6 @@ export const describeWithSeaportFixture = (name: string, suiteCb: (fixture: Fixt
 
     beforeEach(async () => {
       const provider = ethers.provider;
-      fixture.sdk = new KaguraSDK(provider);
 
       [fixture.owner, fixture.offerer, fixture.fulfiller] = await ethers.getSigners();
 
@@ -51,6 +49,7 @@ export const describeWithSeaportFixture = (name: string, suiteCb: (fixture: Fixt
       fixture.erc1155Mock = await ERC1155MockFactory.deploy();
       await fixture.erc1155Mock.deployed();
 
+      const overrides: Overrides = {};
       if (target.seaport) {
         const ConduitControllerFactory = await ethers.getContractFactory("ConduitController");
         const conduitController = await ConduitControllerFactory.deploy();
@@ -63,7 +62,7 @@ export const describeWithSeaportFixture = (name: string, suiteCb: (fixture: Fixt
             contractAddress: seaportContract.address,
           },
         });
-        fixture.seaportContractAddress = seaportContract.address;
+        overrides.seaport = seaportContract.address;
       }
 
       if (target.zeroEx) {
@@ -101,8 +100,9 @@ export const describeWithSeaportFixture = (name: string, suiteCb: (fixture: Fixt
             zeroExExchangeProxyContractAddress: zeroExContract.address,
           }),
         };
-        fixture.zeroExContractAddress = zeroExContract.address;
+        overrides.zeroEx = zeroExContract.address;
       }
+      fixture.sdk = new KaguraSDK(provider, overrides);
     });
     suiteCb(fixture as Fixture);
   });

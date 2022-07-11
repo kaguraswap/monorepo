@@ -7,14 +7,35 @@ import { ethers } from "ethers";
 import { OrderDirection, OrderFee, OrderType, SignedOrder } from "../../common/entities/order";
 import { INVALID_ARGUMENT } from "../../common/utils/error";
 
-export class Order {
-  provider: ethers.providers.JsonRpcProvider;
+export interface Overrides {
+  seaport?: string;
+  zeroEx?: string;
+}
 
-  constructor(provider: ethers.providers.JsonRpcProvider) {
-    this.provider = provider;
+export class Order {
+  private _provider: ethers.providers.JsonRpcProvider;
+  private _seaport: Seaport;
+  private _overriddenZeroExContract?: string;
+
+  constructor(provider: ethers.providers.JsonRpcProvider, overrides?: Overrides) {
+    this._provider = provider;
+    this._seaport = new Seaport(this._provider, {
+      overrides: {
+        contractAddress: overrides?.seaport,
+      },
+    });
+    this._overriddenZeroExContract = overrides?.zeroEx;
   }
 
-  create = async (
+  private _getZeroEx = async (account: string) => {
+    const signer = await this._provider.getSigner(account);
+    const { chainId } = await this._provider.getNetwork();
+    return new ZeroEx(this._provider, signer, chainId, {
+      zeroExExchangeProxyContractAddress: this._overriddenZeroExContract,
+    });
+  };
+
+  public create = async (
     type: OrderType,
     direction: OrderDirection,
     erc721Item: {
@@ -26,15 +47,9 @@ export class Order {
       amount: string;
     },
     offerer: string,
-    fees: OrderFee[],
-    overrides?: string
+    fees: OrderFee[]
   ) => {
     if (type === "seaport") {
-      const seaport = new Seaport(this.provider, {
-        overrides: {
-          contractAddress: overrides,
-        },
-      });
       const erc721ItemAdjusted: CreateInputItem = {
         itemType: ItemType.ERC721,
         token: erc721Item.contractAddress,
@@ -54,18 +69,14 @@ export class Order {
               offer: [erc20ItemAdjusted],
               consideration: [{ ...erc721ItemAdjusted, recipient: offerer }],
             };
-      const { executeAllActions } = await seaport.createOrder({ ...order, fees }, offerer);
+      const { executeAllActions } = await this._seaport.createOrder({ ...order, fees }, offerer);
       const signedOrder = await executeAllActions();
       return { signedOrder };
     } else {
       if (!currencyItem.contractAddress) {
         throw new Error(INVALID_ARGUMENT);
       }
-      const signer = await this.provider.getSigner(offerer);
-      const { chainId } = await this.provider.getNetwork();
-      const zeroEx = new ZeroEx(this.provider, signer, chainId, {
-        zeroExExchangeProxyContractAddress: overrides,
-      });
+      const zeroEx = await this._getZeroEx(offerer);
       const erc721ItemAdjusted = {
         type: "ERC721" as const,
         tokenAddress: erc721Item.contractAddress,
@@ -88,26 +99,17 @@ export class Order {
     }
   };
 
-  fulfill = async (type: OrderType, signedOrder: SignedOrder, fulfiller: string, overrides?: string) => {
+  public fulfill = async (type: OrderType, signedOrder: SignedOrder, fulfiller: string, overrides?: string) => {
     if (type === "seaport") {
       signedOrder = signedOrder as OrderWithCounter;
-      const seaport = new Seaport(this.provider, {
-        overrides: {
-          contractAddress: overrides,
-        },
-      });
-      const { executeAllActions } = await seaport.fulfillOrders({
+      const { executeAllActions } = await this._seaport.fulfillOrders({
         fulfillOrderDetails: [{ order: signedOrder }],
         accountAddress: fulfiller,
       });
       await executeAllActions();
     } else {
       signedOrder = signedOrder as SignedERC721OrderStruct;
-      const signer = await this.provider.getSigner(fulfiller);
-      const { chainId } = await this.provider.getNetwork();
-      const zeroEx = new ZeroEx(this.provider, signer, chainId, {
-        zeroExExchangeProxyContractAddress: overrides,
-      });
+      const zeroEx = await this._getZeroEx(fulfiller);
       const item =
         signedOrder.direction === 0
           ? {
@@ -127,6 +129,19 @@ export class Order {
       }
       const tx = await zeroEx.fillSignedOrder(signedOrder);
       await zeroEx.awaitTransactionHash(tx.hash);
+    }
+  };
+
+  public validate = async (type: OrderType, signedOrder: SignedOrder) => {
+    if (type === "seaport") {
+      signedOrder = signedOrder as OrderWithCounter;
+      const isValid = await this._seaport
+        .validate([signedOrder], signedOrder.parameters.offerer)
+        .callStatic()
+        .catch(() => false);
+      return isValid;
+    } else {
+      signedOrder = signedOrder as SignedERC721OrderStruct;
     }
   };
 }

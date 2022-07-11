@@ -7,7 +7,7 @@ describeWithSeaportFixture(
   "SDK",
   (fixture) => {
     it("Seaport: ERC721 => ETH", async function () {
-      const { sdk, offerer, fulfiller, erc721Mock, seaportContractAddress } = fixture;
+      const { sdk, offerer, fulfiller, erc721Mock } = fixture;
       const tokenId = "0";
       const amount = "10000";
       await erc721Mock.mint(offerer.address, tokenId);
@@ -22,17 +22,19 @@ describeWithSeaportFixture(
           amount,
         },
         offerer.address,
-        [],
-        seaportContractAddress
+        []
       );
+
+      // expect(await sdk.order.validate("seaport", signedOrder)).to.equal(true);
       const previousBalanceOfOfferer = await ethers.provider.getBalance(offerer.address);
-      await sdk.order.fulfill("seaport", signedOrder, fulfiller.address, seaportContractAddress);
+      await sdk.order.fulfill("seaport", signedOrder, fulfiller.address);
+      // expect(await sdk.order.validate("seaport", signedOrder)).to.equal(false);
       expect(await erc721Mock.ownerOf(tokenId)).to.equal(fulfiller.address);
       expect(await ethers.provider.getBalance(offerer.address)).to.equal(previousBalanceOfOfferer.add(amount));
     });
 
     it("ZeroEx: ERC721 => ETH", async function () {
-      const { sdk, offerer, fulfiller, erc20Mock, erc721Mock, zeroExContractAddress } = fixture;
+      const { sdk, offerer, fulfiller, erc20Mock, erc721Mock } = fixture;
       const tokenId = "0";
       const amount = "10000";
       await erc721Mock.mint(offerer.address, tokenId);
@@ -49,11 +51,10 @@ describeWithSeaportFixture(
           amount,
         },
         offerer.address,
-        [],
-        zeroExContractAddress
+        []
       );
       const previousBalanceOfOfferer = await erc20Mock.balanceOf(offerer.address);
-      await sdk.order.fulfill("zeroEx", signedOrder, fulfiller.address, zeroExContractAddress);
+      await sdk.order.fulfill("zeroEx", signedOrder, fulfiller.address);
       expect(await erc721Mock.ownerOf(tokenId)).to.equal(fulfiller.address);
       expect(await erc20Mock.balanceOf(offerer.address)).to.equal(previousBalanceOfOfferer.add(amount));
     });
