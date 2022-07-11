@@ -13,11 +13,10 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { useAccount, useAddress, useBalance, useDisconnect } from "@thirdweb-dev/react";
+import { useAccount, useAddress, useDisconnect } from "@thirdweb-dev/react";
 import router from "next/router";
 import React from "react";
-import { IoCopy, IoWalletOutline } from "react-icons/io5";
-import { RiMoneyDollarCircleLine } from "react-icons/ri";
+import { IoCopy, IoHome, IoWalletOutline } from "react-icons/io5";
 
 import { shortenAddress } from "../../../../../common/utils/wallet";
 
@@ -25,14 +24,13 @@ interface ConnectedWalletProps {
   tokenAddress?: string;
 }
 
-export const ConnectedWallet: React.FC<ConnectedWalletProps> = ({ tokenAddress }) => {
+export const ConnectedWallet: React.FC<ConnectedWalletProps> = () => {
   const toast = useToast();
   const { onOpen, onClose } = useDisclosure({ defaultIsOpen: false });
   const [{ data }] = useAccount();
   const address = useAddress();
   const disconnect = useDisconnect();
   const { onCopy } = useClipboard(address || "");
-  const { data: balance } = useBalance(tokenAddress);
 
   const switchWallet = async () => {
     const provider = data?.connector?.getProvider();
@@ -66,23 +64,6 @@ export const ConnectedWallet: React.FC<ConnectedWalletProps> = ({ tokenAddress }
     <Flex align="center" gap={2}>
       {address && (
         <>
-          {balance && (
-            <Stack
-              direction="row"
-              display={{ base: "none", md: "flex" }}
-              height="32px"
-              px="10px"
-              borderRadius="md"
-              borderColor="gray.200"
-              borderWidth="1px"
-              align="center"
-            >
-              <Icon as={RiMoneyDollarCircleLine} boxSize={4} color="gray.500" />
-              <Text fontSize="sm" fontWeight="semibold" whiteSpace="nowrap">
-                {balance.displayValue.slice(0, 6)} {balance.symbol}
-              </Text>
-            </Stack>
-          )}
           <Popover trigger="hover" openDelay={0} placement="bottom" defaultIsOpen={false} gutter={12}>
             <Box>
               <PopoverTrigger>
@@ -112,10 +93,12 @@ export const ConnectedWallet: React.FC<ConnectedWalletProps> = ({ tokenAddress }
                     />
                   </Flex>
                   <Button
+                    size="sm"
                     color="gray.600"
                     onClick={() => {
                       router.push(`/accounts/${address}`);
                     }}
+                    leftIcon={<Icon as={IoHome} boxSize={4} color="gray.500" />}
                   >
                     MyPage
                   </Button>

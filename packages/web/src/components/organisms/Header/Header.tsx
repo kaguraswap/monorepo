@@ -1,4 +1,5 @@
 import { Box, Flex, HStack, useColorModeValue } from "@chakra-ui/react";
+import { KAGURA_SUPPORTED_CHAIN_ID } from "lib/rpc";
 import Image from "next/image";
 import React from "react";
 import { useAccount } from "wagmi";
@@ -8,7 +9,11 @@ import { ConnectedWallet } from "../../molecules/ConnectedWallet";
 import { ConnectWalletButton } from "../../molecules/ConnectWalletButton";
 import { DropdownSelectNetwork } from "../../molecules/DropdownSelectNetwork";
 
-export const Header: React.FC = () => {
+export interface HeaderProps {
+  chainId?: KAGURA_SUPPORTED_CHAIN_ID;
+}
+
+export const Header: React.FC<HeaderProps> = ({ chainId }) => {
   const [{ data }] = useAccount();
   return (
     <Box as="section">
@@ -26,7 +31,7 @@ export const Header: React.FC = () => {
           </Link>
           <Flex gap={"1"}>
             <HStack spacing="3">
-              {data ? <DropdownSelectNetwork /> : <></>}
+              {chainId ? <DropdownSelectNetwork chainId={chainId} /> : <></>}
               {data ? <ConnectedWallet /> : <ConnectWalletButton size="sm" />}
             </HStack>
           </Flex>

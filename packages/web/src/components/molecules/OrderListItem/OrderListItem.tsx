@@ -1,8 +1,8 @@
 import { Box, Flex, Icon, Image, Skeleton, Tag, Text } from "@chakra-ui/react";
+import { ChainIDToIcon } from "lib/rpc";
 import React from "react";
 
 import { Order } from "../../../../../common/entities/order";
-import { chainIdToIcon } from "../../../lib/icons";
 
 export interface OrderListItemProps {
   order: Order;
@@ -24,7 +24,7 @@ export const OrderListItem: React.FC<OrderListItemProps> = ({ order }) => {
             />
             <Box position="absolute" top="2" left="2">
               <Tag key={order.nft.chainId} color="white" fontWeight="semibold">
-                <Icon as={chainIdToIcon(order.nft.chainId)} rounded="full" width="4" />
+                <Icon as={ChainIDToIcon[order.nft.chainId]} rounded="full" width="4" />
               </Tag>
             </Box>
             <Box position="absolute" bottom="1" right="1">

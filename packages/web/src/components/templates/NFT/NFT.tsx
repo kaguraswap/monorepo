@@ -13,7 +13,7 @@ export interface NFTTemplateProps {
 
 export const NFTTemplate: React.FC<NFTTemplateProps> = ({ nft, orders }) => {
   return (
-    <DefaultLayout>
+    <DefaultLayout chainId={Number(nft.chainId)}>
       <NFTDetail nft={nft} orders={orders} />
       <OrderList orders={orders} />
     </DefaultLayout>
