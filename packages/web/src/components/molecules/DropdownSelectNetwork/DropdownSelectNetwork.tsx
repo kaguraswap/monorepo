@@ -12,11 +12,12 @@ export interface DropdownSelectNetworkProps {
 
 export const DropdownSelectNetwork: React.FC<DropdownSelectNetworkProps> = ({ chainId }) => {
   const handleSwitchNetwork = async (chainId: string) => {
+    // TODO
     router.push(`/`);
   };
 
   return (
-    <Popover trigger="hover" openDelay={0} placement="bottom" defaultIsOpen={false} gutter={12}>
+    <Popover trigger="click" openDelay={0} placement="bottom" defaultIsOpen={false} gutter={12}>
       {({ isOpen }) => (
         <>
           {chainId ? (
