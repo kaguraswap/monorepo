@@ -27,6 +27,7 @@ import { useNetwork } from "@thirdweb-dev/react";
 import { Link } from "components/atoms/Link";
 import { ethers } from "ethers";
 import { httpsCallable } from "firebase/functions";
+import { ChainIDToIcon, KAGURA_SUPPORTED_CHAIN_ID } from "lib/rpc";
 import router from "next/router";
 import React, { useState } from "react";
 import { FiExternalLink } from "react-icons/fi";
@@ -39,7 +40,6 @@ import { Order, OrderDirection } from "../../../../../common/entities/order";
 import { shortenAddress } from "../../../../../common/utils/wallet";
 import { KaguraSDK } from "../../../../../sdk/lib";
 import { functions } from "../../../lib/firebase";
-import { chainIdToIcon } from "../../../lib/icons";
 import { ConnectWalletButton } from "../../molecules/ConnectWalletButton";
 
 export interface NFTDetailProps {
@@ -108,7 +108,12 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
           <Stack spacing={{ base: "3", md: "4" }}>
             <Stack spacing="3">
               <Text fontSize="sm" fontWeight="medium" color={useColorModeValue("gray.600", "gray.400")}>
-                <Icon as={chainIdToIcon(nft.chainId)} rounded="full" width="8" height="8" />
+                <Icon
+                  as={ChainIDToIcon[Number(nft.chainId) as KAGURA_SUPPORTED_CHAIN_ID]}
+                  rounded="full"
+                  width="8"
+                  height="8"
+                />
               </Text>
               {nft.metadata ? (
                 <>
