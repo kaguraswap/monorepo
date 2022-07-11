@@ -89,9 +89,9 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
     <Box maxW="7xl" mx="auto" px={{ base: "4", md: "8", lg: "12" }} py={{ base: "6", md: "8", lg: "12" }}>
       <Stack direction={{ base: "column", lg: "row" }} spacing={{ base: "6", lg: "12", xl: "16" }}>
         {nft.metadata?.image ? (
-          <Image src={nft.metadata.image} alt={nft.metadata.name} width={"xl"}></Image>
+          <Image src={nft.metadata.image} alt={nft.metadata.name} width={"xl"} />
         ) : (
-          <Image src="/image_placeholder.png" alt="placeholder" width={"xl"}></Image>
+          <Image src="/image_placeholder.png" alt="placeholder" width={"xl"} />
         )}
         <Stack spacing={{ base: "6", lg: "8" }} maxW={{ lg: "sm" }} justify="center">
           <Stack spacing={{ base: "3", md: "4" }}>

@@ -34,7 +34,7 @@ export const nfts: NFT[] = [
     metadata: {
       name: "nft name",
       description: "nft description",
-      image: "https://via.placeholder.com/350x350",
+      image: "https://via.placeholder.com/700x350",
     },
   },
   {
@@ -45,7 +45,7 @@ export const nfts: NFT[] = [
     metadata: {
       name: "nft name",
       description: "nft description",
-      image: "https://via.placeholder.com/350x350",
+      image: "https://via.placeholder.com/350x700",
     },
   },
 ];
