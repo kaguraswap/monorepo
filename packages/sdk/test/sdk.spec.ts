@@ -24,11 +24,10 @@ describeWithSeaportFixture(
         offerer.address,
         []
       );
-
-      // expect(await sdk.order.validate("seaport", signedOrder)).to.equal(true);
+      expect(await sdk.order.validate("seaport", signedOrder)).to.equal(true);
       const previousBalanceOfOfferer = await ethers.provider.getBalance(offerer.address);
       await sdk.order.fulfill("seaport", signedOrder, fulfiller.address);
-      // expect(await sdk.order.validate("seaport", signedOrder)).to.equal(false);
+      expect(await sdk.order.validate("seaport", signedOrder)).to.equal(false);
       expect(await erc721Mock.ownerOf(tokenId)).to.equal(fulfiller.address);
       expect(await ethers.provider.getBalance(offerer.address)).to.equal(previousBalanceOfOfferer.add(amount));
     });
@@ -54,7 +53,9 @@ describeWithSeaportFixture(
         []
       );
       const previousBalanceOfOfferer = await erc20Mock.balanceOf(offerer.address);
+      expect(await sdk.order.validate("zeroEx", signedOrder)).to.equal(true);
       await sdk.order.fulfill("zeroEx", signedOrder, fulfiller.address);
+      expect(await sdk.order.validate("zeroEx", signedOrder)).to.equal(false);
       expect(await erc721Mock.ownerOf(tokenId)).to.equal(fulfiller.address);
       expect(await erc20Mock.balanceOf(offerer.address)).to.equal(previousBalanceOfOfferer.add(amount));
     });

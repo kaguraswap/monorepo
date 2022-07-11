@@ -27,7 +27,7 @@ export class Order {
     this._overriddenZeroExContract = overrides?.zeroEx;
   }
 
-  private _getZeroEx = async (account: string) => {
+  private _getZeroEx = async (account?: string) => {
     const signer = await this._provider.getSigner(account);
     const { chainId } = await this._provider.getNetwork();
     return new ZeroEx(this._provider, signer, chainId, {
@@ -135,13 +135,19 @@ export class Order {
   public validate = async (type: OrderType, signedOrder: SignedOrder) => {
     if (type === "seaport") {
       signedOrder = signedOrder as OrderWithCounter;
-      const isValid = await this._seaport
+      return await this._seaport
         .validate([signedOrder], signedOrder.parameters.offerer)
         .callStatic()
         .catch(() => false);
-      return isValid;
     } else {
       signedOrder = signedOrder as SignedERC721OrderStruct;
+      const zeroEx = await this._getZeroEx();
+      const { canOrderBeFilled } = await zeroEx.checkOrderCanBeFilledMakerSide(signedOrder).catch(() => {
+        return {
+          canOrderBeFilled: false,
+        };
+      });
+      return canOrderBeFilled;
     }
   };
 }
