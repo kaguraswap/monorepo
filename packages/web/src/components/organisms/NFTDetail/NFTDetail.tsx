@@ -23,10 +23,12 @@ import {
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
+import { useNetwork } from "@thirdweb-dev/react";
 import { Link } from "components/atoms/Link";
 import { ethers } from "ethers";
 import { httpsCallable } from "firebase/functions";
 import { ChainIDToIcon, KAGURA_SUPPORTED_CHAIN_ID } from "lib/rpc";
+import router from "next/router";
 import React, { useState } from "react";
 import { FiExternalLink } from "react-icons/fi";
 import BeatLoader from "react-spinners/BeatLoader";
@@ -36,7 +38,7 @@ import { BSP, FEE_RECIPIENT } from "../../../../../common/configs/app";
 import { NFT } from "../../../../../common/entities/nft";
 import { Order, OrderDirection } from "../../../../../common/entities/order";
 import { shortenAddress } from "../../../../../common/utils/wallet";
-import { createOrder } from "../../../../../sdk/lib";
+import { KaguraSDK } from "../../../../../sdk/lib";
 import { functions } from "../../../lib/firebase";
 import { ConnectWalletButton } from "../../molecules/ConnectWalletButton";
 
@@ -54,11 +56,18 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
   const [youGetAmount, setYouGetAmount] = useState(0);
 
   const fees = [{ recipient: FEE_RECIPIENT, basisPoints: BSP }];
+  const [, switchNetwork] = useNetwork();
 
   const handleAmount = (amount: string) => {
     setAmount(amount);
     const fee = (Number(amount) * BSP) / 10000;
     setYouGetAmount(Number(amount) - fee);
+  };
+
+  const validateModalOpen = async (chainId: string, open: () => void) => {
+    if (!switchNetwork) return;
+    const { error } = await switchNetwork(Number(chainId));
+    if (!error) open();
   };
 
   const createSellOrBuyOrder = async (direction: OrderDirection) => {
@@ -67,9 +76,9 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
     }
     const { address } = account.data;
     const provider = signer.data.provider as ethers.providers.JsonRpcProvider;
+    const sdk = new KaguraSDK(provider);
     const amount = ethers.utils.parseEther(amountString);
-    const { order } = await createOrder(
-      provider,
+    const { signedOrder } = await sdk.order.create(
       "seaport",
       direction,
       {
@@ -82,16 +91,18 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
       address,
       fees
     );
-    await httpsCallable(functions, "order-create")({ type: "zeroEx", nft, order });
+    const { data } = await httpsCallable(functions, "order-create")({ type: "seaport", nft, signedOrder });
+    const result = data as Order;
+    router.push(`/orders/${result.hash}`);
   };
 
   return (
     <Box maxW="7xl" mx="auto" px={{ base: "4", md: "8", lg: "12" }} py={{ base: "6", md: "8", lg: "12" }}>
       <Stack direction={{ base: "column", lg: "row" }} spacing={{ base: "6", lg: "12", xl: "16" }}>
         {nft.metadata?.image ? (
-          <Image src={nft.metadata.image} alt={nft.metadata.name} width={"xl"}></Image>
+          <Image src={nft.metadata.image} alt={nft.metadata.name} width={"xl"} />
         ) : (
-          <Image src="/image_placeholder.png" alt="placeholder" width={"xl"}></Image>
+          <Image src="/image_placeholder.png" alt="placeholder" width={"xl"} />
         )}
         <Stack spacing={{ base: "6", lg: "8" }} maxW={{ lg: "sm" }} justify="center">
           <Stack spacing={{ base: "3", md: "4" }}>
@@ -126,10 +137,10 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
           </Stack>
           {account.data ? (
             <>
-              <Button colorScheme="blue" size="lg" onClick={onCreateOrderOpen}>
+              <Button colorScheme="blue" size="lg" onClick={() => validateModalOpen(nft.chainId, onCreateOrderOpen)}>
                 Sell
               </Button>
-              <Button colorScheme="blue" size="lg" onClick={onMakeOfferOpen}>
+              <Button colorScheme="blue" size="lg" onClick={() => validateModalOpen(nft.chainId, onMakeOfferOpen)}>
                 Offer
               </Button>
             </>
