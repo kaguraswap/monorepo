@@ -1,11 +1,13 @@
-import { Box, Button, Heading, Image, Stack, Text, useColorModeValue } from "@chakra-ui/react";
+import { Box, Button, Heading, Image, Modal, Stack, Text, useColorModeValue, useDisclosure } from "@chakra-ui/react";
 import { ethers } from "ethers";
-import React from "react";
+import React, { useState } from "react";
 import { useAccount, useSigner } from "wagmi";
 
+import networks from "../../../../../common/configs/networks.json";
 import { Order } from "../../../../../common/entities/order";
 import { KaguraSDK } from "../../../../../sdk/lib";
 import { ConnectWalletButton } from "../../molecules/ConnectWalletButton";
+import { Notification } from "../../molecules/Notification";
 
 export interface OrderDetailProps {
   order: Order;
@@ -14,6 +16,9 @@ export interface OrderDetailProps {
 export const OrderDetail: React.FC<OrderDetailProps> = ({ order }) => {
   const [account] = useAccount();
   const [signer] = useSigner();
+  const [txHash, setTxHash] = useState("");
+
+  const { isOpen: isNotificationOpen, onOpen: onNotificationrOpen, onClose: onNotificationClose } = useDisclosure();
 
   const cancelOrder = async () => {
     if (!signer.data || !account.data || !order.signedOrder) {
@@ -22,6 +27,7 @@ export const OrderDetail: React.FC<OrderDetailProps> = ({ order }) => {
     const provider = signer.data.provider as ethers.providers.JsonRpcProvider;
     const sdk = new KaguraSDK(provider);
     await sdk.order.cancel(order.type, order.signedOrder);
+    onNotificationrOpen();
   };
 
   const fulfillOrder = async () => {
@@ -30,8 +36,11 @@ export const OrderDetail: React.FC<OrderDetailProps> = ({ order }) => {
     }
     const { address } = account.data;
     const provider = signer.data.provider as ethers.providers.JsonRpcProvider;
+
     const sdk = new KaguraSDK(provider);
     await sdk.order.fulfill(order.type, order.signedOrder, address);
+    setTxHash("");
+    onNotificationrOpen();
   };
 
   return (
@@ -73,6 +82,15 @@ export const OrderDetail: React.FC<OrderDetailProps> = ({ order }) => {
           </Stack>
         </Stack>
       </Box>
+      <Modal isOpen={isNotificationOpen} onClose={onNotificationClose}>
+        <Box position="fixed" top={0} right={0}>
+          <Notification
+            message={`Tx emitted🎉. Please check at the explorer`}
+            link={`${networks[order.nft.chainId].explorer}tx/${txHash}`}
+            close={onNotificationClose}
+          />
+        </Box>
+      </Modal>
     </Box>
   );
 };
