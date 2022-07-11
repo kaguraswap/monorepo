@@ -5,7 +5,7 @@ import { useAccount, useSigner } from "wagmi";
 
 import networks from "../../../../../common/configs/networks.json";
 import { Order } from "../../../../../common/entities/order";
-import { fulfillOrder as _fulfillOrder } from "../../../../../sdk/lib";
+import { KaguraSDK } from "../../../../../sdk/lib";
 import { ConnectWalletButton } from "../../molecules/ConnectWalletButton";
 import { Notification } from "../../molecules/Notification";
 
@@ -21,25 +21,24 @@ export const OrderDetail: React.FC<OrderDetailProps> = ({ order }) => {
   const { isOpen: isNotificationOpen, onOpen: onNotificationrOpen, onClose: onNotificationClose } = useDisclosure();
 
   const cancelOrder = async () => {
-    if (!signer.data || !account.data || !order.raw) {
+    if (!signer.data || !account.data || !order.signedOrder) {
       return;
     }
-    const { address } = account.data;
-    // const provider = signer.data.provider as ethers.providers.JsonRpcProvider;
-    // const seaport = new Seaport(provider);
-    // const cancel = await seaport.cancelOrders([order.raw.parameters], address);
-    // await cancel.transact();
+    const provider = signer.data.provider as ethers.providers.JsonRpcProvider;
+    const sdk = new KaguraSDK(provider);
+    await sdk.order.cancel(order.type, order.signedOrder);
     onNotificationrOpen();
   };
 
   const fulfillOrder = async () => {
-    if (!signer.data || !account.data || !order.raw) {
+    if (!signer.data || !account.data || !order.signedOrder) {
       return;
     }
     const { address } = account.data;
     const provider = signer.data.provider as ethers.providers.JsonRpcProvider;
-    await _fulfillOrder(provider, order.type, order.raw, address);
-    // TODO: set hash
+
+    const sdk = new KaguraSDK(provider);
+    await sdk.order.fulfill(order.type, order.signedOrder, address);
     setTxHash("");
     onNotificationrOpen();
   };

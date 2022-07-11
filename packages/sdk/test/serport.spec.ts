@@ -7,7 +7,7 @@ import { describeWithSeaportFixture } from "./utils/setup";
 describeWithSeaportFixture(
   "Seaport",
   (fixture) => {
-    it("ERC721 <=> ETH", async function () {
+    it("ERC721 => ETH", async function () {
       const { offerer, fulfiller, erc721Mock, seaport } = fixture;
       const tokenId = "0";
       const amount = "10000";
@@ -38,8 +38,8 @@ describeWithSeaportFixture(
       });
       const previousBalanceOfOfferer = await ethers.provider.getBalance(offerer.address);
       await executeAllFulfillActions();
-      expect(await erc721Mock.ownerOf(tokenId)).to.equal(fulfiller.address);
       expect(await ethers.provider.getBalance(offerer.address)).to.equal(previousBalanceOfOfferer.add(amount));
+      expect(await erc721Mock.ownerOf(tokenId)).to.equal(fulfiller.address);
     });
   },
   { seaport: true }
