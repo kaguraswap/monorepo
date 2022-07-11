@@ -4,23 +4,24 @@ import { Seaport } from "@opensea/seaport-js";
 import { NftSwapV4 as ZeroEx } from "@traderxyz/nft-swap-sdk";
 import { ethers, network, web3 } from "hardhat";
 
+import { KaguraSDK } from "../../lib";
 import { ERC20Mock, ERC721Mock, ERC1155Mock } from "../../typechain";
 
 interface Fixture {
+  sdk: KaguraSDK;
   owner: SignerWithAddress;
   offerer: SignerWithAddress;
   fulfiller: SignerWithAddress;
-  attacker: SignerWithAddress;
   erc20Mock: ERC20Mock;
   erc721Mock: ERC721Mock;
   erc1155Mock: ERC1155Mock;
-  seaportContractAddress: string;
   seaport: Seaport;
-  zeroExContractAddress: string;
+  seaportContractAddress: string;
   zeroEx: {
     offerer: ZeroEx;
     fulfiller: ZeroEx;
   };
+  zeroExContractAddress: string;
 }
 
 interface Target {
@@ -35,19 +36,20 @@ export const describeWithSeaportFixture = (name: string, suiteCb: (fixture: Fixt
     const fixture: Partial<Fixture> = {};
 
     beforeEach(async () => {
-      const [owner, offerer, fulfiller, attacker] = await ethers.getSigners();
-
       const provider = ethers.provider;
+      fixture.sdk = new KaguraSDK(provider);
+
+      [fixture.owner, fixture.offerer, fixture.fulfiller] = await ethers.getSigners();
 
       const ERC20MockFactory = await ethers.getContractFactory("ERC20Mock");
-      const erc20Mock = await ERC20MockFactory.deploy();
-      await erc20Mock.deployed();
+      fixture.erc20Mock = await ERC20MockFactory.deploy();
+      await fixture.erc20Mock.deployed();
       const ERC721MockFactory = await ethers.getContractFactory("ERC721Mock");
-      const erc721Mock = await ERC721MockFactory.deploy();
-      await erc721Mock.deployed();
+      fixture.erc721Mock = await ERC721MockFactory.deploy();
+      await fixture.erc721Mock.deployed();
       const ERC1155MockFactory = await ethers.getContractFactory("ERC1155Mock");
-      const erc1155Mock = await ERC1155MockFactory.deploy();
-      await erc1155Mock.deployed();
+      fixture.erc1155Mock = await ERC1155MockFactory.deploy();
+      await fixture.erc1155Mock.deployed();
 
       if (target.seaport) {
         const ConduitControllerFactory = await ethers.getContractFactory("ConduitController");
@@ -56,13 +58,12 @@ export const describeWithSeaportFixture = (name: string, suiteCb: (fixture: Fixt
         const SeaportFactory = await ethers.getContractFactory("Seaport");
         const seaportContract = await SeaportFactory.deploy(conduitController.address);
         await seaportContract.deployed();
-        const seaport = new Seaport(provider, {
+        fixture.seaport = new Seaport(provider, {
           overrides: {
             contractAddress: seaportContract.address,
           },
         });
         fixture.seaportContractAddress = seaportContract.address;
-        fixture.seaport = seaport;
       }
 
       if (target.zeroEx) {
@@ -71,43 +72,37 @@ export const describeWithSeaportFixture = (name: string, suiteCb: (fixture: Fixt
         console.log = () => {};
         const _provider = web3.currentProvider as any;
         const zeroExContract = await fullMigrateAsync(
-          owner.address,
+          fixture.owner.address,
           {
             sendAsync: (a, b) => _provider.send(a, b),
           },
-          { from: owner.address },
+          { from: fixture.owner.address },
           {},
-          { wethAddress: erc20Mock.address }
+          { wethAddress: fixture.erc20Mock.address }
         );
         console.log = _consoleLog;
         const ERC721OrdersFeatureFactory = await ethers.getContractFactory("ERC721OrdersFeature");
-        const erc721OrdersFeature = await ERC721OrdersFeatureFactory.deploy(zeroExContract.address, erc20Mock.address);
+        const erc721OrdersFeature = await ERC721OrdersFeatureFactory.deploy(
+          zeroExContract.address,
+          fixture.erc20Mock.address
+        );
         const OwnableFeatureFactory = await ethers.getContractFactory("OwnableFeature");
         const ownableFeature = await OwnableFeatureFactory.attach(zeroExContract.address);
         await ownableFeature.migrate(
           erc721OrdersFeature.address,
           erc721OrdersFeature.interface.getSighash("migrate"),
-          owner.address
+          fixture.owner.address
         );
-        const zeroEx = {
-          offerer: new ZeroEx(provider, offerer, network.config.chainId, {
+        fixture.zeroEx = {
+          offerer: new ZeroEx(provider, fixture.offerer, network.config.chainId, {
             zeroExExchangeProxyContractAddress: zeroExContract.address,
           }),
-          fulfiller: new ZeroEx(provider, fulfiller, network.config.chainId, {
+          fulfiller: new ZeroEx(provider, fixture.fulfiller, network.config.chainId, {
             zeroExExchangeProxyContractAddress: zeroExContract.address,
           }),
         };
         fixture.zeroExContractAddress = zeroExContract.address;
-        fixture.zeroEx = zeroEx;
       }
-
-      fixture.owner = owner;
-      fixture.offerer = offerer;
-      fixture.fulfiller = fulfiller;
-      fixture.attacker = attacker;
-      fixture.erc20Mock = erc20Mock;
-      fixture.erc721Mock = erc721Mock;
-      fixture.erc1155Mock = erc1155Mock;
     });
     suiteCb(fixture as Fixture);
   });
