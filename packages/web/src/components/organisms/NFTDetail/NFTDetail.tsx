@@ -23,6 +23,7 @@ import {
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
+import { useNetwork } from "@thirdweb-dev/react";
 import { Link } from "components/atoms/Link";
 import { ethers } from "ethers";
 import { httpsCallable } from "firebase/functions";
@@ -54,11 +55,18 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
   const [youGetAmount, setYouGetAmount] = useState(0);
 
   const fees = [{ recipient: FEE_RECIPIENT, basisPoints: BSP }];
+  const [, switchNetwork] = useNetwork();
 
   const handleAmount = (amount: string) => {
     setAmount(amount);
     const fee = (Number(amount) * BSP) / 10000;
     setYouGetAmount(Number(amount) - fee);
+  };
+
+  const validateModalOpen = async (chainId: string, open: () => void) => {
+    if (!switchNetwork) return;
+    const { error } = await switchNetwork(Number(chainId));
+    if (!error) open();
   };
 
   const createSellOrBuyOrder = async (direction: OrderDirection) => {
@@ -121,10 +129,10 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
           </Stack>
           {account.data ? (
             <>
-              <Button colorScheme="blue" size="lg" onClick={onCreateOrderOpen}>
+              <Button colorScheme="blue" size="lg" onClick={() => validateModalOpen(nft.chainId, onCreateOrderOpen)}>
                 Sell
               </Button>
-              <Button colorScheme="blue" size="lg" onClick={onMakeOfferOpen}>
+              <Button colorScheme="blue" size="lg" onClick={() => validateModalOpen(nft.chainId, onMakeOfferOpen)}>
                 Offer
               </Button>
             </>
