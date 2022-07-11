@@ -56,9 +56,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const nftDocData = nftDoc.data();
   return {
     props: {
-      nft: JSON.parse(JSON.stringify(nftDocData)) || nft,
+      nft: nftDocData ? JSON.parse(JSON.stringify(nftDocData)) : nft,
     },
-    revalidate: 300,
+    revalidate: nftDocData ? 300 : 10,
   };
 };
 

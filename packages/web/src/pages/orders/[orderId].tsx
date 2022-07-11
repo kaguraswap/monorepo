@@ -39,7 +39,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     props: {
       order: JSON.parse(JSON.stringify(orderDocData)),
     },
-    revalidate: 300,
+    revalidate: 150,
   };
 };
 
