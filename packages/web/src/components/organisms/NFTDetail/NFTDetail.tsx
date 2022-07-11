@@ -68,7 +68,7 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
     const { address } = account.data;
     const provider = signer.data.provider as ethers.providers.JsonRpcProvider;
     const amount = ethers.utils.parseEther(amountString);
-    const { order } = await createOrder(
+    const { signedOrder } = await createOrder(
       provider,
       "seaport",
       direction,
@@ -82,7 +82,7 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
       address,
       fees
     );
-    await httpsCallable(functions, "order-create")({ type: "zeroEx", nft, order });
+    await httpsCallable(functions, "order-create")({ type: "zeroEx", nft, signedOrder });
   };
 
   return (

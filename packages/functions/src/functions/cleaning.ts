@@ -15,16 +15,16 @@ export const order = functions.pubsub.schedule(SPAN_SYNC_BLOCKCHAIN).onRun(async
 
   for (const doc of orderCollection.docs) {
     const order = <Order>doc.data();
-    if (!order.raw) {
+    if (!order.signedOrder) {
       return;
     }
     if (order.type === "seaport") {
-      order.raw = order.raw as OrderWithCounter;
+      order.signedOrder = order.signedOrder as OrderWithCounter;
       const { rpc } = networks[order.chainId];
       const provider = new ethers.providers.JsonRpcProvider(rpc);
       const seaport = new Seaport(provider);
       const isValid = await seaport
-        .validate([order.raw], order.raw.parameters.offerer)
+        .validate([order.signedOrder], order.signedOrder.parameters.offerer)
         .callStatic()
         .catch(() => false);
       if (!isValid) {

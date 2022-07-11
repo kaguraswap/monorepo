@@ -1,5 +1,4 @@
 import { Seaport } from "@opensea/seaport-js";
-import { NftSwapV4 as ZeroEx } from "@traderxyz/nft-swap-sdk";
 import { ethers } from "ethers";
 import * as admin from "firebase-admin";
 
@@ -13,7 +12,7 @@ const db = admin.firestore();
 
 export const create = functions.https.onRequest(async (req, res) => {
   return cors(req, res, async () => {
-    const { type, nft, order } = req.body.data;
+    const { type, nft, signedOrder } = req.body.data;
 
     const { chainId } = nft;
     if (!isChainId(chainId)) {
@@ -28,10 +27,10 @@ export const create = functions.https.onRequest(async (req, res) => {
     if (type === "seaport") {
       const seaport = new Seaport(provider);
       isValid = await seaport
-        .validate([order], nft.holder)
+        .validate([signedOrder], nft.holder)
         .callStatic()
         .catch(() => false);
-      hash = seaport.getOrderHash(order.parameters);
+      hash = seaport.getOrderHash(signedOrder.parameters);
     } else if (type === "zeroEx") {
       isValid = true;
       hash = "hash";
@@ -49,7 +48,7 @@ export const create = functions.https.onRequest(async (req, res) => {
       nft,
       hash,
       isValid,
-      raw: order,
+      signedOrder,
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
     };
     await db.collection("orders").doc(hash).set(orderDoc, { merge: true });

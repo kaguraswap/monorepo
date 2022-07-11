@@ -42,14 +42,7 @@ const config: HardhatUserConfig = {
       },
     ],
   },
-  networks: {
-    hardhat: {
-      chainId: 1,
-      // forking: {
-      //   url: "https://rpc.ankr.com/eth",
-      // },
-    },
-  },
+  networks: {},
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,
     currency: "USD",

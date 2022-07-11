@@ -7,7 +7,7 @@ import { describeWithSeaportFixture } from "./utils/setup";
 describeWithSeaportFixture(
   "Seaport",
   (fixture) => {
-    it("ERC721 <=> ETH", async function () {
+    it("ERC721 => ETH", async function () {
       const { offerer, fulfiller, erc721Mock, seaport } = fixture;
       const tokenId = "0";
       const amount = "10000";

@@ -16,23 +16,23 @@ export const OrderDetail: React.FC<OrderDetailProps> = ({ order }) => {
   const [signer] = useSigner();
 
   const cancelOrder = async () => {
-    if (!signer.data || !account.data || !order.raw) {
+    if (!signer.data || !account.data || !order.signedOrder) {
       return;
     }
     const { address } = account.data;
     // const provider = signer.data.provider as ethers.providers.JsonRpcProvider;
     // const seaport = new Seaport(provider);
-    // const cancel = await seaport.cancelOrders([order.raw.parameters], address);
+    // const cancel = await seaport.cancelOrders([order.signedOrder.parameters], address);
     // await cancel.transact();
   };
 
   const fulfillOrder = async () => {
-    if (!signer.data || !account.data || !order.raw) {
+    if (!signer.data || !account.data || !order.signedOrder) {
       return;
     }
     const { address } = account.data;
     const provider = signer.data.provider as ethers.providers.JsonRpcProvider;
-    await _fulfillOrder(provider, order.type, order.raw, address);
+    await _fulfillOrder(provider, order.type, order.signedOrder, address);
   };
 
   return (

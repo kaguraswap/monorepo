@@ -14,7 +14,9 @@ interface Fixture {
   erc20Mock: ERC20Mock;
   erc721Mock: ERC721Mock;
   erc1155Mock: ERC1155Mock;
+  seaportContractAddress: string;
   seaport: Seaport;
+  zeroExContractAddress: string;
   zeroEx: {
     offerer: ZeroEx;
     fulfiller: ZeroEx;
@@ -59,6 +61,7 @@ export const describeWithSeaportFixture = (name: string, suiteCb: (fixture: Fixt
             contractAddress: seaportContract.address,
           },
         });
+        fixture.seaportContractAddress = seaportContract.address;
         fixture.seaport = seaport;
       }
 
@@ -94,6 +97,7 @@ export const describeWithSeaportFixture = (name: string, suiteCb: (fixture: Fixt
             zeroExExchangeProxyContractAddress: zeroExContract.address,
           }),
         };
+        fixture.zeroExContractAddress = zeroExContract.address;
         fixture.zeroEx = zeroEx;
       }
 
