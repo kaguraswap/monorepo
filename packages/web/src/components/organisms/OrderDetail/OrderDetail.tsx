@@ -4,7 +4,7 @@ import React from "react";
 import { useAccount, useSigner } from "wagmi";
 
 import { Order } from "../../../../../common/entities/order";
-import { fulfillOrder as _fulfillOrder } from "../../../../../sdk/lib";
+import { KaguraSDK } from "../../../../../sdk/lib";
 import { ConnectWalletButton } from "../../molecules/ConnectWalletButton";
 
 export interface OrderDetailProps {
@@ -19,11 +19,9 @@ export const OrderDetail: React.FC<OrderDetailProps> = ({ order }) => {
     if (!signer.data || !account.data || !order.signedOrder) {
       return;
     }
-    const { address } = account.data;
-    // const provider = signer.data.provider as ethers.providers.JsonRpcProvider;
-    // const seaport = new Seaport(provider);
-    // const cancel = await seaport.cancelOrders([order.signedOrder.parameters], address);
-    // await cancel.transact();
+    const provider = signer.data.provider as ethers.providers.JsonRpcProvider;
+    const sdk = new KaguraSDK(provider);
+    await sdk.order.cancel(order.type, order.signedOrder);
   };
 
   const fulfillOrder = async () => {
@@ -32,7 +30,8 @@ export const OrderDetail: React.FC<OrderDetailProps> = ({ order }) => {
     }
     const { address } = account.data;
     const provider = signer.data.provider as ethers.providers.JsonRpcProvider;
-    await _fulfillOrder(provider, order.type, order.signedOrder, address);
+    const sdk = new KaguraSDK(provider);
+    await sdk.order.fulfill(order.type, order.signedOrder, address);
   };
 
   return (

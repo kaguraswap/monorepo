@@ -1,10 +1,10 @@
-import { Seaport } from "@opensea/seaport-js";
 import { ethers } from "ethers";
 import * as admin from "firebase-admin";
 
 import networks from "../../../common/configs/networks.json";
 import { isChainId } from "../../../common/entities/network";
-import { INVALID_ARGUMENT, NOT_IMPLEMENTED, ORDER_VERIFICATION_FAILED } from "../../../common/utils/error";
+import { INVALID_ARGUMENT, ORDER_VERIFICATION_FAILED } from "../../../common/utils/error";
+import { KaguraSDK } from "../../../sdk/lib";
 import { cors } from "../lib/cors";
 import { functions } from "../lib/functions";
 
@@ -13,35 +13,18 @@ const db = admin.firestore();
 export const create = functions.https.onRequest(async (req, res) => {
   return cors(req, res, async () => {
     const { type, nft, signedOrder } = req.body.data;
-
     const { chainId } = nft;
     if (!isChainId(chainId)) {
       throw new Error(INVALID_ARGUMENT);
     }
     const { rpc } = networks[chainId];
     const provider = new ethers.providers.JsonRpcProvider(rpc);
-
-    let isValid;
-    let hash;
-
-    if (type === "seaport") {
-      const seaport = new Seaport(provider);
-      isValid = await seaport
-        .validate([signedOrder], nft.holder)
-        .callStatic()
-        .catch(() => false);
-      hash = seaport.getOrderHash(signedOrder.parameters);
-    } else if (type === "zeroEx") {
-      isValid = true;
-      hash = "hash";
-    } else {
-      throw new Error(NOT_IMPLEMENTED);
-    }
-
+    const sdk = new KaguraSDK(provider);
+    const isValid = sdk.order.validate(type, signedOrder);
     if (!isValid) {
       throw new Error(ORDER_VERIFICATION_FAILED);
     }
-
+    const hash = await sdk.order.hash(type, signedOrder);
     const orderDoc = {
       type,
       chainId,

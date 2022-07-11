@@ -42,7 +42,7 @@ export class Order {
     } else {
       const order = signedOrder as ERC721OrderStructSerialized;
       const zeroEx = await this._getZeroEx();
-      return zeroEx.getOrderHash(order);
+      return await zeroEx.getOrderHash(order);
     }
   };
 

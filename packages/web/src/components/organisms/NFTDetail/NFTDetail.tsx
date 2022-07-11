@@ -35,7 +35,7 @@ import { BSP, FEE_RECIPIENT } from "../../../../../common/configs/app";
 import { NFT } from "../../../../../common/entities/nft";
 import { Order, OrderDirection } from "../../../../../common/entities/order";
 import { shortenAddress } from "../../../../../common/utils/wallet";
-import { createOrder } from "../../../../../sdk/lib";
+import { KaguraSDK } from "../../../../../sdk/lib";
 import { functions } from "../../../lib/firebase";
 import { chainIdToIcon } from "../../../lib/icons";
 import { ConnectWalletButton } from "../../molecules/ConnectWalletButton";
@@ -67,9 +67,9 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
     }
     const { address } = account.data;
     const provider = signer.data.provider as ethers.providers.JsonRpcProvider;
+    const sdk = new KaguraSDK(provider);
     const amount = ethers.utils.parseEther(amountString);
-    const { signedOrder } = await createOrder(
-      provider,
+    const { signedOrder } = await sdk.order.create(
       "seaport",
       direction,
       {
