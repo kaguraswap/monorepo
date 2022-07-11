@@ -14,7 +14,7 @@ export const OrderList: React.FC<OrderListProps> = ({ orders }) => {
     <Box maxW="7xl" mx="auto" p={"4"}>
       <SimpleGrid gap="4">
         {orders.map((order, i) => (
-          <Link key={i} href={`/orders/${order.hash}`}>
+          <Link key={i} href={`/orders/${order.id}`}>
             <OrderListItem key={i} order={order} />
           </Link>
         ))}

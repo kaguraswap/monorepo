@@ -20,7 +20,7 @@ export const create = functions.https.onRequest(async (req, res) => {
     const { rpc } = networks[chainId];
     const provider = new ethers.providers.JsonRpcProvider(rpc);
     const sdk = new KaguraSDK(provider);
-    const isValid = sdk.order.validate(type, signedOrder);
+    const isValid = await sdk.order.validate(type, signedOrder);
     if (!isValid) {
       throw new Error(ORDER_VERIFICATION_FAILED);
     }
@@ -29,11 +29,13 @@ export const create = functions.https.onRequest(async (req, res) => {
       type,
       chainId,
       nft,
-      hash,
       isValid,
       signedOrder,
+      id: hash,
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
     };
+
     await db.collection("orders").doc(hash).set(orderDoc, { merge: true });
     res.send({ status: true, data: orderDoc });
   });

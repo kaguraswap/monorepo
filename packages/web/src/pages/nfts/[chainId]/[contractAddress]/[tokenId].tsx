@@ -1,6 +1,6 @@
-import { collection, doc, query, where } from "firebase/firestore";
+import { collection, doc, getDoc, query, where } from "firebase/firestore";
 import { httpsCallable } from "firebase/functions";
-import type { GetServerSideProps, NextPage } from "next";
+import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import React from "react";
 import { useCollectionData, useDocumentData } from "react-firebase-hooks/firestore";
 
@@ -43,7 +43,7 @@ const NFTPage: NextPage<NFTPageProps> = ({ nft }) => {
 
 export default NFTPage;
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getStaticProps: GetStaticProps = async (context) => {
   const nft = validate(context.params);
   if (!nft) {
     return {
@@ -51,9 +51,20 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
   httpsCallable(functions, "nft-sync")(nft);
+  const key = toKey(nft);
+  const nftDoc = await getDoc(doc(db, "nfts", key));
+  const nftDocData = nftDoc.data();
   return {
     props: {
-      nft,
+      nft: JSON.parse(JSON.stringify(nftDocData)) || nft,
     },
+    revalidate: 300,
+  };
+};
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [],
+    fallback: "blocking",
   };
 };

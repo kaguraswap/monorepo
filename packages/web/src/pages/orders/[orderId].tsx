@@ -1,5 +1,5 @@
-import { doc } from "firebase/firestore";
-import type { GetServerSideProps, NextPage } from "next";
+import { doc, getDoc } from "firebase/firestore";
+import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import React from "react";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 
@@ -8,34 +8,44 @@ import { OrderTemplate } from "../../components/templates/Order";
 import { db } from "../../lib/firebase";
 
 export interface OrderPageProps {
-  orderId: string;
+  order: Order;
 }
 
-const OrderPage: NextPage<OrderPageProps> = ({ orderId }) => {
-  const [syncedOrderState, setSyncedOrderState] = React.useState<Order>();
+const OrderPage: NextPage<OrderPageProps> = ({ order }) => {
+  const orderId = order.id as string;
+  const [syncedOrderState, setSyncedOrderState] = React.useState<Order>(order);
   const [orderDoc] = useDocumentData(doc(db, "orders", orderId));
-
   React.useEffect(() => {
     if (!orderDoc) {
       return;
     }
     setSyncedOrderState(orderDoc as any);
-  }, [orderId, orderDoc]);
+  }, [order, orderDoc]);
 
   return <>{syncedOrderState && <OrderTemplate order={syncedOrderState} />}</>;
 };
 
 export default OrderPage;
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getStaticProps: GetStaticProps = async (context) => {
   if (!context.params || typeof context.params.orderId !== "string") {
     return {
       notFound: true,
     };
   }
+  const orderDoc = await getDoc(doc(db, "orders", context.params.orderId));
+  const orderDocData = orderDoc.data();
   return {
     props: {
-      orderId: context.params.orderId,
+      order: JSON.parse(JSON.stringify(orderDocData)),
     },
+    revalidate: 300,
+  };
+};
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [],
+    fallback: "blocking",
   };
 };
