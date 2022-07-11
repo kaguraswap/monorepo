@@ -26,6 +26,7 @@ import {
 import { Link } from "components/atoms/Link";
 import { ethers } from "ethers";
 import { httpsCallable } from "firebase/functions";
+import router from "next/router";
 import React, { useState } from "react";
 import { FiExternalLink } from "react-icons/fi";
 import BeatLoader from "react-spinners/BeatLoader";
@@ -59,6 +60,16 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
     setAmount(amount);
     const fee = (Number(amount) * BSP) / 10000;
     setYouGetAmount(Number(amount) - fee);
+  };
+
+  const handleLowestOrder = () => {
+    const sortedOrders = orders.sort((a, b) => Number(a.value) - Number(b.value));
+    router.push(`/orders/${sortedOrders[0].hash}`);
+  };
+
+  const handleHighestOrder = () => {
+    const sortedOrders = orders.sort((a, b) => Number(b.value) - Number(a.value));
+    router.push(`/orders/${sortedOrders[0].hash}`);
   };
 
   const createSellOrBuyOrder = async (direction: OrderDirection) => {
@@ -121,12 +132,35 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
           </Stack>
           {account.data ? (
             <>
-              <Button colorScheme="blue" size="lg" onClick={onCreateOrderOpen}>
-                Sell
-              </Button>
-              <Button colorScheme="blue" size="lg" onClick={onMakeOfferOpen}>
-                Offer
-              </Button>
+              {account.data.address === nft.holder ? (
+                <>
+                  <Button colorScheme="blue" size="lg" onClick={onCreateOrderOpen}>
+                    List for Sale
+                  </Button>
+                  <Button
+                    colorScheme="blue"
+                    size="lg"
+                    disabled={!orders.some((order) => order.direction === "buy")}
+                    onClick={handleHighestOrder}
+                  >
+                    Accept Highest Offer
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button
+                    colorScheme="blue"
+                    size="lg"
+                    disabled={!orders.some((order) => order.direction === "sell")}
+                    onClick={handleLowestOrder}
+                  >
+                    Buy Now
+                  </Button>
+                  <Button colorScheme="blue" size="lg" onClick={onMakeOfferOpen}>
+                    Make Offer
+                  </Button>
+                </>
+              )}
             </>
           ) : (
             <ConnectWalletButton size="lg" />
