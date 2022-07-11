@@ -1,11 +1,11 @@
 import { Seaport } from "@opensea/seaport-js";
 import { ItemType } from "@opensea/seaport-js/lib/constants";
 import { OrderWithCounter } from "@opensea/seaport-js/lib/types";
-import { NftSwapV4 as ZeroEx, SignedOrder } from "@traderxyz/nft-swap-sdk";
+import { NftSwapV4 as ZeroEx } from "@traderxyz/nft-swap-sdk";
 import { ethers } from "ethers";
 
 import { OrderDirection, OrderFee, OrderType, RawOrder } from "../../common/entities/order";
-import { NOT_IMPLEMENTED } from "../../functions/dist/common/utils/error";
+import { NOT_IMPLEMENTED } from "../../common/utils/error";
 
 export const createOrder = async (
   provider: ethers.providers.JsonRpcProvider,
