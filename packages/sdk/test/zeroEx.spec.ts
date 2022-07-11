@@ -9,8 +9,8 @@ describeWithSeaportFixture(
       const { offerer, fulfiller, erc721Mock, erc20Mock, zeroEx } = fixture;
       const tokenId = "0";
       const amount = "10000";
-      await erc721Mock.mint(offerer.address, tokenId);
       await erc20Mock.mint(fulfiller.address, amount);
+      await erc721Mock.mint(offerer.address, tokenId);
       const erc721 = {
         type: "ERC721" as const,
         tokenAddress: erc721Mock.address,
@@ -44,8 +44,8 @@ describeWithSeaportFixture(
 
       const tx = await zeroEx.fulfiller.fillSignedOrder(signedOrder);
       await zeroEx.fulfiller.awaitTransactionHash(tx.hash);
-      expect(await erc721Mock.ownerOf(tokenId)).to.equal(fulfiller.address);
       expect(await erc20Mock.balanceOf(offerer.address)).to.equal(amount);
+      expect(await erc721Mock.ownerOf(tokenId)).to.equal(fulfiller.address);
     });
   },
   { zeroEx: true }

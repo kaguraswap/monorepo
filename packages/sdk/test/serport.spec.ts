@@ -38,8 +38,8 @@ describeWithSeaportFixture(
       });
       const previousBalanceOfOfferer = await ethers.provider.getBalance(offerer.address);
       await executeAllFulfillActions();
-      expect(await erc721Mock.ownerOf(tokenId)).to.equal(fulfiller.address);
       expect(await ethers.provider.getBalance(offerer.address)).to.equal(previousBalanceOfOfferer.add(amount));
+      expect(await erc721Mock.ownerOf(tokenId)).to.equal(fulfiller.address);
     });
   },
   { seaport: true }

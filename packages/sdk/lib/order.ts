@@ -1,7 +1,7 @@
 import { Seaport } from "@opensea/seaport-js";
 import { ItemType } from "@opensea/seaport-js/lib/constants";
 import { CreateInputItem, OrderWithCounter } from "@opensea/seaport-js/lib/types";
-import { NftSwapV4 as ZeroEx, SignedERC721OrderStruct } from "@traderxyz/nft-swap-sdk";
+import { ERC721OrderStructSerialized, NftSwapV4 as ZeroEx, SignedERC721OrderStruct } from "@traderxyz/nft-swap-sdk";
 import { ethers } from "ethers";
 
 import { OrderDirection, OrderFee, OrderType, SignedOrder } from "../../common/entities/order";
@@ -33,6 +33,17 @@ export class Order {
     return new ZeroEx(this._provider, signer, chainId, {
       zeroExExchangeProxyContractAddress: this._overriddenZeroExContract,
     });
+  };
+
+  public hash = async (type: OrderType, signedOrder: SignedOrder) => {
+    if (type === "seaport") {
+      signedOrder = signedOrder as OrderWithCounter;
+      return this._seaport.getOrderHash(signedOrder.parameters);
+    } else {
+      const order = signedOrder as ERC721OrderStructSerialized;
+      const zeroEx = await this._getZeroEx();
+      return zeroEx.getOrderHash(order);
+    }
   };
 
   public create = async (
@@ -99,7 +110,33 @@ export class Order {
     }
   };
 
-  public fulfill = async (type: OrderType, signedOrder: SignedOrder, fulfiller: string, overrides?: string) => {
+  public validate = async (type: OrderType, signedOrder: SignedOrder) => {
+    if (type === "seaport") {
+      signedOrder = signedOrder as OrderWithCounter;
+      return await this._seaport
+        .validate([signedOrder], signedOrder.parameters.offerer)
+        .callStatic()
+        .catch(() => false);
+    } else {
+      signedOrder = signedOrder as SignedERC721OrderStruct;
+      const zeroEx = await this._getZeroEx();
+      const status = await zeroEx.getOrderStatus(signedOrder);
+      return status === 1;
+    }
+  };
+
+  public cancel = async (type: OrderType, signedOrder: SignedOrder) => {
+    if (type === "seaport") {
+      signedOrder = signedOrder as OrderWithCounter;
+      await this._seaport.cancelOrders([signedOrder.parameters], signedOrder.parameters.offerer).transact();
+    } else {
+      signedOrder = signedOrder as SignedERC721OrderStruct;
+      const zeroEx = await this._getZeroEx(signedOrder.maker);
+      await zeroEx.cancelOrder(signedOrder.nonce, "ERC721");
+    }
+  };
+
+  public fulfill = async (type: OrderType, signedOrder: SignedOrder, fulfiller: string) => {
     if (type === "seaport") {
       signedOrder = signedOrder as OrderWithCounter;
       const { executeAllActions } = await this._seaport.fulfillOrders({
@@ -129,25 +166,6 @@ export class Order {
       }
       const tx = await zeroEx.fillSignedOrder(signedOrder);
       await zeroEx.awaitTransactionHash(tx.hash);
-    }
-  };
-
-  public validate = async (type: OrderType, signedOrder: SignedOrder) => {
-    if (type === "seaport") {
-      signedOrder = signedOrder as OrderWithCounter;
-      return await this._seaport
-        .validate([signedOrder], signedOrder.parameters.offerer)
-        .callStatic()
-        .catch(() => false);
-    } else {
-      signedOrder = signedOrder as SignedERC721OrderStruct;
-      const zeroEx = await this._getZeroEx();
-      const { canOrderBeFilled } = await zeroEx.checkOrderCanBeFilledMakerSide(signedOrder).catch(() => {
-        return {
-          canOrderBeFilled: false,
-        };
-      });
-      return canOrderBeFilled;
     }
   };
 }
