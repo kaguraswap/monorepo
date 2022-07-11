@@ -91,7 +91,7 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
       address,
       fees
     );
-    const { data } = await httpsCallable(functions, "order-create")({ type: "seaport", nft, order });
+    const { data } = await httpsCallable(functions, "order-create")({ type: "seaport", nft, signedOrder });
     const result = data as Order;
     router.push(`/orders/${result.hash}`);
   };
