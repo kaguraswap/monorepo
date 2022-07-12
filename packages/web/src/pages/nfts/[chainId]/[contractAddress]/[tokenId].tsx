@@ -1,6 +1,7 @@
 import { collection, doc, getDoc, query, where } from "firebase/firestore";
 import { httpsCallable } from "firebase/functions";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import { useRouter } from "next/router";
 import React from "react";
 import { useCollectionData, useDocumentData } from "react-firebase-hooks/firestore";
 
@@ -13,6 +14,10 @@ export interface NFTPageProps {
 }
 
 const NFTPage: NextPage<NFTPageProps> = ({ nft }) => {
+  const router = useRouter();
+
+  console.log(router);
+
   const [syncedNFTState, setSyncedNFTState] = React.useState(nft);
   const [syncedOrdersState, setSynceOrdersState] = React.useState([]);
   const key = toKey(nft);
