@@ -1,6 +1,7 @@
 import { Box, Button, Heading, Image, Modal, Stack, Text, useColorModeValue, useDisclosure } from "@chakra-ui/react";
 import { ethers } from "ethers";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { TwitterIcon, TwitterShareButton } from "react-share";
 import { useAccount, useSigner } from "wagmi";
 
 import networks from "../../../../../common/configs/networks.json";
@@ -17,6 +18,11 @@ export const OrderDetail: React.FC<OrderDetailProps> = ({ order }) => {
   const [account] = useAccount();
   const [signer] = useSigner();
   const [txHash, setTxHash] = useState("");
+  const [url, setUrl] = useState("");
+
+  useEffect(() => {
+    setUrl(window.location.href);
+  }, []);
 
   const { isOpen: isNotificationOpen, onOpen: onNotificationrOpen, onClose: onNotificationClose } = useDisclosure();
 
@@ -75,6 +81,9 @@ export const OrderDetail: React.FC<OrderDetailProps> = ({ order }) => {
                 <Button colorScheme="blue" size="lg" onClick={fulfillOrder}>
                   Fulfill Order
                 </Button>
+                <TwitterShareButton url={url} title={"I created orders on KaguraSwap. Let's visit and buy my NFT"}>
+                  <TwitterIcon size={32} round />
+                </TwitterShareButton>
               </>
             ) : (
               <ConnectWalletButton size="lg" />
