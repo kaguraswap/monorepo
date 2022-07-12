@@ -69,11 +69,12 @@ export const describeWithSeaportFixture = (name: string, suiteCb: (fixture: Fixt
         const _consoleLog = console.log;
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         console.log = () => {};
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const _provider = web3.currentProvider as any;
         const zeroExContract = await fullMigrateAsync(
           fixture.owner.address,
           {
-            sendAsync: (a, b) => _provider.send(a, b),
+            sendAsync: (a, b) => _provider?.send(a, b),
           },
           { from: fixture.owner.address },
           {},

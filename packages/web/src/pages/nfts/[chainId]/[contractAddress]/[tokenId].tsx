@@ -5,6 +5,7 @@ import React from "react";
 import { useCollectionData, useDocumentData } from "react-firebase-hooks/firestore";
 
 import { NFT, toKey, validate } from "../../../../../../common/entities/nft";
+import { Order } from "../../../../../../common/entities/order";
 import { NFTTemplate } from "../../../../components/templates/NFT";
 import { db, functions } from "../../../../lib/firebase";
 
@@ -14,7 +15,7 @@ export interface NFTPageProps {
 
 const NFTPage: NextPage<NFTPageProps> = ({ nft }) => {
   const [syncedNFTState, setSyncedNFTState] = React.useState(nft);
-  const [syncedOrdersState, setSynceOrdersState] = React.useState([]);
+  const [syncedOrdersState, setSynceOrdersState] = React.useState<Order[]>([]);
   const key = toKey(nft);
   const [nftDoc] = useDocumentData(doc(db, "nfts", key));
   const [orderDocs] = useCollectionData(
@@ -35,7 +36,7 @@ const NFTPage: NextPage<NFTPageProps> = ({ nft }) => {
     });
     if (orderDocs) {
       console.log(orderDocs);
-      setSynceOrdersState(orderDocs as any);
+      setSynceOrdersState(orderDocs as Order[]);
     }
   }, [nft, nftDoc, orderDocs]);
   return <NFTTemplate nft={syncedNFTState} orders={syncedOrdersState} />;

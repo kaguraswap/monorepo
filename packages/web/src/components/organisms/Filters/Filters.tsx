@@ -1,15 +1,4 @@
-import {
-  Button,
-  Flex,
-  HStack,
-  Image,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  SimpleGrid,
-  Text,
-  useColorModeValue,
-} from "@chakra-ui/react";
+import { Flex, HStack, SimpleGrid, Text, useColorModeValue } from "@chakra-ui/react";
 import { CheckboxFilter } from "components/molecules/CheckboxFilter";
 import React from "react";
 

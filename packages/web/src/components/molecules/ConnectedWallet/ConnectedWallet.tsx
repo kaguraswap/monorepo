@@ -7,8 +7,6 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-  Stack,
-  Text,
   useClipboard,
   useDisclosure,
   useToast,

@@ -36,7 +36,6 @@ export const CheckboxFilter: React.FC<CheckboxFilterProps> = ({
   hideLabel,
   spacing = "2",
   showSearch,
-  ...rest
 }) => {
   const handleQueryChanges = (key: string, id: string) => {
     router.push({ query: { ...router.query, [key]: id } }, undefined, { shallow: true });

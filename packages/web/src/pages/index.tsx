@@ -11,7 +11,7 @@ import { db } from "../lib/firebase";
 const HomePage: NextPage<HomeTemplateProps> = () => {
   const router = useRouter();
   const [syncedOrdersState, setSynceOrdersState] = React.useState<Order[]>([]);
-  const queryList = [{ property: "isValid", operator: "==" as WhereFilterOp, value: true as any }];
+
   const [queryConditions, setQueryConditions] = React.useState([where("isValid", "==", true)]);
 
   const [orderDocs] = useCollectionData(query(collection(db, "orders"), ...queryConditions));
@@ -20,16 +20,17 @@ const HomePage: NextPage<HomeTemplateProps> = () => {
       return;
     }
 
-    setSynceOrdersState(orderDocs as any);
+    setSynceOrdersState(orderDocs as Order[]);
   }, [orderDocs]);
 
   React.useEffect(() => {
     const { chainId, direction } = router.query;
+    const queryList = [{ property: "isValid", operator: "==" as WhereFilterOp, value: true as unknown }];
     if (chainId) {
-      queryList.push({ property: "chainId", operator: "==" as WhereFilterOp, value: chainId as string });
+      queryList.push({ property: "chainId", operator: "==", value: chainId });
     }
     if (direction) {
-      queryList.push({ property: "direction", operator: "==" as WhereFilterOp, value: direction as string });
+      queryList.push({ property: "direction", operator: "==", value: direction });
     }
     const queryConditions = queryList.map((condition) =>
       where(condition.property, condition.operator, condition.value)

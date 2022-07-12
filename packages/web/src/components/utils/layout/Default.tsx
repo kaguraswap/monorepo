@@ -1,4 +1,4 @@
-import { Container, Flex, Stack } from "@chakra-ui/react";
+import { Container, Flex } from "@chakra-ui/react";
 import { KAGURA_SUPPORTED_CHAIN_ID } from "lib/rpc";
 import React from "react";
 

@@ -13,6 +13,7 @@ export interface DropdownSelectNetworkProps {
 export const DropdownSelectNetwork: React.FC<DropdownSelectNetworkProps> = ({ chainId }) => {
   const handleSwitchNetwork = async (chainId: string) => {
     // TODO
+    console.log("chainId", chainId);
     router.push(`/`);
   };
 

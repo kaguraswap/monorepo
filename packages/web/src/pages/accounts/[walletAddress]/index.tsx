@@ -4,6 +4,7 @@ import type { GetServerSideProps, NextPage } from "next";
 import React from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 
+import { NFT } from "../../../../../common/entities/nft";
 import { AccountTemplate } from "../../../components/templates/Account";
 import { db } from "../../../lib/firebase";
 
@@ -12,13 +13,13 @@ export interface AccountPageProps {
 }
 
 const AccountPage: NextPage<AccountPageProps> = ({ walletAddress }) => {
-  const [syncedNFTsState, setSyncedNFTsState] = React.useState([]);
+  const [syncedNFTsState, setSyncedNFTsState] = React.useState<NFT[]>([]);
   const [nftDocs] = useCollectionData(query(collection(db, "nfts"), where("holder", "==", walletAddress)));
   React.useEffect(() => {
     if (!nftDocs) {
       return;
     }
-    setSyncedNFTsState(nftDocs as any);
+    setSyncedNFTsState(nftDocs as NFT[]);
   }, [nftDocs]);
 
   return <AccountTemplate nfts={syncedNFTsState} />;

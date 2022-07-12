@@ -19,7 +19,7 @@ const OrderPage: NextPage<OrderPageProps> = ({ order }) => {
     if (!orderDoc) {
       return;
     }
-    setSyncedOrderState(orderDoc as any);
+    setSyncedOrderState(orderDoc as Order);
   }, [order, orderDoc]);
 
   return <>{syncedOrderState && <OrderTemplate order={syncedOrderState} />}</>;
