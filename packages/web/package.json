@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "iframe": "serve iframe -p 3001",
     "storybook": "start-storybook -p 6006 --ci -s public",
     "build-storybook": "build-storybook",
     "chromatic": "chromatic --exit-zero-on-changes"
@@ -51,6 +52,7 @@
     "crypto-browserify": "^3.12.0",
     "https-browserify": "^1.0.0",
     "os-browserify": "^0.3.0",
+    "serve": "^13.0.4",
     "storybook-addon-next": "^1.6.7",
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
