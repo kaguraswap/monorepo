@@ -30,6 +30,7 @@
     "react-dom": "18.2.0",
     "react-firebase-hooks": "^5.0.3",
     "react-icons": "^4.4.0",
+    "react-share": "^4.4.0",
     "react-spinners": "^0.13.3"
   },
   "devDependencies": {
