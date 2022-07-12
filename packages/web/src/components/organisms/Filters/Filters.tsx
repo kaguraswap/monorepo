@@ -10,17 +10,12 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { useConnect } from "@thirdweb-dev/react";
 import { CheckboxFilter } from "components/molecules/CheckboxFilter";
 import React from "react";
 
 import { supportedChains } from "../../../lib/rpc";
 
-interface FiltersProps {
-  size: string;
-}
-
-export const Filters: React.FC<FiltersProps> = ({ size }) => {
+export const Filters: React.FC = () => {
   const chainIdOptions = supportedChains.map((chain) => {
     return { label: chain.name, value: chain.id.toString() };
   });

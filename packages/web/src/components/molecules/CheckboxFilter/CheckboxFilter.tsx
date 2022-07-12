@@ -1,27 +1,21 @@
 import {
   Box,
-  Button,
-  Checkbox,
-  CheckboxGroup,
-  Flex,
   FormLabel,
   HStack,
-  Icon,
-  IconButton,
   Input,
   InputGroup,
   InputRightElement,
   Popover,
   PopoverBody,
   PopoverContent,
-  PopoverFooter,
   PopoverTrigger,
+  Radio,
+  RadioGroup,
   Stack,
   StackProps,
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { useAccount, useAddress, useDisconnect } from "@thirdweb-dev/react";
 import { PopoverIcon } from "components/atoms/PopoverIcon";
 import router from "next/router";
 import React from "react";
@@ -44,6 +38,9 @@ export const CheckboxFilter: React.FC<CheckboxFilterProps> = ({
   showSearch,
   ...rest
 }) => {
+  const handleQueryChanges = (key: string, id: string) => {
+    router.push({ query: { ...router.query, [key]: id } }, undefined, { shallow: true });
+  };
   return (
     <Popover placement="bottom-start">
       <PopoverTrigger>
@@ -62,9 +59,8 @@ export const CheckboxFilter: React.FC<CheckboxFilterProps> = ({
           _expanded={{ bg: useColorModeValue("gray.100", "gray.700") }}
           _selected={{ bg: "blue.50", borderColor: "blue.500" }}
         >
-          {/* {icon && <Icon as={icon} boxSize="2" />} */}
           <Text fontWeight="medium">{label}</Text>
-          <PopoverIcon isOpen fontSize="xl" color="gray.400" />
+          <PopoverIcon isOpen={false} fontSize="xl" color="gray.400" />
         </HStack>
       </PopoverTrigger>
       <PopoverContent _focus={{ shadow: "none", outline: 0 }} _focusVisible={{ shadow: "outline" }}>
@@ -83,19 +79,26 @@ export const CheckboxFilter: React.FC<CheckboxFilterProps> = ({
                 </InputRightElement>
               </InputGroup>
             )}
-            <CheckboxGroup {...rest}>
-              {options.map((option) => (
-                <Checkbox key={option.value} value={option.value} colorScheme="blue">
-                  <span>{option.label}</span>
-                  {option.count != null && (
-                    <Box as="span" color="gray.500" fontSize="sm">
-                      {" "}
-                      ({option.count})
-                    </Box>
-                  )}
-                </Checkbox>
-              ))}
-            </CheckboxGroup>
+            <RadioGroup>
+              <Stack direction="column">
+                {options.map((option) => (
+                  <Radio
+                    key={option.value}
+                    value={option.value}
+                    colorScheme="blue"
+                    onChange={() => handleQueryChanges("chainId", option.value)}
+                  >
+                    <span>{option.label}</span>
+                    {option.count != null && (
+                      <Box as="span" color="gray.500" fontSize="sm">
+                        {" "}
+                        ({option.count})
+                      </Box>
+                    )}
+                  </Radio>
+                ))}
+              </Stack>
+            </RadioGroup>
           </Stack>
         </PopoverBody>
       </PopoverContent>
