@@ -50,7 +50,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
       notFound: true,
     };
   }
-  httpsCallable(functions, "nft-sync")(nft);
+  httpsCallable(functions, "nft-sync")({ nft });
   const key = toKey(nft);
   const nftDoc = await getDoc(doc(db, "nfts", key));
   const nftDocData = nftDoc.data();

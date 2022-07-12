@@ -16,7 +16,8 @@ const db = admin.firestore();
 
 export const sync = functions.https.onRequest(async (req, res) => {
   return cors(req, res, async () => {
-    const nft = validate(req.body.data);
+    const { nft: _nft } = req.body.data;
+    const nft = validate(_nft);
     if (!nft) {
       res.send({ status: false, data: "not found" });
       return;

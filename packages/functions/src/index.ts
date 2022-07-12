@@ -7,9 +7,10 @@ interface Files {
 }
 
 const files: Files = {
+  cleaning: "./functions/cleaning",
   nft: "./functions/nft",
   order: "./functions/order",
-  cleaning: "./functions/cleaning",
+  royalty: "./functions/royalty",
 };
 
 const loadFunctions = (filesObj: Files) => {
