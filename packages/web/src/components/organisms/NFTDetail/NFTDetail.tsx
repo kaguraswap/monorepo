@@ -53,7 +53,7 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
   const { isOpen: isCreateOrderOpen, onOpen: onCreateOrderOpen, onClose: onCreateOrderClose } = useDisclosure();
   const { isOpen: isMakeOfferOpen, onOpen: onMakeOfferOpen, onClose: onMakeOfferClose } = useDisclosure();
   const [amountString, setAmount] = useState("0");
-  const [youGetAmount, setYouGetAmount] = useState(0);
+  const [youGetAmount, setYouGetAmount] = useState("0");
 
   const fees = [{ recipient: FEE_RECIPIENT, basisPoints: BSP }];
   const [, switchNetwork] = useNetwork();
@@ -61,7 +61,7 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
   const handleAmount = (amount: string) => {
     setAmount(amount);
     const fee = (Number(amount) * BSP) / 10000;
-    setYouGetAmount(Number(amount) - fee);
+    setYouGetAmount((Number(amount) - fee).toFixed(5));
   };
 
   const validateModalOpen = async (chainId: string, open: () => void) => {
