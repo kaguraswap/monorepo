@@ -1,6 +1,7 @@
 import { OrderWithCounter } from "@opensea/seaport-js/lib/types";
 import { SignedNftOrderV4 } from "@traderxyz/nft-swap-sdk";
 
+import { Record } from "../../value-objects/record";
 import { ChainId } from "../network";
 import { NFT } from "../nft";
 
@@ -13,7 +14,7 @@ export interface OrderFee {
   basisPoints: number;
 }
 
-export interface Order {
+export interface Order extends Record {
   direction: OrderDirection;
   type: OrderType;
   chainId: ChainId;
@@ -25,6 +26,5 @@ export interface Order {
   endTime: string;
   nft: NFT;
   isValid?: boolean;
-  hash?: string;
   signedOrder?: SignedOrder;
 }

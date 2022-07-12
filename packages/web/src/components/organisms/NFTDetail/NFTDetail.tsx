@@ -72,12 +72,12 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
 
   const handleLowestOrder = () => {
     const sortedOrders = orders.sort((a, b) => Number(a.value) - Number(b.value));
-    router.push(`/orders/${sortedOrders[0].hash}`);
+    router.push(`/orders/${sortedOrders[0].id}`);
   };
 
   const handleHighestOrder = () => {
     const sortedOrders = orders.sort((a, b) => Number(b.value) - Number(a.value));
-    router.push(`/orders/${sortedOrders[0].hash}`);
+    router.push(`/orders/${sortedOrders[0].id}`);
   };
 
   const createSellOrBuyOrder = async (direction: OrderDirection) => {
@@ -103,7 +103,7 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
     );
     const { data } = await httpsCallable(functions, "order-create")({ type: "seaport", nft, signedOrder });
     const result = data as Order;
-    router.push(`/orders/${result.hash}`);
+    router.push(`/orders/${result.id}`);
   };
 
   return (

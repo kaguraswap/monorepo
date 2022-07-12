@@ -25,6 +25,7 @@
     "dev": "yarn build:contracts && yarn build:functions && run-p dev:*",
     "dev:web": "yarn workspace @kaguraswap/web dev",
     "dev:storybook": "yarn workspace @kaguraswap/web storybook",
+    "dev:iframe": "yarn workspace @kaguraswap/web iframe",
     "dev:functions": "yarn workspace @kaguraswap/functions dev",
     "dev:firebase": "firebase emulators:start --only auth,functions,firestore,pubsub",
     "prebuild": "yarn workspace @kaguraswap/sdk build",
