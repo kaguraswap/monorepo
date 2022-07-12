@@ -18,6 +18,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { ethers } from "ethers";
+import { getChainId } from "lib/web3/networks";
 import router from "next/router";
 import React, { useState } from "react";
 import { IoIosAdd } from "react-icons/io";
@@ -52,8 +53,8 @@ export const NFTRegister: React.FC = () => {
       typeof tokenId !== "string" ||
       typeof nftContractAddress !== "string" ||
       !ethers.utils.isAddress(nftContractAddress) ||
-      typeof network !== "string"
-      // || !config[network]
+      typeof network !== "string" ||
+      getChainId(network) === 0
     ) {
       clear();
       setAssetURIErrorMessage("URI Invalid, please input chainId, contract address and token id directly");
@@ -62,7 +63,7 @@ export const NFTRegister: React.FC = () => {
     setAssetURIErrorMessage("");
     setContractAddress(nftContractAddress);
     setTokenId(tokenId);
-    // setChainId(config[network].chainId);
+    setChainId(getChainId(network).toString());
   };
 
   const clear = () => {
