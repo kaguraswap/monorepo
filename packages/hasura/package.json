@@ -1,0 +1,11 @@
+{
+  "name": "@kaguraswap/hasura",
+  "version": "0.0.1",
+  "license": "MIT",
+  "private": true,
+  "scripts": {},
+  "dependencies": {},
+  "devDependencies": {
+    "hasura-cli": "^2.8.4"
+  }
+}
