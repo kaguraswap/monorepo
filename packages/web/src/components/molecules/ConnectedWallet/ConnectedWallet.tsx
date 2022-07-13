@@ -12,9 +12,8 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useAccount, useAddress, useDisconnect } from "@thirdweb-dev/react";
-import router from "next/router";
 import React from "react";
-import { IoCopy, IoHome, IoWalletOutline } from "react-icons/io5";
+import { IoCopy, IoWalletOutline } from "react-icons/io5";
 
 import { shortenAddress } from "../../../../../common/utils/wallet";
 
@@ -90,16 +89,6 @@ export const ConnectedWallet: React.FC<ConnectedWalletProps> = () => {
                       icon={<Icon as={IoCopy} />}
                     />
                   </Flex>
-                  <Button
-                    size="sm"
-                    color="gray.600"
-                    onClick={() => {
-                      router.push(`/accounts/${address}`);
-                    }}
-                    leftIcon={<Icon as={IoHome} boxSize={4} color="gray.500" />}
-                  >
-                    MyPage
-                  </Button>
                   {data?.connector?.getProvider()?.isMetaMask && (
                     <Button size="sm" color="gray.600" onClick={switchWallet}>
                       Switch Wallet

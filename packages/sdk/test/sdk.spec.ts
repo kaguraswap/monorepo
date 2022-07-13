@@ -11,7 +11,7 @@ describeWithSeaportFixture(
       const tokenId = "0";
       const amount = "10000";
       await erc721Mock.mint(offerer.address, tokenId);
-      const { signedOrder } = await sdk.order.create(
+      const { signedOrder } = await sdk.order.offer(
         "seaport",
         "sell",
         {
@@ -38,7 +38,7 @@ describeWithSeaportFixture(
       const amount = "10000";
       await erc20Mock.mint(offerer.address, amount);
       await erc721Mock.mint(fulfiller.address, tokenId);
-      const { signedOrder } = await sdk.order.create(
+      const { signedOrder } = await sdk.order.offer(
         "seaport",
         "buy",
         {
@@ -64,7 +64,7 @@ describeWithSeaportFixture(
       const tokenId = "0";
       const amount = "10000";
       await erc721Mock.mint(offerer.address, tokenId);
-      const { signedOrder } = await sdk.order.create(
+      const { signedOrder } = await sdk.order.offer(
         "seaport",
         "sell",
         {
@@ -88,7 +88,7 @@ describeWithSeaportFixture(
       const amount = "10000";
       await erc20Mock.mint(fulfiller.address, amount);
       await erc721Mock.mint(offerer.address, tokenId);
-      const { signedOrder } = await sdk.order.create(
+      const { signedOrder } = await sdk.order.offer(
         "zeroEx",
         "sell",
         {
@@ -116,7 +116,7 @@ describeWithSeaportFixture(
       const amount = "10000";
       await erc20Mock.mint(offerer.address, amount);
       await erc721Mock.mint(fulfiller.address, tokenId);
-      const { signedOrder } = await sdk.order.create(
+      const { signedOrder } = await sdk.order.offer(
         "zeroEx",
         "buy",
         {
@@ -142,7 +142,7 @@ describeWithSeaportFixture(
       const tokenId = "0";
       const amount = "10000";
       await erc721Mock.mint(offerer.address, tokenId);
-      const { signedOrder } = await sdk.order.create(
+      const { signedOrder } = await sdk.order.offer(
         "zeroEx",
         "sell",
         {
