@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "license": "MIT",
   "private": true,
-  "scripts": {},
+  "scripts": {
+    "dev": "hasura console --no-browser"
+  },
   "dependencies": {},
   "devDependencies": {
     "hasura-cli": "^2.8.4"
