@@ -16,3 +16,6 @@ export const UINT256_MAX = "1157920892373161954235709850086879078532699846656405
 export const ERC165_ID = "0x01ffc9a7";
 export const ERC721_ID = "0x80ac58cd";
 export const ERC721_METADATA_ID = "0x5b5e139f";
+
+export const PERCENTAGE_BASE = 100;
+export const BSP_BASE = 10000;
