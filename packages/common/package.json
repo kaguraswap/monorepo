@@ -5,8 +5,7 @@
   "private": true,
   "scripts": {
     "build": "run-p build:*",
-    "build:graphql": "graphql-codegen --config codegen.yml",
-    "build:orm": "sequelize-auto --host localhost --user postgres --pass postgrespassword --port 5432 --output ./dist/entity --dialect postgres --database postgres --lang ts --caseModel c --caseProp c --caseFile k --schema public --views"
+    "build:graphql": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {},
   "devDependencies": {
