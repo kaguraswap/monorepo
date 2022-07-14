@@ -103,9 +103,6 @@ dist
 # TernJS port file
 .tern-port
 
-# Firebase
-.firebase
-
 # Web
 storybook-static
 
