@@ -1,4 +1,5 @@
 import { useQuery } from "@apollo/react-hooks";
+import axios from "axios";
 import gql from "graphql-tag";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import React from "react";
@@ -67,6 +68,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
       notFound: true,
     };
   }
+
+  axios.post("http://localhost:3000/api/nft/sync", { nft });
+
   return {
     props: {
       nft,
