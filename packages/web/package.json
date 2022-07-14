@@ -13,6 +13,8 @@
   },
   "dependencies": {
     "@3rdweb/react": "^1.9.3",
+    "@apollo/client": "^3.6.9",
+    "@apollo/react-hooks": "^4.0.0",
     "@chakra-ui/react": "^2.2.1",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
@@ -25,6 +27,7 @@
     "canonicalize": "^1.0.8",
     "firebase": "^9.8.4",
     "framer-motion": "^6",
+    "graphql": "^16.5.0",
     "next": "12.2.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",

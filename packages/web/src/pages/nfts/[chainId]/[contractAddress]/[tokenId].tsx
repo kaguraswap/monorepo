@@ -1,44 +1,60 @@
-import { collection, doc, getDoc, query, where } from "firebase/firestore";
-import { httpsCallable } from "firebase/functions";
+import { useQuery } from "@apollo/react-hooks";
+import gql from "graphql-tag";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import React from "react";
-import { useCollectionData, useDocumentData } from "react-firebase-hooks/firestore";
 
-import { NFT, toKey, validate } from "../../../../../../common/entities/nft";
-import { Order } from "../../../../../../common/entities/order";
+import { Nft } from "../../../../../../common/dist/graphql";
+import { validate } from "../../../../../../common/entities/nft";
 import { NFTTemplate } from "../../../../components/templates/NFT";
-import { db, functions } from "../../../../lib/firebase";
 
 export interface NFTPageProps {
-  nft: NFT;
+  nft: Nft;
 }
 
+const NFT_QUERY = gql`
+  query {
+    nft(
+      where: {
+        chainId: { _eq: "1" }
+        contractAddress: { _eq: "0x0000000000000000000000000000000000000001" }
+        tokenId: { _eq: "0" }
+      }
+    ) {
+      orders {
+        id
+        nft {
+          chainId
+          contractAddress
+          tokenId
+          metadata
+        }
+      }
+      holder
+      chainId
+      contractAddress
+      tokenId
+      metadata
+    }
+  }
+`;
+
 const NFTPage: NextPage<NFTPageProps> = ({ nft }) => {
-  const [syncedNFTState, setSyncedNFTState] = React.useState(nft);
-  const [syncedOrdersState, setSynceOrdersState] = React.useState<Order[]>([]);
-  const key = toKey(nft);
-  const [nftDoc] = useDocumentData(doc(db, "nfts", key));
-  const [orderDocs] = useCollectionData(
-    query(
-      collection(db, "orders"),
-      where("nft.chainId", "==", nft.chainId),
-      where("nft.contractAddress", "==", nft.contractAddress),
-      where("nft.tokenId", "==", nft.tokenId)
-    )
-  );
+  const [syncedNFTState, setSyncedNFTState] = React.useState<any>(nft);
+  const [syncedOrdersState, setSynceOrdersState] = React.useState<any>([]);
+  const { data } = useQuery(NFT_QUERY);
   React.useEffect(() => {
-    if (!nftDoc) {
+    if (!data) {
       return;
     }
+    const [nft] = data.nft;
     setSyncedNFTState({
       ...nft,
-      ...nftDoc,
+      ...data,
     });
-    if (orderDocs) {
-      console.log(orderDocs);
-      setSynceOrdersState(orderDocs as Order[]);
+    if (nft.orders.length > 0) {
+      setSynceOrdersState(nft.orders);
     }
-  }, [nft, nftDoc, orderDocs]);
+  }, [data]);
   return <NFTTemplate nft={syncedNFTState} orders={syncedOrdersState} />;
 };
 
@@ -51,15 +67,10 @@ export const getStaticProps: GetStaticProps = async (context) => {
       notFound: true,
     };
   }
-  httpsCallable(functions, "nft-sync")({ nft });
-  const key = toKey(nft);
-  const nftDoc = await getDoc(doc(db, "nfts", key));
-  const nftDocData = nftDoc.data();
   return {
     props: {
-      nft: nftDocData ? JSON.parse(JSON.stringify(nftDocData)) : nft,
+      nft,
     },
-    revalidate: nftDocData ? 300 : 10,
   };
 };
 

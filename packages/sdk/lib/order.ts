@@ -46,7 +46,7 @@ export class Order {
     }
   };
 
-  public create = async (
+  public offer = async (
     type: OrderType,
     direction: OrderDirection,
     erc721Item: {

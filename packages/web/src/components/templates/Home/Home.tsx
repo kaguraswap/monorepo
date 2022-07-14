@@ -1,16 +1,16 @@
 import { Button, Heading, Text, VStack } from "@chakra-ui/react";
+import { NFTList } from "components/organisms/NFTList";
 import React from "react";
 
-import { Order } from "../../../../../common/entities/order";
+import { NFT } from "../../../../../common/entities/nft";
 import { Filters } from "../../organisms/Filters";
-import { OrderList } from "../../organisms/OrderList";
 import { DefaultLayout } from "../../utils/layout";
 
 export interface HomeTemplateProps {
-  orders: Order[];
+  nfts: NFT[];
 }
 
-export const HomeTemplate: React.FC<HomeTemplateProps> = ({ orders }) => {
+export const HomeTemplate: React.FC<HomeTemplateProps> = ({ nfts }) => {
   return (
     <DefaultLayout>
       <VStack justify={"center"} py="32" spacing={"8"}>
@@ -22,11 +22,8 @@ export const HomeTemplate: React.FC<HomeTemplateProps> = ({ orders }) => {
         </VStack>
         <Button>Create Swap</Button>
       </VStack>
-      <Text textAlign={"center"} mb="12" fontSize={"xl"}>
-        Available Swaps
-      </Text>
       <Filters />
-      <OrderList orders={orders} />
+      <NFTList nfts={nfts} />
     </DefaultLayout>
   );
 };

@@ -26,7 +26,6 @@ import {
 import { useNetwork } from "@thirdweb-dev/react";
 import { Link } from "components/atoms/Link";
 import { ethers } from "ethers";
-import { httpsCallable } from "firebase/functions";
 import { ChainIDToIcon, KAGURA_SUPPORTED_CHAIN_ID } from "lib/rpc";
 import router from "next/router";
 import React, { useState } from "react";
@@ -39,7 +38,6 @@ import { NFT } from "../../../../../common/entities/nft";
 import { Order, OrderDirection } from "../../../../../common/entities/order";
 import { shortenAddress } from "../../../../../common/utils/wallet";
 import { KaguraSDK } from "../../../../../sdk/lib";
-import { functions } from "../../../lib/firebase";
 import { ConnectWalletButton } from "../../molecules/ConnectWalletButton";
 
 export interface NFTDetailProps {
@@ -88,7 +86,7 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
     const provider = signer.data.provider as ethers.providers.JsonRpcProvider;
     const sdk = new KaguraSDK(provider);
     const amount = ethers.utils.parseEther(amountString);
-    const { signedOrder } = await sdk.order.create(
+    const { signedOrder } = await sdk.order.offer(
       "seaport",
       direction,
       {
@@ -101,9 +99,7 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
       address,
       fees
     );
-    const { data } = await httpsCallable(functions, "order-create")({ type: "seaport", nft, signedOrder });
-    const result = data as Order;
-    router.push(`/orders/${result.id}`);
+    console.log(signedOrder);
   };
 
   return (

@@ -1,44 +1,34 @@
-import { collection, query, where, WhereFilterOp } from "firebase/firestore";
+import { useQuery } from "@apollo/react-hooks";
+import gql from "graphql-tag";
 import type { NextPage } from "next";
-import { useRouter } from "next/router";
 import React from "react";
-import { useCollectionData } from "react-firebase-hooks/firestore";
 
-import { Order } from "../../../common/entities/order";
 import { HomeTemplate, HomeTemplateProps } from "../components/templates/Home";
-import { db } from "../lib/firebase";
 
 const HomePage: NextPage<HomeTemplateProps> = () => {
-  const router = useRouter();
-  const [syncedOrdersState, setSynceOrdersState] = React.useState<Order[]>([]);
+  const [syncedNFTsState, setSynceNFTsState] = React.useState<any>([]);
 
-  const [queryConditions, setQueryConditions] = React.useState([where("isValid", "==", true)]);
+  const NFT_QUERY = gql`
+    query {
+      nft(where: { orders: { isValid: { _eq: true } } }) {
+        chainId
+        contractAddress
+        tokenId
+        metadata
+      }
+    }
+  `;
 
-  const [orderDocs] = useCollectionData(query(collection(db, "orders"), ...queryConditions));
+  const { data } = useQuery(NFT_QUERY);
+
   React.useEffect(() => {
-    if (!orderDocs) {
+    if (!data) {
       return;
     }
+    setSynceNFTsState(data.nft);
+  }, [data]);
 
-    setSynceOrdersState(orderDocs as Order[]);
-  }, [orderDocs]);
-
-  React.useEffect(() => {
-    const { chainId, direction } = router.query;
-    const queryList = [{ property: "isValid", operator: "==" as WhereFilterOp, value: true as unknown }];
-    if (chainId) {
-      queryList.push({ property: "chainId", operator: "==", value: chainId });
-    }
-    if (direction) {
-      queryList.push({ property: "direction", operator: "==", value: direction });
-    }
-    const queryConditions = queryList.map((condition) =>
-      where(condition.property, condition.operator, condition.value)
-    );
-    setQueryConditions(queryConditions);
-  }, [router]);
-
-  return <HomeTemplate orders={syncedOrdersState} />;
+  return <HomeTemplate nfts={syncedNFTsState} />;
 };
 
 export default HomePage;
