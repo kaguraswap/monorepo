@@ -1,7 +1,6 @@
 {
   "extends": ["standard", "eslint:recommended", "plugin:@typescript-eslint/recommended", "prettier"],
   "plugins": ["simple-import-sort", "import"],
-  "ignorePatterns": ["**/generated/**/*.ts"],
   "rules": {
     "simple-import-sort/imports": "error",
     "simple-import-sort/exports": "error",

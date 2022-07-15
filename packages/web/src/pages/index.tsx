@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import React from "react";
 
-import { useNftHasValidOrderQuery } from "../../../common/generated/graphql";
+import { useNftHasValidOrderQuery } from "../../../common/dist/graphql";
 import { HomeTemplate, HomeTemplateProps } from "../components/templates/Home";
 
 const HomePage: NextPage<HomeTemplateProps> = () => {

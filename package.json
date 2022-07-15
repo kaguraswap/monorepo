@@ -22,11 +22,11 @@
     "lint:sol": "solhint 'packages/contracts/**/*.sol' --ignore-path .gitignore",
     "test": "run-p test:*",
     "test:sdk": "yarn workspace @kaguraswap/sdk test",
-    "dev": "yarn build:sdk && run-p dev:*",
+    "dev": "yarn build:sdk && yarn build:common && run-p dev:*",
     "dev:common": "yarn workspace @kaguraswap/common dev",
     "dev:web": "yarn workspace @kaguraswap/web dev",
     "dev:hasura": "yarn workspace @kaguraswap/hasura dev",
-    "build": "yarn build:sdk && yarn build:web",
+    "build": "yarn build:sdk && yarn build:common && yarn build:web",
     "build:common": "yarn workspace @kaguraswap/common build",
     "build:sdk": "yarn workspace @kaguraswap/sdk build",
     "build:web": "yarn workspace @kaguraswap/web build"

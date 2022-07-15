@@ -2,8 +2,8 @@ import axios from "axios";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import React from "react";
 
+import { Nft, useNftQuery } from "../../../../../../common/dist/graphql";
 import { validate } from "../../../../../../common/entities/nft";
-import { Nft, useNftQuery } from "../../../../../../common/generated/graphql";
 import { NFTTemplate } from "../../../../components/templates/NFT";
 
 export interface NFTPageProps {

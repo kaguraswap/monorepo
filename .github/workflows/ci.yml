@@ -10,5 +10,6 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 16.x.x
+      - run: docker-compose up -d
       - run: yarn
       - run: yarn ci
