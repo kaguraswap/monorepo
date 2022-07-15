@@ -58,7 +58,7 @@ export class Order {
       amount: string;
     },
     offerer: string,
-    fees: OrderFee[]
+    fees?: OrderFee[]
   ) => {
     if (type === "seaport") {
       const erc721ItemAdjusted: CreateInputItem = {
@@ -80,6 +80,7 @@ export class Order {
               offer: [erc20ItemAdjusted],
               consideration: [{ ...erc721ItemAdjusted, recipient: offerer }],
             };
+
       const { executeAllActions } = await this._seaport.createOrder({ ...order, fees }, offerer);
       const signedOrder = await executeAllActions();
       return { signedOrder };

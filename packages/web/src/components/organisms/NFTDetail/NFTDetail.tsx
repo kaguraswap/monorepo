@@ -34,7 +34,7 @@ import { FiExternalLink } from "react-icons/fi";
 import BeatLoader from "react-spinners/BeatLoader";
 import { useAccount, useSigner } from "wagmi";
 
-import { BSP, FEE_RECIPIENT } from "../../../../../common/configs/app";
+import { BSP, TIP_RECIPIENT } from "../../../../../common/configs/app";
 import { NFT } from "../../../../../common/entities/nft";
 import { Order, OrderDirection } from "../../../../../common/entities/order";
 import { shortenAddress } from "../../../../../common/utils/wallet";
@@ -54,7 +54,7 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
   const [amountString, setAmount] = useState("0");
   const [youGetAmount, setYouGetAmount] = useState("0");
 
-  const fees = [{ recipient: FEE_RECIPIENT, basisPoints: BSP }];
+  const fees = [{ recipient: TIP_RECIPIENT, basisPoints: BSP }];
   const [, switchNetwork] = useNetwork();
 
   const handleAmount = (amount: string) => {
