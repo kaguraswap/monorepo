@@ -1,15 +1,13 @@
 import axios from "axios";
 import { ethers } from "ethers";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { Sequelize } from "sequelize";
 
 import networks from "../../../../../common/configs/networks.json";
 import { NFTMetadata, validate } from "../../../../../common/entities/nft";
 import IERC721MetadataArtifact from "../../../../../sdk/artifacts/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol/IERC721Metadata.json";
 import IERC721Artifact from "../../../../../sdk/artifacts/@openzeppelin/contracts/token/ERC721/IERC721.sol/IERC721.json";
 import { IERC721, IERC721Metadata } from "../../../../../sdk/typechain";
-
-const POSTGRES_CONNECTION_STRING = "postgres://postgres:postgrespassword@localhost:5432/postgres";
+import { orm } from "../../../lib/sequelize";
 
 export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { nft: _nft } = req.body;
@@ -39,24 +37,22 @@ export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       metadata.animationUrl = data.animation_url || "";
     }
   }
+
   const nftDoc = {
     ...nft,
     holder,
     metadata,
   };
-
-  const sequelize = new Sequelize(POSTGRES_CONNECTION_STRING);
-
-  // console.log(
-  //   `INSERT INTO "public"."nft"("chainId", "contractAddress", "tokenId", "holder", "metadata") VALUES (E'${
-  //     nft.chainId
-  //   }', E'${nft.contractAddress}', E'${nft.tokenId}', E'${holder}', '${JSON.stringify(metadata)}');`
-  // );
-
-  await sequelize.query(
-    `INSERT INTO "public"."nft"("chainId", "contractAddress", "tokenId", "holder", "metadata") VALUES (E'1', E'0x0000000000000000000000000000000000000001', E'3', E'0x0000000000000000000000000000000000000001', '{"name":"nft name","description":"With a sleek design and a captivating essence, this is a modern Classic made for every occasion.asset description","image":"https://via.placeholder.com/350x350"}');`
-  );
-
+  await orm.contract.upsert({
+    chainId: nft.chainId,
+    contractAddress: nft.contractAddress.toLowerCase(),
+    supportsInterface: {},
+  });
+  await orm.nft.upsert({
+    ...nftDoc,
+    contractAddress: nftDoc.contractAddress.toLowerCase(),
+    holder: nftDoc.holder.toLowerCase(),
+  });
   res.status(200).json({ nft: nftDoc });
 };
 

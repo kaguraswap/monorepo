@@ -12,34 +12,34 @@ export interface NFTPageProps {
   nft: Nft;
 }
 
-const NFT_QUERY = gql`
-  query {
-    nft(
-      where: {
-        chainId: { _eq: "1" }
-        contractAddress: { _eq: "0x0000000000000000000000000000000000000001" }
-        tokenId: { _eq: "0" }
-      }
-    ) {
-      orders {
-        id
-        nft {
-          chainId
-          contractAddress
-          tokenId
-          metadata
-        }
-      }
-      holder
-      chainId
-      contractAddress
-      tokenId
-      metadata
-    }
-  }
-`;
-
 const NFTPage: NextPage<NFTPageProps> = ({ nft }) => {
+  const NFT_QUERY = gql`
+    query {
+      nft(
+        where: {
+          chainId: { _eq: "${nft.chainId}" }
+          contractAddress: { _eq: "${nft.contractAddress}" }
+          tokenId: { _eq: "${nft.tokenId}" }
+        }
+      ) {
+        orders {
+          id
+          nft {
+            chainId
+            contractAddress
+            tokenId
+            metadata
+          }
+        }
+        holder
+        chainId
+        contractAddress
+        tokenId
+        metadata
+      }
+    }
+  `;
+
   const [syncedNFTState, setSyncedNFTState] = React.useState<any>(nft);
   const [syncedOrdersState, setSynceOrdersState] = React.useState<any>([]);
   const { data } = useQuery(NFT_QUERY);
@@ -73,7 +73,10 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   return {
     props: {
-      nft,
+      nft: {
+        ...nft,
+        contractAddress: nft.contractAddress.toLowerCase(),
+      },
     },
   };
 };
