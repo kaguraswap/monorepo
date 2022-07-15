@@ -24,6 +24,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useNetwork } from "@thirdweb-dev/react";
+import axios from "axios";
 import { Link } from "components/atoms/Link";
 import { ethers } from "ethers";
 import { ChainIDToIcon, KAGURA_SUPPORTED_CHAIN_ID } from "lib/rpc";
@@ -99,7 +100,9 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
       address,
       fees
     );
-    console.log(signedOrder);
+
+    const { data } = await axios.post("http://localhost:3000/api/order/create", { type: "seaport", nft, signedOrder });
+    console.log(data);
   };
 
   return (
@@ -143,7 +146,7 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
           </Stack>
           {account.data ? (
             <>
-              {account.data.address === nft.holder ? (
+              {account.data.address.toLowerCase() === nft.holder ? (
                 <>
                   <Button
                     colorScheme="blue"

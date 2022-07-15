@@ -1,10 +1,8 @@
-import { useQuery } from "@apollo/react-hooks";
 import axios from "axios";
-import gql from "graphql-tag";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import React from "react";
 
-import { Nft } from "../../../../../../common/dist/graphql";
+import { Nft, useNftQuery } from "../../../../../../common/dist/graphql";
 import { validate } from "../../../../../../common/entities/nft";
 import { NFTTemplate } from "../../../../components/templates/NFT";
 
@@ -13,36 +11,17 @@ export interface NFTPageProps {
 }
 
 const NFTPage: NextPage<NFTPageProps> = ({ nft }) => {
-  const NFT_QUERY = gql`
-    query {
-      nft(
-        where: {
-          chainId: { _eq: "${nft.chainId}" }
-          contractAddress: { _eq: "${nft.contractAddress}" }
-          tokenId: { _eq: "${nft.tokenId}" }
-        }
-      ) {
-        orders {
-          id
-          nft {
-            chainId
-            contractAddress
-            tokenId
-            metadata
-          }
-        }
-        holder
-        chainId
-        contractAddress
-        tokenId
-        metadata
-      }
-    }
-  `;
-
   const [syncedNFTState, setSyncedNFTState] = React.useState<any>(nft);
   const [syncedOrdersState, setSynceOrdersState] = React.useState<any>([]);
-  const { data } = useQuery(NFT_QUERY);
+
+  const { data } = useNftQuery({
+    variables: {
+      chainId: nft.chainId as string,
+      contractAddress: nft.contractAddress,
+      tokenId: nft.tokenId,
+    },
+  });
+
   React.useEffect(() => {
     if (!data) {
       return;
@@ -52,7 +31,7 @@ const NFTPage: NextPage<NFTPageProps> = ({ nft }) => {
       ...nft,
       ...data,
     });
-    if (nft.orders.length > 0) {
+    if (nft.orders && nft.orders.length > 0) {
       setSynceOrdersState(nft.orders);
     }
   }, [data]);

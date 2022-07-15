@@ -1,0 +1,28 @@
+query NFTHasValidOrder {
+  nft(where: { orders: { isValid: { _eq: true } } }) {
+    chainId
+    contractAddress
+    tokenId
+    holder
+    metadata
+  }
+}
+
+query NFT($chainId: String, $contractAddress: String, $tokenId: String) {
+  nft(where: { chainId: { _eq: $chainId }, contractAddress: { _eq: $contractAddress }, tokenId: { _eq: $tokenId } }) {
+    orders {
+      id
+      nft {
+        chainId
+        contractAddress
+        tokenId
+        metadata
+      }
+    }
+    holder
+    chainId
+    contractAddress
+    tokenId
+    metadata
+  }
+}
