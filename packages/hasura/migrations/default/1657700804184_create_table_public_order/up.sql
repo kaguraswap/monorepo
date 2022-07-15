@@ -1,1 +1,0 @@
-CREATE TABLE "public"."order" ("id" text NOT NULL, "chainId" text NOT NULL, "contractAddress" text NOT NULL, "tokenId" text NOT NULL, "type" text NOT NULL, "isValid" boolean NOT NULL, "signedOrder" jsonb NOT NULL, PRIMARY KEY ("id") );

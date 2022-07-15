@@ -1,1 +1,0 @@
-INSERT INTO "public"."order"("id", "chainId", "contractAddress", "tokenId", "type", "isValid", "signedOrder") VALUES (E'0x0000000000000000000000000000000000000000000000000000000000000002', E'1', E'0x0000000000000000000000000000000000000001', E'0', E'seaport', false, '{}');
