@@ -1,5 +1,12 @@
 {
+  "version": 2,
   "github": {
     "enabled": false
-  }
+  },
+  "builds": [
+    {
+      "src": "/packages/web/.next/*",
+      "use": "@now/static"
+    }
+  ]
 }

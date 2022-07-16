@@ -16,9 +16,13 @@ jobs:
           node-version: 16.x.x
       - run: docker-compose up -d
       - run: yarn
-      - run: yarn ci
+      - run: yarn lint
+      - run: yarn build
       - uses: amondnet/vercel-action@v20
+        if: github.event_name == 'push'
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
+          vercel-args: "--prod"
