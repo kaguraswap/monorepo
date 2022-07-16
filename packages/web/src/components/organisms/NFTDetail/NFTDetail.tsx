@@ -24,9 +24,9 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useNetwork } from "@thirdweb-dev/react";
+import axios from "axios";
 import { Link } from "components/atoms/Link";
 import { ethers } from "ethers";
-import { httpsCallable } from "firebase/functions";
 import { ChainIDToIcon, KAGURA_SUPPORTED_CHAIN_ID } from "lib/rpc";
 import router from "next/router";
 import React, { useState } from "react";
@@ -39,7 +39,6 @@ import { NFT } from "../../../../../common/entities/nft";
 import { Order, OrderDirection } from "../../../../../common/entities/order";
 import { shortenAddress } from "../../../../../common/utils/wallet";
 import { KaguraSDK } from "../../../../../sdk/lib";
-import { functions } from "../../../lib/firebase";
 import { ConnectWalletButton } from "../../molecules/ConnectWalletButton";
 
 export interface NFTDetailProps {
@@ -101,9 +100,9 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
       address,
       fees
     );
-    const { data } = await httpsCallable(functions, "order-create")({ type: "seaport", nft, signedOrder });
-    const result = data as Order;
-    router.push(`/orders/${result.id}`);
+
+    const { data } = await axios.post("http://localhost:3000/api/order/create", { type: "seaport", nft, signedOrder });
+    console.log(data);
   };
 
   return (
@@ -147,7 +146,7 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
           </Stack>
           {account.data ? (
             <>
-              {account.data.address === nft.holder ? (
+              {account.data.address.toLowerCase() === nft.holder ? (
                 <>
                   <Button
                     colorScheme="blue"

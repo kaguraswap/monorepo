@@ -1,5 +1,5 @@
+import axios from "axios";
 import { ethers } from "ethers";
-import { httpsCallable } from "firebase/functions";
 import { useAccount, useSigner } from "wagmi";
 
 import { TIP_RECIPIENT } from "../../../../../common/configs/app";
@@ -7,7 +7,6 @@ import { NFT } from "../../../../../common/entities/nft";
 import { Order, OrderDirection, OrderType } from "../../../../../common/entities/order";
 import { PERCENTAGE_BASE } from "../../../../../common/utils/constant";
 import { KaguraSDK } from "../../../../../sdk/lib";
-import { functions } from "../../../lib/firebase";
 
 export const useSwap = () => {
   const [{ data: signer }] = useSigner();
@@ -33,7 +32,7 @@ export const useSwap = () => {
       address,
       [{ recipient: TIP_RECIPIENT, basisPoints: Number(tip) * PERCENTAGE_BASE }]
     );
-    const { data } = await httpsCallable(functions, "order-create")({ type: "seaport", nft, signedOrder });
+    const { data } = await axios.post("http://localhost:3000/api/order/create", { type: "seaport", nft, signedOrder });
     return data as Order;
   };
 

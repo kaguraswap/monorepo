@@ -103,9 +103,6 @@ dist
 # TernJS port file
 .tern-port
 
-# Firebase
-.firebase
-
 # Web
 storybook-static
 
@@ -119,3 +116,5 @@ gasReporterOutput.json
 # misc
 .DS_Store
 
+# vercel
+.vercel

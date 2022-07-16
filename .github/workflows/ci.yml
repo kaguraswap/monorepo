@@ -1,6 +1,10 @@
 name: CI
 
-on: push
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
   ci:
@@ -10,5 +14,17 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 16.x.x
+      - run: docker-compose up -d
       - run: yarn
       - run: yarn ci
+      - uses: chromaui/action@v1
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          workingDir: "./packages/web"
+      - uses: BetaHuhn/deploy-to-vercel-action@v1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          WORKING_DIRECTORY: ./packages/web

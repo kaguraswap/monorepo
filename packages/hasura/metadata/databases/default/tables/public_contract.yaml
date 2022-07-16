@@ -1,0 +1,14 @@
+table:
+  schema: public
+  name: contract
+array_relationships:
+  - name: nfts
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: nft
+        insertion_order: null
+        column_mapping:
+          contractAddress: contractAddress
+          chainId: chainId
