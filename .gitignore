@@ -116,3 +116,5 @@ gasReporterOutput.json
 # misc
 .DS_Store
 
+# vercel
+.vercel
