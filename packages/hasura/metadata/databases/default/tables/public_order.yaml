@@ -13,3 +13,15 @@ object_relationships:
           contractAddress: contractAddress
           chainId: chainId
           tokenId: tokenId
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - isValid
+        - signedOrder
+        - chainId
+        - contractAddress
+        - id
+        - tokenId
+        - type
+      filter: {}
