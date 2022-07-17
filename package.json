@@ -21,14 +21,14 @@
     "lint:sol": "solhint 'packages/contracts/**/*.sol' --ignore-path .gitignore",
     "test": "run-p test:*",
     "test:sdk": "yarn workspace @kaguraswap/sdk test",
-    "dev": "yarn build:sdk && yarn build:common && run-p dev:*",
+    "dev": "yarn prebuild && run-p dev:*",
     "dev:common": "yarn workspace @kaguraswap/common dev",
     "dev:web": "yarn workspace @kaguraswap/web dev",
     "dev:hasura": "yarn workspace @kaguraswap/hasura dev",
-    "build": "yarn build:sdk && yarn build:common && yarn build:web",
-    "build:common": "yarn workspace @kaguraswap/common build",
-    "build:sdk": "yarn workspace @kaguraswap/sdk build",
-    "build:web": "yarn workspace @kaguraswap/web build"
+    "prebuild": "run-p prebuild:*",
+    "prebuild:common": "yarn workspace @kaguraswap/common build",
+    "prebuild:sdk": "yarn workspace @kaguraswap/sdk build",
+    "build": "vercel build"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.2.4",
@@ -55,6 +55,7 @@
     "prettier": "^2.7.1",
     "prettier-plugin-solidity": "^1.0.0-beta.19",
     "tcp-port-used": "^1.0.2",
+    "vercel": "^27.1.5",
     "wait-on": "^6.0.1"
   },
   "lint-staged": {
