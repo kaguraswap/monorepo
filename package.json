@@ -28,7 +28,8 @@
     "prebuild": "run-p prebuild:*",
     "prebuild:common": "yarn workspace @kaguraswap/common build",
     "prebuild:sdk": "yarn workspace @kaguraswap/sdk build",
-    "build": "vercel build"
+    "build-vercel": "vercel build",
+    "build": "yarn build-vercel"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.2.4",

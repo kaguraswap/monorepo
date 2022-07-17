@@ -11,21 +11,38 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v1
         with:
           node-version: 16.x.x
       - run: docker-compose up -d
       - run: yarn
       - run: yarn lint
+      - run: yarn prebuild
+      - uses: chromaui/action@v1
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          workingDir: "./packages/web"
       - run: vercel pull -y --token ${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID}}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID}}
-      - run: yarn build
+      - run: yarn build-vercel
+        if: github.event_name == 'pull_request'
       - uses: amondnet/vercel-action@v20
+        if: github.event_name == 'pull_request'
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
           vercel-args: "--prebuilt"
+      - run: yarn build-vercel --prod
+        if: github.event_name == 'push'
+      - uses: amondnet/vercel-action@v20
+        if: github.event_name == 'push'
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
+          vercel-args: "--prebuilt --prod"
