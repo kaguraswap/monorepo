@@ -12,16 +12,12 @@
     "chromatic": "chromatic --exit-zero-on-changes"
   },
   "dependencies": {
-    "@3rdweb/react": "^1.9.3",
     "@apollo/client": "^3.6.9",
     "@apollo/react-hooks": "^4.0.0",
     "@chakra-ui/react": "^2.2.1",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
     "@opensea/seaport-js": "^1.0.2",
-    "@thirdweb-dev/chain-icons": "^1.0.4",
-    "@thirdweb-dev/react": "^2.4.7",
-    "@thirdweb-dev/sdk": "^2.3.23",
     "@walletconnect/web3-provider": "^1.7.8",
     "axios": "^0.27.2",
     "canonicalize": "^1.0.8",
@@ -36,7 +32,9 @@
     "react-icons": "^4.4.0",
     "react-share": "^4.4.0",
     "react-spinners": "^0.13.3",
-    "sequelize": "^6.21.3"
+    "sequelize": "^6.21.3",
+    "subscriptions-transport-ws": "^0.11.0",
+    "wagmi": "^0.5.9"
   },
   "devDependencies": {
     "@babel/core": "^7.18.6",

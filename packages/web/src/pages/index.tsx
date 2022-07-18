@@ -1,12 +1,12 @@
 import type { NextPage } from "next";
 import React from "react";
 
-import { useNftHasValidOrderQuery } from "../../../common/dist/graphql";
+import { useHomePageSubscription } from "../../../common/dist/graphql";
 import { HomeTemplate, HomeTemplateProps } from "../components/templates/Home";
 
 const HomePage: NextPage<HomeTemplateProps> = () => {
   const [syncedNFTsState, setSynceNFTsState] = React.useState<any>([]);
-  const { data } = useNftHasValidOrderQuery();
+  const { data } = useHomePageSubscription();
 
   React.useEffect(() => {
     if (!data) {

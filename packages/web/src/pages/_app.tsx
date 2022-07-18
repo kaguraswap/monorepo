@@ -1,26 +1,19 @@
 import { ApolloProvider } from "@apollo/client";
-import { ChakraProvider, extendTheme } from "@chakra-ui/react";
-import { ChainId, ThirdwebProvider } from "@thirdweb-dev/react";
+import { ChakraProvider } from "@chakra-ui/react";
 import type { AppProps } from "next/app";
+import { WagmiConfig } from "wagmi";
 
-import client from "../lib/apollo";
+import { apolloClient } from "../lib/apollo";
+import { wagmiClient } from "../lib/wagmi";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const desiredChainId = ChainId.Mumbai;
   return (
-    <ApolloProvider client={client}>
-      <ThirdwebProvider desiredChainId={desiredChainId}>
-        <ChakraProvider
-          theme={extendTheme({
-            fonts: {
-              heading: "Roboto",
-              body: "Roboto",
-            },
-          })}
-        >
+    <ApolloProvider client={apolloClient}>
+      <WagmiConfig client={wagmiClient}>
+        <ChakraProvider>
           <Component {...pageProps} />
         </ChakraProvider>
-      </ThirdwebProvider>
+      </WagmiConfig>
     </ApolloProvider>
   );
 }

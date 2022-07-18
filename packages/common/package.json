@@ -13,16 +13,21 @@
     "build:graphql": {
       "patterns": [
         "../hasura/metadata",
-        "../hasura/metadata"
+        "./queries"
       ],
-      "extensions": "yaml",
+      "extensions": [
+        "yaml",
+        "graphql"
+      ],
       "runOnChangeOnly": true
     },
     "build:orm": {
       "patterns": [
         "../hasura/migrations"
       ],
-      "extensions": "sql",
+      "extensions": [
+        "sql"
+      ],
       "runOnChangeOnly": true
     }
   },
