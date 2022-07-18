@@ -1,15 +1,15 @@
 import { ApolloProvider } from "@apollo/client";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
-import { ChainId, ThirdwebProvider } from "@thirdweb-dev/react";
 import type { AppProps } from "next/app";
+import { WagmiConfig } from "wagmi";
 
-import client from "../lib/apollo";
+import { apolloClient } from "../lib/apollo";
+import { wagmiClient } from "../lib/wagmi";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const desiredChainId = ChainId.Mumbai;
   return (
-    <ApolloProvider client={client}>
-      <ThirdwebProvider desiredChainId={desiredChainId}>
+    <ApolloProvider client={apolloClient}>
+      <WagmiConfig client={wagmiClient}>
         <ChakraProvider
           theme={extendTheme({
             fonts: {
@@ -20,7 +20,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         >
           <Component {...pageProps} />
         </ChakraProvider>
-      </ThirdwebProvider>
+      </WagmiConfig>
     </ApolloProvider>
   );
 }

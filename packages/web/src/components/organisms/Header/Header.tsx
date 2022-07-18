@@ -1,20 +1,16 @@
-import { Box, Flex, HStack, useColorModeValue } from "@chakra-ui/react";
-import { KAGURA_SUPPORTED_CHAIN_ID } from "lib/rpc";
+import { Box, Button, Flex, HStack, useColorModeValue } from "@chakra-ui/react";
 import Image from "next/image";
 import React from "react";
-import { useAccount } from "wagmi";
 
+import { useIsWagmiConnected } from "../../../hooks/useIsWagmiConnected";
 import { Link } from "../../atoms/Link";
 import { ConnectedWallet } from "../../molecules/ConnectedWallet";
 import { ConnectWalletButton } from "../../molecules/ConnectWalletButton";
-import { DropdownSelectNetwork } from "../../molecules/DropdownSelectNetwork";
 
-export interface HeaderProps {
-  chainId?: KAGURA_SUPPORTED_CHAIN_ID;
-}
+export const Header: React.FC = () => {
+  const { isWagmiConnected } = useIsWagmiConnected();
+  console.log(isWagmiConnected);
 
-export const Header: React.FC<HeaderProps> = ({ chainId }) => {
-  const [{ data }] = useAccount();
   return (
     <Box as="section">
       <Box
@@ -31,8 +27,8 @@ export const Header: React.FC<HeaderProps> = ({ chainId }) => {
           </Link>
           <Flex gap={"1"}>
             <HStack spacing="3">
-              {chainId ? <DropdownSelectNetwork chainId={chainId} /> : <></>}
-              {data ? <ConnectedWallet /> : <ConnectWalletButton size="sm" />}
+              {!isWagmiConnected && <ConnectWalletButton />}
+              {isWagmiConnected && <ConnectedWallet />}
             </HStack>
           </Flex>
         </HStack>

@@ -1,5 +1,4 @@
 import { Button, Icon, Popover, PopoverContent, PopoverTrigger, SimpleGrid, Text } from "@chakra-ui/react";
-import { ChainIDToIcon, ChainIDToName, KAGURA_SUPPORTED_CHAIN_ID } from "lib/rpc";
 import router from "next/router";
 import React from "react";
 
@@ -7,7 +6,7 @@ import config from "../../../../../common/configs/networks.json";
 import { PopoverIcon } from "../../atoms/PopoverIcon";
 
 export interface DropdownSelectNetworkProps {
-  chainId?: KAGURA_SUPPORTED_CHAIN_ID;
+  chainId?: any;
 }
 
 export const DropdownSelectNetwork: React.FC<DropdownSelectNetworkProps> = ({ chainId }) => {
@@ -19,7 +18,7 @@ export const DropdownSelectNetwork: React.FC<DropdownSelectNetworkProps> = ({ ch
 
   return (
     <Popover trigger="click" openDelay={0} placement="bottom" defaultIsOpen={false} gutter={12}>
-      {({ isOpen }) => (
+      {/* {({ isOpen }) => (
         <>
           {chainId ? (
             <PopoverTrigger>
@@ -56,7 +55,7 @@ export const DropdownSelectNetwork: React.FC<DropdownSelectNetworkProps> = ({ ch
             </SimpleGrid>
           </PopoverContent>
         </>
-      )}
+      )} */}
     </Popover>
   );
 };

@@ -2,12 +2,10 @@ import { Flex, HStack, SimpleGrid, Text, useColorModeValue } from "@chakra-ui/re
 import { CheckboxFilter } from "components/molecules/CheckboxFilter";
 import React from "react";
 
-import { supportedChains } from "../../../lib/rpc";
-
 export const Filters: React.FC = () => {
-  const chainIdOptions = supportedChains.map((chain) => {
-    return { label: chain.name, value: chain.id.toString() };
-  });
+  // const chainIdOptions = supportedChains.map((chain) => {
+  //   return { label: chain.name, value: chain.id.toString() };
+  // });
   return (
     <>
       <Flex justify="space-between" align="center" display={{ base: "none", md: "flex" }}>
@@ -16,7 +14,7 @@ export const Filters: React.FC = () => {
             Filter by
           </Text>
           <SimpleGrid display="inline-grid" spacing="4" columns={4}>
-            <CheckboxFilter options={chainIdOptions} label="chain" />
+            {/* <CheckboxFilter options={chainIdOptions} label="chain" /> */}
           </SimpleGrid>
         </HStack>
 
