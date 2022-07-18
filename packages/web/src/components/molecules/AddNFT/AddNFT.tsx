@@ -57,14 +57,16 @@ export const AddNFT: React.FC<OfferProps> = () => {
       <IconButton aria-label="Add" rounded="xl" icon={<MdAdd />} onClick={onOpen}>
         Add
       </IconButton>
-      <Modal onClose={onClose} isOpen={isOpen} maxWidth="xl">
+      <Modal onClose={onClose} isOpen={isOpen} modalContentProps={{ maxWidth: "xl" }}>
         <VStack spacing={2} mb="8">
           {selectedInputNFTMethod === "url" && (
             <FormControl>
               <HStack justify={"space-between"}>
                 <Text fontWeight="bold">URL</Text>
                 <Text fontSize="xs" textAlign={"right"}>
-                  <Link onClick={() => handleSelectedInputNFTMethod("manual")}>Input manually</Link>
+                  <Link chakraLinkProps={{ onClick: () => handleSelectedInputNFTMethod("manual") }}>
+                    Input manually
+                  </Link>
                 </Text>
               </HStack>
               <Input onChange={handleURLChange} value={url} />
@@ -76,7 +78,7 @@ export const AddNFT: React.FC<OfferProps> = () => {
                 <HStack justify={"space-between"}>
                   <Text fontWeight="bold">Network</Text>
                   <Text fontSize="xs" textAlign={"right"}>
-                    <Link onClick={() => handleSelectedInputNFTMethod("url")}>from URL</Link>
+                    <Link chakraLinkProps={{ onClick: () => handleSelectedInputNFTMethod("url") }}>from URL</Link>
                   </Text>
                 </HStack>
                 <Select onChange={handleChainIdChange} value={selectedChainId}>

@@ -17,11 +17,15 @@ select_permissions:
   - role: anonymous
     permission:
       columns:
-        - isValid
-        - signedOrder
+        - id
         - chainId
         - contractAddress
-        - id
         - tokenId
-        - type
+        - protocol
+        - isValid
+        - signedOrder
+        - offerer
+        - sortablePrice
+        - price
+        - direction
       filter: {}

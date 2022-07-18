@@ -5,37 +5,26 @@ subscription HomePage {
     tokenId
     holder
     metadata
+    orders(where: { isValid: { _eq: true }, direction: { _eq: "sell" } }, order_by: { sortablePrice: desc }) {
+      price
+    }
   }
 }
 
 subscription NFTPage($chainId: String, $contractAddress: String, $tokenId: String) {
   nft(where: { chainId: { _eq: $chainId }, contractAddress: { _eq: $contractAddress }, tokenId: { _eq: $tokenId } }) {
-    holder
     chainId
     contractAddress
     tokenId
+    holder
     metadata
-    contract {
-      supportsInterface
-    }
-    orders {
+    orders(where: { isValid: { _eq: true }, direction: { _eq: "sell" } }, order_by: { sortablePrice: desc }) {
       id
-      nft {
-        chainId
-        contractAddress
-        tokenId
-        metadata
-      }
+      direction
+      protocol
+      offerer
+      price
+      signedOrder
     }
-  }
-}
-
-subscription OfferPage($chainId: String, $contractAddress: String, $tokenId: String) {
-  nft(where: { chainId: { _eq: $chainId }, contractAddress: { _eq: $contractAddress }, tokenId: { _eq: $tokenId } }) {
-    chainId
-    contractAddress
-    tokenId
-    holder
-    metadata
   }
 }

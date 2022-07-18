@@ -4,23 +4,23 @@ import {
   ModalCloseButton,
   ModalContent,
   ModalContentProps,
-  ModalFooter,
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/react";
 import React from "react";
 
-export interface ModalProps extends Pick<ModalContentProps, "maxWidth"> {
+export interface ModalProps {
   children: React.ReactNode;
   isOpen: boolean;
   onClose: () => void;
+  modalContentProps?: ModalContentProps;
 }
 
-export const Modal: React.FC<ModalProps> = ({ children, isOpen, onClose, maxWidth }) => {
+export const Modal: React.FC<ModalProps> = ({ children, isOpen, onClose, modalContentProps }) => {
   return (
     <_Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
-      <ModalContent maxWidth={maxWidth}>
+      <ModalContent {...modalContentProps}>
         <ModalHeader>
           <ModalCloseButton />
         </ModalHeader>

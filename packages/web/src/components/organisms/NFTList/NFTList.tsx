@@ -2,7 +2,7 @@ import { Box, Flex, HStack, Icon, Select, SimpleGrid, Stack, Text, useDisclosure
 import React from "react";
 import { MdFilterList } from "react-icons/md";
 
-import { NFT } from "../../../../../common/entities/nft";
+import { Nft } from "../../../../../common/dist/graphql";
 import { Link } from "../../atoms/Link";
 import { AddNFT } from "../../molecules/AddNFT";
 import { CheckboxFilter } from "../../molecules/CheckBoxFIlter";
@@ -11,7 +11,7 @@ import { NFTListItem } from "../../molecules/NFTListItem";
 import { networkFilter, protocolFilter, sortByOptions, statusFilter } from "./data";
 
 export interface NFTListProps {
-  nfts: NFT[];
+  nfts: Nft[];
 }
 
 export const NFTList: React.FC<NFTListProps> = ({ nfts }) => {
@@ -25,7 +25,7 @@ export const NFTList: React.FC<NFTListProps> = ({ nfts }) => {
           <Text>Filters</Text>
         </HStack>
         <HStack>
-          <Select defaultValue={sortByOptions.defaultValue} rounded="xl" width="200px">
+          <Select defaultValue={sortByOptions.defaultValue} rounded="xl" width="180px">
             {sortByOptions.options.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}

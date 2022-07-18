@@ -1,19 +1,17 @@
 import React from "react";
 
-import { NFT } from "../../../../../common/entities/nft";
-import { Order } from "../../../../../common/entities/order";
+import { Nft } from "../../../../../common/dist/graphql";
 import { NFTDetail } from "../../organisms/NFTDetail";
 import { DefaultLayout } from "../../utils/layout";
 
 export interface NFTDetailTemplateProps {
-  nft: NFT;
-  orders: Order[];
+  nft: Nft;
 }
 
-export const NFTDetailTemplate: React.FC<NFTDetailTemplateProps> = ({ nft, orders }) => {
+export const NFTDetailTemplate: React.FC<NFTDetailTemplateProps> = ({ nft }) => {
   return (
     <DefaultLayout>
-      <NFTDetail nft={nft} orders={orders} />
+      <NFTDetail nft={nft} />
     </DefaultLayout>
   );
 };

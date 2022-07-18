@@ -5,11 +5,7 @@ import { useAccount, useDisconnect } from "wagmi";
 
 import { shortenAddress } from "../../../../../common/utils/wallet";
 
-interface WalletProps {
-  tokenAddress?: string;
-}
-
-export const Wallet: React.FC<WalletProps> = () => {
+export const Wallet: React.FC = () => {
   const { onOpen, onClose } = useDisclosure({ defaultIsOpen: false });
   const { address } = useAccount();
   const { disconnect } = useDisconnect();
@@ -20,7 +16,7 @@ export const Wallet: React.FC<WalletProps> = () => {
   };
 
   return (
-    <Popover trigger="hover" openDelay={1} placement={"bottom"} defaultIsOpen={false}>
+    <Popover trigger="hover" placement={"bottom"} defaultIsOpen={false}>
       <PopoverTrigger>
         <Button rounded="xl" leftIcon={<Icon as={IoWalletOutline} />} onClick={onOpen}>
           {shortenAddress(address)}

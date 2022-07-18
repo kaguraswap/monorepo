@@ -1,17 +1,21 @@
-import { Button, Stack, useDisclosure } from "@chakra-ui/react";
+import { Button, ButtonProps, Stack, useDisclosure } from "@chakra-ui/react";
 import React from "react";
 import { useConnect } from "wagmi";
 
 import { injectedConnector } from "../../../lib/wagmi";
 import { Modal } from "../Modal";
 
-export const ConnectWallet: React.FC = () => {
+export interface ConnectWalletProps {
+  buttonProps?: ButtonProps;
+}
+
+export const ConnectWallet: React.FC<ConnectWalletProps> = ({ buttonProps }) => {
   const { connect } = useConnect();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <>
-      <Button rounded="xl" onClick={onOpen}>
+      <Button {...buttonProps} rounded="xl" onClick={onOpen}>
         Connect Wallet
       </Button>
       <Modal onClose={onClose} isOpen={isOpen}>

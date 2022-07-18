@@ -35,8 +35,8 @@ export class Order {
     });
   };
 
-  public hash = async (type: OrderType, signedOrder: SignedOrder) => {
-    if (type === "seaport") {
+  public hash = async (protocol: OrderType, signedOrder: SignedOrder) => {
+    if (protocol === "seaport") {
       signedOrder = signedOrder as OrderWithCounter;
       return this._seaport.getOrderHash(signedOrder.parameters);
     } else {
@@ -47,7 +47,7 @@ export class Order {
   };
 
   public offer = async (
-    type: OrderType,
+    protocol: OrderType,
     direction: OrderDirection,
     erc721Item: {
       contractAddress: string;
@@ -60,7 +60,7 @@ export class Order {
     offerer: string,
     fees?: OrderFee[]
   ) => {
-    if (type === "seaport") {
+    if (protocol === "seaport") {
       const erc721ItemAdjusted: CreateInputItem = {
         itemType: ItemType.ERC721,
         token: erc721Item.contractAddress,
@@ -111,8 +111,8 @@ export class Order {
     }
   };
 
-  public validate = async (type: OrderType, signedOrder: SignedOrder) => {
-    if (type === "seaport") {
+  public validate = async (protocol: OrderType, signedOrder: SignedOrder) => {
+    if (protocol === "seaport") {
       signedOrder = signedOrder as OrderWithCounter;
       return await this._seaport
         .validate([signedOrder], signedOrder.parameters.offerer)
@@ -126,8 +126,8 @@ export class Order {
     }
   };
 
-  public cancel = async (type: OrderType, signedOrder: SignedOrder) => {
-    if (type === "seaport") {
+  public cancel = async (protocol: OrderType, signedOrder: SignedOrder) => {
+    if (protocol === "seaport") {
       signedOrder = signedOrder as OrderWithCounter;
       await this._seaport.cancelOrders([signedOrder.parameters], signedOrder.parameters.offerer).transact();
     } else {
@@ -137,8 +137,8 @@ export class Order {
     }
   };
 
-  public fulfill = async (type: OrderType, signedOrder: SignedOrder, fulfiller: string) => {
-    if (type === "seaport") {
+  public fulfill = async (protocol: OrderType, signedOrder: SignedOrder, fulfiller: string) => {
+    if (protocol === "seaport") {
       signedOrder = signedOrder as OrderWithCounter;
       const { executeAllActions } = await this._seaport.fulfillOrders({
         fulfillOrderDetails: [{ order: signedOrder }],

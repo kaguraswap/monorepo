@@ -12,7 +12,6 @@ export interface NFTPageProps {
 
 const NFTPage: NextPage<NFTPageProps> = ({ nft }) => {
   const [syncedNFTState, setSyncedNFTState] = React.useState<any>(nft);
-  const [syncedOrdersState, setSynceOrdersState] = React.useState<any>([]);
 
   const { data } = useNftPageSubscription({
     variables: {
@@ -34,11 +33,8 @@ const NFTPage: NextPage<NFTPageProps> = ({ nft }) => {
       ...nft,
       ...data,
     });
-    if (nft.orders && nft.orders.length > 0) {
-      setSynceOrdersState(nft.orders);
-    }
   }, [data]);
-  return <NFTDetailTemplate nft={syncedNFTState} orders={syncedOrdersState} />;
+  return <NFTDetailTemplate nft={syncedNFTState} />;
 };
 
 export default NFTPage;

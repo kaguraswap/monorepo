@@ -4,7 +4,7 @@ import { useAccount, useSigner } from "wagmi";
 
 import { TIP_RECIPIENT } from "../../../common/configs/app";
 import { NFT } from "../../../common/entities/nft";
-import { Order, OrderDirection, OrderType } from "../../../common/entities/order";
+import { OrderDirection, OrderType, SignedOrder } from "../../../common/entities/order";
 import { PERCENTAGE_BASE } from "../../../common/utils/constant";
 import { KaguraSDK } from "../../../sdk/lib";
 
@@ -31,13 +31,32 @@ export const useSwap = () => {
       address,
       [{ recipient: TIP_RECIPIENT, basisPoints: Number(tip) * PERCENTAGE_BASE }]
     );
-    const { data } = await axios.post("http://localhost:3000/api/order/create", { type: "seaport", nft, signedOrder });
-    return data as Order;
+    const { data } = await axios.post("http://localhost:3000/api/order/create", {
+      protocol,
+      direction,
+      nft,
+      signedOrder,
+    });
+    return data.id as string;
   };
 
-  const fulfill = async (protocol: OrderType, signedOrder: OrderDirection) => {
-    console.log("fulfill");
+  const cancel = async (protocol: OrderType, signedOrder: SignedOrder) => {
+    if (!signer || !address) {
+      return;
+    }
+    const provider = signer.provider as ethers.providers.JsonRpcProvider;
+    const sdk = new KaguraSDK(provider);
+    await sdk.order.cancel(protocol, signedOrder);
   };
 
-  return { offer, fulfill };
+  const fulfill = async (protocol: OrderType, signedOrder: SignedOrder) => {
+    if (!signer || !address) {
+      return;
+    }
+    const provider = signer.provider as ethers.providers.JsonRpcProvider;
+    const sdk = new KaguraSDK(provider);
+    await sdk.order.fulfill(protocol, signedOrder, address);
+  };
+
+  return { offer, cancel, fulfill };
 };
