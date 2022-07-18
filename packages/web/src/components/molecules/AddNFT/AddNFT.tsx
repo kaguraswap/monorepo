@@ -57,7 +57,7 @@ export const AddNFT: React.FC<OfferProps> = () => {
       <IconButton aria-label="Add" rounded="xl" icon={<MdAdd />} onClick={onOpen}>
         Add
       </IconButton>
-      <Modal onClose={onClose} isOpen={isOpen}>
+      <Modal onClose={onClose} isOpen={isOpen} maxWidth="xl">
         <VStack spacing={2} mb="8">
           {selectedInputNFTMethod === "url" && (
             <FormControl>
