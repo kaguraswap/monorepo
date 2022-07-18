@@ -5,14 +5,14 @@ import { Order } from "../../../../../common/entities/order";
 import { NFTDetail } from "../../organisms/NFTDetail";
 import { DefaultLayout } from "../../utils/layout";
 
-export interface NFTTemplateProps {
+export interface NFTDetailTemplateProps {
   nft: NFT;
   orders: Order[];
 }
 
-export const NFTTemplate: React.FC<NFTTemplateProps> = ({ nft, orders }) => {
+export const NFTDetailTemplate: React.FC<NFTDetailTemplateProps> = ({ nft, orders }) => {
   return (
-    <DefaultLayout chainId={Number(nft.chainId)}>
+    <DefaultLayout>
       <NFTDetail nft={nft} orders={orders} />
     </DefaultLayout>
   );

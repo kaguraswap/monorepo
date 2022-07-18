@@ -2,21 +2,20 @@ import axios from "axios";
 import { ethers } from "ethers";
 import { useAccount, useSigner } from "wagmi";
 
-import { TIP_RECIPIENT } from "../../../../../common/configs/app";
-import { NFT } from "../../../../../common/entities/nft";
-import { Order, OrderDirection, OrderType } from "../../../../../common/entities/order";
-import { PERCENTAGE_BASE } from "../../../../../common/utils/constant";
-import { KaguraSDK } from "../../../../../sdk/lib";
+import { TIP_RECIPIENT } from "../../../common/configs/app";
+import { NFT } from "../../../common/entities/nft";
+import { Order, OrderDirection, OrderType } from "../../../common/entities/order";
+import { PERCENTAGE_BASE } from "../../../common/utils/constant";
+import { KaguraSDK } from "../../../sdk/lib";
 
 export const useSwap = () => {
-  const [{ data: signer }] = useSigner();
-  const [{ data: account }] = useAccount();
+  const { data: signer } = useSigner();
+  const { address } = useAccount();
 
   const offer = async (protocol: OrderType, direction: OrderDirection, nft: NFT, price: string, tip: string) => {
-    if (!signer || !account) {
+    if (!signer || !address) {
       return;
     }
-    const { address } = account;
     const provider = signer.provider as ethers.providers.JsonRpcProvider;
     const sdk = new KaguraSDK(provider);
     const { signedOrder } = await sdk.order.offer(

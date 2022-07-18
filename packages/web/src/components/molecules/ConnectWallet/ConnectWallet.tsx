@@ -4,11 +4,11 @@ import { useConnect } from "wagmi";
 
 import { injectedConnector } from "../../../lib/wagmi";
 
-interface ConnectWalletButtonProps {
+interface ConnectWalletProps {
   size?: string;
 }
 
-export const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({ size = "sm" }) => {
+export const ConnectWallet: React.FC<ConnectWalletProps> = ({ size = "sm" }) => {
   const { connect } = useConnect();
 
   return (

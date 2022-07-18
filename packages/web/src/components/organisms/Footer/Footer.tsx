@@ -5,7 +5,6 @@ import { FaDiscord, FaGithub, FaTwitter } from "react-icons/fa";
 export const Footer: React.FC = () => {
   return (
     <Box>
-      <Divider />
       <Stack p="4" justify="space-between" direction={{ base: "column-reverse", md: "row" }} align="center">
         <Text fontSize="xs" color="gray.800">
           &copy; {new Date().getFullYear()} KaguraSwap

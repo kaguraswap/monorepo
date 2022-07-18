@@ -16,6 +16,7 @@ export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     res.send({ status: false, data: "not found" });
     return;
   }
+
   const { rpc } = networks[nft.chainId];
   const provider = new ethers.providers.JsonRpcProvider(rpc);
   const erc721 = <IERC721>new ethers.Contract(nft.contractAddress, IERC721Artifact.abi, provider);
@@ -46,7 +47,6 @@ export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   await orm.contract.upsert({
     chainId: nft.chainId,
     contractAddress: nft.contractAddress.toLowerCase(),
-    supportsInterface: {},
   });
   await orm.nft.upsert({
     ...nftDoc,

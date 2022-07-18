@@ -2,13 +2,18 @@ import NextHead from "next/head";
 import React from "react";
 
 export interface HeadProps {
-  title: string;
-  description: string;
-  image: string;
-  type: "summary" | "summary_large_image";
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: "summary" | "summary_large_image";
 }
 
-export const Head: React.FC<HeadProps> = ({ title, description, image, type }) => {
+export const Head: React.FC<HeadProps> = ({
+  title = "KaguraSwap",
+  description = "Multichain NFT Marketplace aggregator built with Seaport and 0x",
+  image = "https://kaguraswap.com/brand/banner.png",
+  type = "summary_large_image",
+}) => {
   return (
     <NextHead>
       <title>{title}</title>

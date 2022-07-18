@@ -1,5 +1,5 @@
-query NFTHasValidOrder {
-  nft(where: { orders: { isValid: { _eq: true } } }) {
+subscription HomePage {
+  nft(where: { metadata: { _is_null: false } }) {
     chainId
     contractAddress
     tokenId
@@ -8,7 +8,7 @@ query NFTHasValidOrder {
   }
 }
 
-query NFT($chainId: String, $contractAddress: String, $tokenId: String) {
+subscription NFTPage($chainId: String, $contractAddress: String, $tokenId: String) {
   nft(where: { chainId: { _eq: $chainId }, contractAddress: { _eq: $contractAddress }, tokenId: { _eq: $tokenId } }) {
     holder
     chainId
@@ -27,5 +27,15 @@ query NFT($chainId: String, $contractAddress: String, $tokenId: String) {
         metadata
       }
     }
+  }
+}
+
+subscription OfferPage($chainId: String, $contractAddress: String, $tokenId: String) {
+  nft(where: { chainId: { _eq: $chainId }, contractAddress: { _eq: $contractAddress }, tokenId: { _eq: $tokenId } }) {
+    chainId
+    contractAddress
+    tokenId
+    holder
+    metadata
   }
 }

@@ -2,9 +2,9 @@ import axios from "axios";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import React from "react";
 
-import { Nft, useNftQuery } from "../../../../../../common/dist/graphql";
+import { Nft, useNftPageSubscription } from "../../../../../../common/dist/graphql";
 import { validate } from "../../../../../../common/entities/nft";
-import { NFTTemplate } from "../../../../components/templates/NFT";
+import { NFTDetailTemplate } from "../../../../components/templates/NFTDetail";
 
 export interface NFTPageProps {
   nft: Nft;
@@ -14,7 +14,7 @@ const NFTPage: NextPage<NFTPageProps> = ({ nft }) => {
   const [syncedNFTState, setSyncedNFTState] = React.useState<any>(nft);
   const [syncedOrdersState, setSynceOrdersState] = React.useState<any>([]);
 
-  const { data } = useNftQuery({
+  const { data } = useNftPageSubscription({
     variables: {
       chainId: nft.chainId as string,
       contractAddress: nft.contractAddress,
@@ -38,7 +38,7 @@ const NFTPage: NextPage<NFTPageProps> = ({ nft }) => {
       setSynceOrdersState(nft.orders);
     }
   }, [data]);
-  return <NFTTemplate nft={syncedNFTState} orders={syncedOrdersState} />;
+  return <NFTDetailTemplate nft={syncedNFTState} orders={syncedOrdersState} />;
 };
 
 export default NFTPage;

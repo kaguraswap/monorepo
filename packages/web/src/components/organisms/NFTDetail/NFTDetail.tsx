@@ -2,10 +2,12 @@ import {
   Box,
   Button,
   Flex,
+  FormControl,
   Heading,
   HStack,
   Icon,
   Image,
+  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -18,28 +20,36 @@ import {
   NumberInput,
   NumberInputField,
   NumberInputStepper,
+  Select,
   Stack,
   Text,
   useColorModeValue,
   useDisclosure,
+  VStack,
 } from "@chakra-ui/react";
-import { useNetwork } from "@thirdweb-dev/react";
 import axios from "axios";
 import { Link } from "components/atoms/Link";
 import { ethers } from "ethers";
-import { ChainIDToIcon, KAGURA_SUPPORTED_CHAIN_ID } from "lib/rpc";
 import router from "next/router";
 import React, { useState } from "react";
 import { FiExternalLink } from "react-icons/fi";
 import BeatLoader from "react-spinners/BeatLoader";
 import { useAccount, useSigner } from "wagmi";
 
-import { BSP, TIP_RECIPIENT } from "../../../../../common/configs/app";
+import { BSP, DEFAULT_PRICE, DEFAULT_TIP, TIP_RECIPIENT } from "../../../../../common/configs/app";
+import networks from "../../../../../common/configs/networks.json";
+import protocols from "../../../../../common/configs/protocols.json";
+import { ChainId } from "../../../../../common/entities/network";
 import { NFT } from "../../../../../common/entities/nft";
-import { Order, OrderDirection } from "../../../../../common/entities/order";
+import { Order, OrderDirection, OrderType } from "../../../../../common/entities/order";
 import { shortenAddress } from "../../../../../common/utils/wallet";
+import ERC721Artifact from "../../../../../sdk/artifacts/@openzeppelin/contracts/token/ERC721/ERC721.sol/ERC721.json";
 import { KaguraSDK } from "../../../../../sdk/lib";
-import { ConnectWalletButton } from "../../molecules/ConnectWalletButton";
+import { ERC721 } from "../../../../../sdk/typechain";
+import { useInput } from "../../../hooks/useInput";
+import { useIsWagmiConnected } from "../../../hooks/useIsWagmiConnected";
+import { useSwap } from "../../../hooks/useSwap";
+import { ConnectWallet } from "../../molecules/ConnectWallet";
 
 export interface NFTDetailProps {
   nft: NFT;
@@ -47,63 +57,9 @@ export interface NFTDetailProps {
 }
 
 export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
-  const [signer] = useSigner();
-  const [account] = useAccount();
-  const { isOpen: isCreateOrderOpen, onOpen: onCreateOrderOpen, onClose: onCreateOrderClose } = useDisclosure();
-  const { isOpen: isMakeOfferOpen, onOpen: onMakeOfferOpen, onClose: onMakeOfferClose } = useDisclosure();
-  const [amountString, setAmount] = useState("0");
-  const [youGetAmount, setYouGetAmount] = useState("0");
-
-  const fees = [{ recipient: TIP_RECIPIENT, basisPoints: BSP }];
-  const [, switchNetwork] = useNetwork();
-
-  const handleAmount = (amount: string) => {
-    setAmount(amount);
-    const fee = (Number(amount) * BSP) / 10000;
-    setYouGetAmount((Number(amount) - fee).toFixed(5));
-  };
-
-  const validateModalOpen = async (chainId: string, open: () => void) => {
-    if (!switchNetwork) return;
-    const { error } = await switchNetwork(Number(chainId));
-    if (!error) open();
-  };
-
-  const handleLowestOrder = () => {
-    const sortedOrders = orders.sort((a, b) => Number(a.value) - Number(b.value));
-    router.push(`/orders/${sortedOrders[0].id}`);
-  };
-
-  const handleHighestOrder = () => {
-    const sortedOrders = orders.sort((a, b) => Number(b.value) - Number(a.value));
-    router.push(`/orders/${sortedOrders[0].id}`);
-  };
-
-  const createSellOrBuyOrder = async (direction: OrderDirection) => {
-    if (!signer.data || !account.data) {
-      return;
-    }
-    const { address } = account.data;
-    const provider = signer.data.provider as ethers.providers.JsonRpcProvider;
-    const sdk = new KaguraSDK(provider);
-    const amount = ethers.utils.parseEther(amountString);
-    const { signedOrder } = await sdk.order.offer(
-      "seaport",
-      direction,
-      {
-        contractAddress: nft.contractAddress,
-        tokenId: nft.tokenId,
-      },
-      {
-        amount: amount.toString(),
-      },
-      address,
-      fees
-    );
-
-    const { data } = await axios.post("http://localhost:3000/api/order/create", { type: "seaport", nft, signedOrder });
-    console.log(data);
-  };
+  const { value: inputPrice, handleInput: handleInputPrice } = useInput(DEFAULT_PRICE);
+  const { value: selectedProtocol, handleInput: handleSelectedProtocol } = useInput<OrderType>("seaport");
+  const { value: inputTip, handleInput: handleInputTip } = useInput(DEFAULT_TIP);
 
   return (
     <Box maxW="7xl" mx="auto" px={{ base: "4", md: "8", lg: "12" }} py={{ base: "6", md: "8", lg: "12" }}>
@@ -117,12 +73,12 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
           <Stack spacing={{ base: "3", md: "4" }}>
             <Stack spacing="3">
               <Text fontSize="sm" fontWeight="medium" color={useColorModeValue("gray.600", "gray.400")}>
-                <Icon
+                {/* <Icon
                   as={ChainIDToIcon[Number(nft.chainId) as KAGURA_SUPPORTED_CHAIN_ID]}
                   rounded="full"
                   width="8"
                   height="8"
-                />
+                /> */}
               </Text>
               {nft.metadata ? (
                 <>
@@ -144,141 +100,43 @@ export const NFTDetail: React.FC<NFTDetailProps> = ({ nft, orders }) => {
               {nft.metadata ? nft.metadata.description : ""}
             </Text>
           </Stack>
-          {account.data ? (
-            <>
-              {account.data.address.toLowerCase() === nft.holder ? (
-                <>
-                  <Button
-                    colorScheme="blue"
-                    size="lg"
-                    onClick={() => validateModalOpen(nft.chainId, onCreateOrderOpen)}
-                  >
-                    List for Sale
-                  </Button>
-                  <Button
-                    colorScheme="blue"
-                    size="lg"
-                    disabled={!orders.some((order) => order.direction === "buy")}
-                    onClick={handleHighestOrder}
-                  >
-                    Accept Highest Offer
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Button
-                    colorScheme="blue"
-                    size="lg"
-                    disabled={!orders.some((order) => order.direction === "sell")}
-                    onClick={handleLowestOrder}
-                  >
-                    Buy Now
-                  </Button>
-                  <Button colorScheme="blue" size="lg" onClick={() => validateModalOpen(nft.chainId, onMakeOfferOpen)}>
-                    Make Offer
-                  </Button>
-                </>
-              )}
-            </>
-          ) : (
-            <ConnectWalletButton size="lg" />
-          )}
+          <Box>
+            <VStack spacing={1} mb="8">
+              <FormControl>
+                <Text>Price</Text>
+                <NumberInput step={0.01} min={0} defaultValue={DEFAULT_PRICE} onChange={handleInputPrice}>
+                  <NumberInputField />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper />
+                    <NumberDecrementStepper />
+                  </NumberInputStepper>
+                </NumberInput>
+              </FormControl>
 
-          <Modal isOpen={isCreateOrderOpen} onClose={onCreateOrderClose}>
-            <ModalOverlay />
-            <ModalContent p="4">
-              <ModalHeader>List Token for Sale</ModalHeader>
-              <ModalCloseButton />
-              <ModalBody>
-                <Flex alignItems="center" justify="space-between" my="2">
-                  <Text fontWeight="semibold">Price</Text>
-                  <NumberInput step={0.01} min={0} onChange={(amount) => handleAmount(amount)}>
-                    <NumberInputField placeholder="Amount" />
-                    <NumberInputStepper>
-                      <NumberIncrementStepper />
-                      <NumberDecrementStepper />
-                    </NumberInputStepper>
-                  </NumberInput>
-                </Flex>
-                <Flex alignItems="center" justify="space-between" my="4">
-                  <Text fontWeight="semibold">Fees</Text>
-                  <Text>2.5%</Text>
-                </Flex>
-                <Flex alignItems="center" justify="space-between" my="4">
-                  <Text fontWeight="semibold">You get</Text>
-                  <Text>{youGetAmount}</Text>
-                </Flex>
-              </ModalBody>
-              <ModalFooter>
-                <Stack width="full" direction={{ base: "column", lg: "row" }}>
-                  <Button width="full" onClick={onCreateOrderClose}>
-                    Cancel
-                  </Button>
-                  <Button colorScheme="blue" width="full" onClick={() => createSellOrBuyOrder("sell")}>
-                    List
-                  </Button>
-                </Stack>
-              </ModalFooter>
-            </ModalContent>
-          </Modal>
-          <Modal isOpen={isMakeOfferOpen} onClose={onMakeOfferClose}>
-            <ModalOverlay />
-            <ModalContent p="4">
-              <ModalHeader>Make a Token Offer</ModalHeader>
-              <ModalCloseButton />
-              <ModalBody>
-                <Flex alignItems="center" justify="space-between" my="2">
-                  <Text fontWeight="semibold">Price (wETH)</Text>
-                  <NumberInput step={0.01} min={0} onChange={(amount) => handleAmount(amount)}>
-                    <NumberInputField placeholder="Amount" />
-                    <NumberInputStepper>
-                      <NumberIncrementStepper />
-                      <NumberDecrementStepper />
-                    </NumberInputStepper>
-                  </NumberInput>
-                </Flex>
-                <Flex alignItems="center" justify="space-between" my="4">
-                  <Text fontWeight="semibold">Fees</Text>
-                  <Text>2.5%</Text>
-                </Flex>
-                <Flex alignItems="center" justify="space-between" my="4">
-                  <Text fontWeight="semibold">Total Cost</Text>
-                  <Text>{youGetAmount}</Text>
-                </Flex>
-              </ModalBody>
-              <ModalFooter>
-                <Stack width="full" direction={{ base: "column", lg: "row" }}>
-                  <Button width="full" onClick={onMakeOfferClose}>
-                    Cancel
-                  </Button>
-                  <Button colorScheme="blue" width="full" onClick={() => createSellOrBuyOrder("buy")}>
-                    Make Offer
-                  </Button>
-                </Stack>
-              </ModalFooter>
-            </ModalContent>
-          </Modal>
-          <Box border="1px" borderColor="gray.200" borderRadius="md" p="6">
-            <Heading size="md" mb="4">
-              Token Info
-            </Heading>
-            <Flex alignItems="center" justify="space-between">
-              <Text>Contract Address</Text>
-              <Link href={``}>
-                <HStack>
-                  <Text color={"blue.500"}>{shortenAddress(nft.contractAddress)}</Text>
-                  <Icon as={FiExternalLink} color="blue.500" />
-                </HStack>
-              </Link>
-            </Flex>
-            <Flex alignItems="center" justify="space-between">
-              <Text>Token ID</Text>
-              <Text>{nft.tokenId}</Text>
-            </Flex>
-            <Flex alignItems="center" justify="space-between">
-              <Text>Token Standard</Text>
-              {nft.supportsInterface?.isERC721 ? <Text>ERC721</Text> : <Text>undefined</Text>}
-            </Flex>
+              <FormControl>
+                <Text>Tip</Text>
+                <NumberInput step={0.5} min={0} max={100} defaultValue={DEFAULT_TIP} onChange={handleInputTip}>
+                  <NumberInputField placeholder="Amount" />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper />
+                    <NumberDecrementStepper />
+                  </NumberInputStepper>
+                </NumberInput>
+              </FormControl>
+              <FormControl>
+                <Text>Swap Protocol</Text>
+                <Select onChange={handleSelectedProtocol} value={selectedProtocol}>
+                  {networks[nft.chainId].protocols.map((protocol) => (
+                    <option key={protocol} value={protocol}>
+                      {protocols[protocol as OrderType].name}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
+            </VStack>
+            <HStack>
+              <Button width="100%">Confirm</Button>
+            </HStack>
           </Box>
         </Stack>
       </Stack>
