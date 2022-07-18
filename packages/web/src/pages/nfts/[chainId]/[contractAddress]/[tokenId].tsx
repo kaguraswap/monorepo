@@ -27,6 +27,9 @@ const NFTPage: NextPage<NFTPageProps> = ({ nft }) => {
       return;
     }
     const [nft] = data.nft;
+    if (!nft) {
+      return;
+    }
     setSyncedNFTState({
       ...nft,
       ...data,

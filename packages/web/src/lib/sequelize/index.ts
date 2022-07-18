@@ -2,7 +2,14 @@ import { Sequelize } from "sequelize";
 
 import { initModels } from "../../../../common/dist/entity/init-models";
 
-export const POSTGRES_CONNECTION_STRING = "postgres://postgres:postgrespassword@localhost:5432/postgres";
-export const sequelize = new Sequelize(POSTGRES_CONNECTION_STRING);
+export const sequelize = new Sequelize(process.env.POSTGRES_CONNECTION || "", {
+  dialectOptions: process.env.PGSSLMODE
+    ? {
+        ssl: {
+          rejectUnauthorized: false,
+        },
+      }
+    : {},
+});
 
 export const orm = initModels(sequelize);
