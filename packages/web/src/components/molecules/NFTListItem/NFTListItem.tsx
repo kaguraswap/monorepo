@@ -1,6 +1,7 @@
-import { AspectRatio, Box, HStack, Image, Skeleton, Stack, Tag, Text } from "@chakra-ui/react";
+import { AspectRatio, Box, HStack, Image, Skeleton, Stack, Tag, Text, VStack } from "@chakra-ui/react";
 import React from "react";
 
+import networks from "../../../../../common/configs/networks.json";
 import { NFT } from "../../../../../common/entities/nft";
 
 export interface NFTListItemProps {
@@ -9,21 +10,34 @@ export interface NFTListItemProps {
 
 export const NFTListItem: React.FC<NFTListItemProps> = ({ nft }) => {
   return (
-    <Stack spacing="3">
+    <Stack border="1px" rounded="xl" borderColor="gray.200">
       <Box position="relative" className="group">
         {nft.metadata && (
           <AspectRatio ratio={1}>
-            <Image src={nft.metadata.image} alt={nft.metadata.name} draggable="false" fallback={<Skeleton />} />
+            <Image
+              src={nft.metadata.image}
+              alt={nft.metadata.name}
+              fallback={<Skeleton />}
+              rounded="xl"
+              roundedBottom={"none"}
+            />
           </AspectRatio>
         )}
-        <HStack spacing="3" position="absolute" top="4" left="4">
-          {/* TODO: change to chain name and color */}
-          <Tag key={nft.chainId} bg={`${"purple"}.500`} color="white" fontWeight="semibold">
-            {nft.chainId}
-          </Tag>
-        </HStack>
+        <Tag position="absolute" top="2" left="2">
+          {networks[nft.chainId].name}
+        </Tag>
+        {/* TODO: Price */}
+        <Tag position="absolute" bottom="2" right="2">
+          Price
+        </Tag>
       </Box>
-      {nft.metadata && <Text fontWeight="semibold">{nft.metadata.name}</Text>}
+      {nft.metadata && (
+        <Box px="2" pb="2">
+          <Text fontSize={"xs"}>{nft.metadata.name}</Text>
+          {/* TODO: Collection */}
+          <Text fontSize={"xs"}>Collection</Text>
+        </Box>
+      )}
     </Stack>
   );
 };

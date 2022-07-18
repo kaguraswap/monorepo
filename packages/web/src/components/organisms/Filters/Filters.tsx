@@ -2,6 +2,7 @@ import { Box, Flex, HStack, Icon, Select, Stack, Text, useDisclosure } from "@ch
 import React from "react";
 import { MdFilterList } from "react-icons/md";
 
+import { AddNFT } from "../../molecules/AddNFT";
 import { CheckboxFilter } from "../../molecules/CheckBoxFIlter/CheckboxFilter";
 import { FilterDrawer } from "../../molecules/FilterDrawer/FilterDrawer";
 import { networkFilter, protocolFilter, sortByOptions, statusFilter } from "./_data";
@@ -20,19 +21,23 @@ export const Filters: React.FC<WithFilterProps> = ({ children }) => {
           <Icon as={MdFilterList} />
           <Text>Filters</Text>
         </HStack>
-        <Select defaultValue={sortByOptions.defaultValue} rounded="xl" width="200px">
-          {sortByOptions.options.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </Select>
+        <HStack>
+          <Select defaultValue={sortByOptions.defaultValue} rounded="xl" width="200px">
+            {sortByOptions.options.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </Select>
+          <AddNFT />
+        </HStack>
       </Flex>
       <FilterDrawer isOpen={isOpen} onClose={onClose}>
         <Stack spacing={"4"}>
           <CheckboxFilter options={statusFilter.options} label="Status" />
           <CheckboxFilter options={protocolFilter.options} label="Protocol" />
           <CheckboxFilter options={networkFilter.options} label="Network" />
+          {/* TODO: Contract Address */}
         </Stack>
       </FilterDrawer>
       <Box py="4">{children}</Box>

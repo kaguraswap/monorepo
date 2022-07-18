@@ -19,6 +19,7 @@ export const ConnectWallet: React.FC = () => {
           <Button width="100%" rounded="xl" onClick={() => connect({ connector: injectedConnector })}>
             Metamask
           </Button>
+          {/* TODO: Wallet Connect */}
           <Button width="100%" rounded="xl" onClick={() => connect({ connector: injectedConnector })}>
             Wallet Connect
           </Button>
