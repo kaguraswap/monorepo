@@ -16,11 +16,11 @@ export const Filters: React.FC<WithFilterProps> = ({ children }) => {
   return (
     <Box>
       <Flex width="full" justify="space-between">
-        <HStack as="button" fontSize="xs" type="button" px="3" py="1" onClick={onToggle} borderWidth="1px" rounded="xl">
+        <HStack as="button" type="button" px="4" onClick={onToggle} borderWidth="1px" rounded="xl">
           <Icon as={MdFilterList} />
           <Text>Filters</Text>
         </HStack>
-        <Select defaultValue={sortByOptions.defaultValue} rounded="xl" fontSize={"xs"} width="160px">
+        <Select defaultValue={sortByOptions.defaultValue} rounded="xl" width="200px">
           {sortByOptions.options.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
@@ -35,7 +35,7 @@ export const Filters: React.FC<WithFilterProps> = ({ children }) => {
           <CheckboxFilter options={networkFilter.options} label="Network" />
         </Stack>
       </FilterDrawer>
-      {children}
+      <Box py="4">{children}</Box>
     </Box>
   );
 };

@@ -1,11 +1,11 @@
-import { Box, Flex, HStack } from "@chakra-ui/react";
+import { Box, HStack } from "@chakra-ui/react";
 import Image from "next/image";
 import React from "react";
 
 import { useIsWagmiConnected } from "../../../hooks/useIsWagmiConnected";
 import { Link } from "../../atoms/Link";
-import { ConnectedWallet } from "../../molecules/ConnectedWallet";
 import { ConnectWallet } from "../../molecules/ConnectWallet";
+import { Wallet } from "../../molecules/Wallet";
 
 export const Header: React.FC = () => {
   const { isWagmiConnected } = useIsWagmiConnected();
@@ -19,7 +19,7 @@ export const Header: React.FC = () => {
           </Link>
           <HStack spacing="2">
             {!isWagmiConnected && <ConnectWallet />}
-            {isWagmiConnected && <ConnectedWallet />}
+            {isWagmiConnected && <Wallet />}
           </HStack>
         </HStack>
       </Box>

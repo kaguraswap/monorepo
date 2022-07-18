@@ -1,10 +1,10 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
 
-import { ConnectedWallet as Component } from "./ConnectedWallet";
+import { Wallet as Component } from "./Wallet";
 
 export default {
-  title: "Molecules/ConnectedWallet",
+  title: "Molecules/Wallet",
   component: Component,
 } as ComponentMeta<typeof Component>;
 

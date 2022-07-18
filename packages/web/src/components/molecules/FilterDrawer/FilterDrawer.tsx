@@ -31,7 +31,9 @@ export const FilterDrawer: React.FC<FilterDrawerProps> = ({ onClose, isOpen, chi
         </DrawerHeader>
         <DrawerBody>{children}</DrawerBody>
         <DrawerFooter px="4">
-          <Button onClick={onClose}>Apply</Button>
+          <Button onClick={onClose} rounded="xl">
+            Apply
+          </Button>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
