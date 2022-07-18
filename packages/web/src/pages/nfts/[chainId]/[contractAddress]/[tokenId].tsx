@@ -23,8 +23,6 @@ const NFTPage: NextPage<NFTPageProps> = ({ nft }) => {
   });
 
   React.useEffect(() => {
-    console.log("test", process.env.NEXT_PUBLIC_GRAPH_QL_CONNECTION);
-    console.log(data);
     if (!data) {
       return;
     }
@@ -46,7 +44,6 @@ const NFTPage: NextPage<NFTPageProps> = ({ nft }) => {
 export default NFTPage;
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  console.log(context);
   const nft = validate(context.params);
   if (!nft) {
     return {
