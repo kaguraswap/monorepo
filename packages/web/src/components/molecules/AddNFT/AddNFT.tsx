@@ -18,6 +18,7 @@ export interface OfferProps {
   type?: SwapType;
 }
 
+// TODO: add clear
 export const AddNFT: React.FC<OfferProps> = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 

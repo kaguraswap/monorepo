@@ -1,5 +1,5 @@
 import { ApolloProvider } from "@apollo/client";
-import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import { ChakraProvider } from "@chakra-ui/react";
 import type { AppProps } from "next/app";
 import { WagmiConfig } from "wagmi";
 
@@ -10,14 +10,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ApolloProvider client={apolloClient}>
       <WagmiConfig client={wagmiClient}>
-        <ChakraProvider
-          theme={extendTheme({
-            fonts: {
-              heading: "Roboto",
-              body: "Roboto",
-            },
-          })}
-        >
+        <ChakraProvider>
           <Component {...pageProps} />
         </ChakraProvider>
       </WagmiConfig>
