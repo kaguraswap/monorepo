@@ -5,7 +5,7 @@ import { useAccount, useSigner } from "wagmi";
 import { TIP_RECIPIENT } from "../../../common/configs/app";
 import { OrderDirection, OrderType, SignedOrder } from "../../../common/types/order";
 import { PERCENTAGE_BASE } from "../../../common/utils/constant";
-import { KaguraSDK } from "../../../sdk/lib";
+import { KaguraSDK } from "../../../hardhat/lib";
 
 export const useSwap = () => {
   const { data: signer } = useSigner();

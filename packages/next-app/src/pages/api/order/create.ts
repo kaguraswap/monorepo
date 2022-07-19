@@ -6,7 +6,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import networks from "../../../../../common/configs/networks.json";
 import { isChainId } from "../../../../../common/types/network";
 import { INVALID_ARGUMENT, NOT_IMPLEMENTED, ORDER_VERIFICATION_FAILED } from "../../../../../common/utils/error";
-import { KaguraSDK } from "../../../../../sdk/lib";
+import { KaguraSDK } from "../../../../../hardhat/lib";
 
 export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { protocol, direction, chainId, contractAddress, tokenId, signedOrder } = req.body;
