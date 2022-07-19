@@ -1,5 +1,6 @@
 import axios from "axios";
 import { ethers } from "ethers";
+import { models } from "lib/sequelize";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import networks from "../../../../../common/configs/networks.json";
@@ -8,7 +9,6 @@ import { ChainId } from "../../../../../common/types/network";
 import IERC721MetadataArtifact from "../../../../../hardhat/artifacts/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol/IERC721Metadata.json";
 import IERC721Artifact from "../../../../../hardhat/artifacts/@openzeppelin/contracts/token/ERC721/IERC721.sol/IERC721.json";
 import { IERC721, IERC721Metadata } from "../../../../../hardhat/typechain";
-import { models } from "../../../lib/sequelize";
 
 export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   // TODO: update validate

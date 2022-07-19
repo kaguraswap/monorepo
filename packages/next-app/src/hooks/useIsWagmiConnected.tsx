@@ -1,7 +1,6 @@
+import { useIsMounted } from "hooks/useIsMounted";
 import React from "react";
 import { useAccount } from "wagmi";
-
-import { useIsMounted } from "./useIsMounted";
 
 export const useIsWagmiConnected = () => {
   const [isWagmiConnected, setIsWagmiConnected] = React.useState(false);

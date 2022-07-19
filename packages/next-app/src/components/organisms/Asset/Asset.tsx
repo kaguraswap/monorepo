@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { AssetListItem } from "components/molecules/AssetListItem";
 import { ConnectWallet } from "components/molecules/ConnectWallet";
+import { useInput } from "hooks/useInput";
 import { useIsWagmiConnected } from "hooks/useIsWagmiConnected";
 import { useSwap } from "hooks/useSwap";
 import React from "react";
@@ -25,7 +26,6 @@ import protocols from "../../../../../common/configs/protocols.json";
 import { AssetFragment } from "../../../../../common/dist/graphql";
 import { ChainId } from "../../../../../common/types/network";
 import { OrderType } from "../../../../../common/types/order";
-import { useInput } from "../../../hooks/useInput";
 
 export interface AssetProps {
   asset: AssetFragment;

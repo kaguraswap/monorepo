@@ -1,10 +1,9 @@
 import { ApolloProvider } from "@apollo/client";
 import { ChakraProvider } from "@chakra-ui/react";
+import { apolloClient } from "lib/apollo";
+import { wagmiClient } from "lib/wagmi";
 import type { AppProps } from "next/app";
 import { WagmiConfig } from "wagmi";
-
-import { apolloClient } from "../lib/apollo";
-import { wagmiClient } from "../lib/wagmi";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (

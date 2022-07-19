@@ -1,15 +1,15 @@
 import { Box, Flex, HStack, Icon, Select, SimpleGrid, Stack, Text, useDisclosure } from "@chakra-ui/react";
+import { Link } from "components/atoms/Link";
+import { AddNFT } from "components/molecules/AddNFT";
+import { AssetListItem } from "components/molecules/AssetListItem";
+import { CheckboxFilter } from "components/molecules/CheckBoxFIlter";
+import { FilterDrawer } from "components/molecules/FilterDrawer";
 import React from "react";
 import { MdFilterList } from "react-icons/md";
 
 import networks from "../../../../../common/configs/networks.json";
 import { AssetsFragment } from "../../../../../common/dist/graphql";
 import { ChainId } from "../../../../../common/types/network";
-import { Link } from "../../atoms/Link";
-import { AddNFT } from "../../molecules/AddNFT";
-import { AssetListItem } from "../../molecules/AssetListItem";
-import { CheckboxFilter } from "../../molecules/CheckBoxFIlter";
-import { FilterDrawer } from "../../molecules/FilterDrawer";
 import { networkFilter, protocolFilter, sortByOptions, statusFilter } from "./data";
 
 export interface AssetsProps {

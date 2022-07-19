@@ -1,9 +1,8 @@
 import { Button, ButtonProps, Stack, useDisclosure } from "@chakra-ui/react";
+import { Modal } from "components/molecules/Modal";
+import { injectedConnector } from "lib/wagmi";
 import React from "react";
 import { useConnect } from "wagmi";
-
-import { injectedConnector } from "../../../lib/wagmi";
-import { Modal } from "../Modal";
 
 export interface ConnectWalletProps {
   buttonProps?: ButtonProps;
