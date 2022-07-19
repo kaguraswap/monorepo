@@ -1,7 +1,12 @@
 import "./polyfill";
-import { ChainId, ThirdwebProvider } from "@thirdweb-dev/react";
+import { WagmiConfig, createClient } from "wagmi";
+import { getDefaultProvider } from "ethers";
 
-const desiredChainId = ChainId.Rinkeby;
+const client = createClient({
+  autoConnect: true,
+  provider: getDefaultProvider(),
+});
+
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
   controls: {
@@ -14,8 +19,8 @@ export const parameters = {
 
 export const decorators = [
   (Story) => (
-    <ThirdwebProvider desiredChainId={desiredChainId}>
+    <WagmiConfig client={client}>
       <Story />
-    </ThirdwebProvider>
+    </WagmiConfig>
   ),
 ];
