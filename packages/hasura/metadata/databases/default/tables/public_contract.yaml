@@ -2,12 +2,12 @@ table:
   schema: public
   name: contract
 array_relationships:
-  - name: nfts
+  - name: assets
     using:
       manual_configuration:
         remote_table:
           schema: public
-          name: nft
+          name: assets
         insertion_order: null
         column_mapping:
           contractAddress: contractAddress

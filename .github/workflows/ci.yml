@@ -23,7 +23,7 @@ jobs:
       - uses: chromaui/action@v1
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          workingDir: "./packages/web"
+          workingDir: "./packages/next-app"
       - run: vercel pull -y --token ${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID}}

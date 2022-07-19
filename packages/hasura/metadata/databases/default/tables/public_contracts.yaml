@@ -1,8 +1,8 @@
 table:
   schema: public
-  name: order
-object_relationships:
-  - name: asset
+  name: contracts
+array_relationships:
+  - name: assets
     using:
       manual_configuration:
         remote_table:
@@ -12,20 +12,11 @@ object_relationships:
         column_mapping:
           contractAddress: contractAddress
           chainId: chainId
-          tokenId: tokenId
 select_permissions:
   - role: anonymous
     permission:
       columns:
-        - id
         - chainId
         - contractAddress
-        - tokenId
-        - protocol
-        - isValid
-        - signedOrder
-        - offerer
-        - sortablePrice
-        - price
-        - direction
+        - supportsInterface
       filter: {}
