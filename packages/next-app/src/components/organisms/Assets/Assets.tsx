@@ -4,6 +4,8 @@ import { AddNFT } from "components/molecules/AddNFT";
 import { AssetListItem } from "components/molecules/AssetListItem";
 import { CheckboxFilter } from "components/molecules/CheckBoxFIlter";
 import { FilterDrawer } from "components/molecules/FilterDrawer";
+import { useRouter } from "next/router";
+import qs from "query-string";
 import React from "react";
 import { MdFilterList } from "react-icons/md";
 
@@ -18,6 +20,12 @@ export interface AssetsProps {
 
 export const Assets: React.FC<AssetsProps> = ({ assets }) => {
   const { isOpen, onToggle, onClose } = useDisclosure();
+  const router = useRouter();
+
+  const handleChainIdChange = (chainId: string[]) => {
+    const query = qs.stringify({ chainId });
+    router.push(`/?${query}`, undefined, { shallow: true });
+  };
 
   return (
     <Box>
@@ -41,7 +49,7 @@ export const Assets: React.FC<AssetsProps> = ({ assets }) => {
         <Stack spacing={"4"}>
           <CheckboxFilter options={statusFilter.options} label="Status" />
           <CheckboxFilter options={protocolFilter.options} label="Protocol" />
-          <CheckboxFilter options={networkFilter.options} label="Network" />
+          <CheckboxFilter options={networkFilter.options} label="Network" onChange={handleChainIdChange} />
           {/* TODO: Contract Address */}
         </Stack>
       </FilterDrawer>

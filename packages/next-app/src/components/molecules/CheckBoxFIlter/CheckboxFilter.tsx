@@ -8,11 +8,11 @@ interface CheckboxFilterProps {
   onChange?: (value: string[]) => void;
 }
 
-export const CheckboxFilter: React.FC<CheckboxFilterProps> = ({ options, label }) => {
+export const CheckboxFilter: React.FC<CheckboxFilterProps> = ({ options, label, onChange }) => {
   return (
     <Stack spacing={"2"}>
       <FormLabel fontWeight="bold">{label}</FormLabel>
-      <CheckboxGroup>
+      <CheckboxGroup onChange={onChange}>
         {options.map((option) => (
           <Checkbox key={option.value} value={option.value}>
             <span>{option.label}</span>
