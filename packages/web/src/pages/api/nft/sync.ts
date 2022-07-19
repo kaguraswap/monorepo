@@ -44,10 +44,12 @@ export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     holder,
     metadata,
   };
-  await orm.contract.upsert({
-    chainId: nft.chainId,
-    contractAddress: nft.contractAddress.toLowerCase(),
-  });
+
+  // TODO: move to sync contract
+  // await orm.contract.upsert({
+  //   chainId: nft.chainId,
+  //   contractAddress: nft.contractAddress.toLowerCase(),
+  // });
   await orm.nft.upsert({
     ...nftDoc,
     contractAddress: nftDoc.contractAddress.toLowerCase(),
