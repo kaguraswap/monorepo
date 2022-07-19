@@ -1,5 +1,5 @@
 import { ADDRESS_1, UINT256_MAX, UINT256_MIN } from "../../utils/constant";
-import { nft } from "../nft";
+import { asset } from "../asset";
 import { Order } from "./type";
 
 export const orders: Order[] = [

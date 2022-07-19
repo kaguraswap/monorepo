@@ -1,9 +1,8 @@
 import { Container, Flex } from "@chakra-ui/react";
+import { Footer } from "components/organisms/Footer";
+import { Header } from "components/organisms/Header";
+import { Head } from "components/utils/Head";
 import React from "react";
-
-import { Footer } from "../../organisms/Footer";
-import { Header } from "../../organisms/Header";
-import { Head } from "../Head";
 
 export interface DefaultLayoutProps {
   children: React.ReactNode;

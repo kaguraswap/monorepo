@@ -1,6 +1,6 @@
 import { Item } from "@opensea/seaport-js/lib/types";
 import { ethers } from "ethers";
-import { orm } from "lib/sequelize";
+import { models } from "lib/sequelize";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import networks from "../../../../../common/configs/networks.json";
@@ -42,8 +42,7 @@ export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   } else {
     throw new Error(NOT_IMPLEMENTED);
   }
-
-  const order = {
+  const [order] = await models.Order.upsert({
     id: hash,
     protocol,
     chainId: chainId.toString(),
@@ -55,10 +54,8 @@ export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     sortablePrice,
     price,
     direction,
-  };
-
-  await orm.order.upsert(order);
-  res.status(200).json(order);
+  });
+  res.status(200).json({ order });
 };
 
 export default handler;

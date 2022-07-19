@@ -9,11 +9,11 @@ import { wagmiClient } from "../lib/wagmi";
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ApolloProvider client={apolloClient}>
-      <WagmiConfig client={wagmiClient}>
-        <ChakraProvider>
+      <ChakraProvider>
+        <WagmiConfig client={wagmiClient}>
           <Component {...pageProps} />
-        </ChakraProvider>
-      </WagmiConfig>
+        </WagmiConfig>
+      </ChakraProvider>
     </ApolloProvider>
   );
 }

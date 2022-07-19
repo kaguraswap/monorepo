@@ -12,4 +12,4 @@ export const sequelize = new Sequelize(process.env.POSTGRES_CONNECTION || "", {
     : {},
 });
 
-export const orm = initModels(sequelize);
+export const models = initModels(sequelize);

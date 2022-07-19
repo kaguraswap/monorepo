@@ -1,17 +1,17 @@
-import { NFTList } from "components/organisms/NFTList";
+import { Assets } from "components/organisms/Assets";
+import { DefaultLayout } from "components/utils/layout";
 import React from "react";
 
-import { NFT } from "../../../../../common/entities/nft";
-import { DefaultLayout } from "../../utils/layout";
+import { AssetsFragment } from "../../../../../common/dist/graphql";
 
 export interface HomeTemplateProps {
-  nfts: NFT[];
+  assets: AssetsFragment[];
 }
 
-export const HomeTemplate: React.FC<HomeTemplateProps> = ({ nfts }) => {
+export const HomeTemplate: React.FC<HomeTemplateProps> = ({ assets }) => {
   return (
     <DefaultLayout>
-      <NFTList nfts={nfts} />
+      <Assets assets={assets} />
     </DefaultLayout>
   );
 };

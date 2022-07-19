@@ -1,21 +1,20 @@
+import { HomeTemplate, HomeTemplateProps } from "components/templates/Home";
 import type { NextPage } from "next";
 import React from "react";
 
-import { useHomePageSubscription } from "../../../common/dist/graphql";
-import { HomeTemplate, HomeTemplateProps } from "../components/templates/Home";
+import { AssetsFragment, useHomeSubscription } from "../../../common/dist/graphql";
 
 const HomePage: NextPage<HomeTemplateProps> = () => {
-  const [syncedNFTsState, setSynceNFTsState] = React.useState<any>([]);
-  const { data } = useHomePageSubscription();
-
+  const [assets, setAssets] = React.useState<AssetsFragment[]>([]);
+  const { data } = useHomeSubscription();
   React.useEffect(() => {
     if (!data) {
       return;
     }
-    setSynceNFTsState(data.nft);
+    setAssets(data.assets);
   }, [data]);
 
-  return <HomeTemplate nfts={syncedNFTsState} />;
+  return <HomeTemplate assets={assets} />;
 };
 
 export default HomePage;
