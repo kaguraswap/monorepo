@@ -9,9 +9,9 @@ import { INVALID_ARGUMENT, NOT_IMPLEMENTED, ORDER_VERIFICATION_FAILED } from "..
 import { KaguraSDK } from "../../../../../sdk/lib";
 
 export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { protocol, direction, nft, signedOrder } = req.body;
+  const { protocol, direction, chainId, contractAddress, tokenId, signedOrder } = req.body;
   // TODO: better common validation
-  const { chainId } = nft;
+
   if (!isChainId(chainId)) {
     throw new Error(INVALID_ARGUMENT);
   }
@@ -46,8 +46,8 @@ export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     id: hash,
     protocol,
     chainId: chainId.toString(),
-    contractAddress: nft.contractAddress,
-    tokenId: nft.tokenId,
+    contractAddress,
+    tokenId,
     isValid,
     signedOrder,
     offerer,

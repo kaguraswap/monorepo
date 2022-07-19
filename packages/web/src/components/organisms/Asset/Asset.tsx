@@ -14,7 +14,6 @@ import {
 } from "@chakra-ui/react";
 import { AssetListItem } from "components/molecules/AssetListItem";
 import { ConnectWallet } from "components/molecules/ConnectWallet";
-// import { useIsNFTOrderAvailable } from "hooks/useIsArrayAvailable";
 import { useIsWagmiConnected } from "hooks/useIsWagmiConnected";
 import { useSwap } from "hooks/useSwap";
 import React from "react";
@@ -24,7 +23,6 @@ import { DEFAULT_PRICE, DEFAULT_TIP } from "../../../../../common/configs/app";
 import networks from "../../../../../common/configs/networks.json";
 import protocols from "../../../../../common/configs/protocols.json";
 import { AssetFragment } from "../../../../../common/dist/graphql";
-// import { AssetAttributes } from "../../../../../common/dist/entity/init-models";
 import { ChainId } from "../../../../../common/entities/network";
 import { OrderType } from "../../../../../common/entities/order";
 import { useInput } from "../../../hooks/useInput";
@@ -44,7 +42,7 @@ export const Asset: React.FC<AssetProps> = ({ asset }) => {
   const { offer: _offer, cancel: _cancel, fulfill: _fulfill } = useSwap();
 
   const offer = async () => {
-    await _offer(selectedProtocol, "sell", asset, inputPrice, inputTip);
+    await _offer(selectedProtocol, "sell", asset.chainId, asset.contractAddress, asset.tokenId, inputPrice, inputTip);
   };
 
   const cancel = async () => {

@@ -3,7 +3,7 @@ import { ethers } from "ethers";
 import { useAccount, useSigner } from "wagmi";
 
 import { TIP_RECIPIENT } from "../../../common/configs/app";
-import { NFT } from "../../../common/entities/asset";
+// import { NFT } from "../../../common/entities/asset";
 import { OrderDirection, OrderType, SignedOrder } from "../../../common/entities/order";
 import { PERCENTAGE_BASE } from "../../../common/utils/constant";
 import { KaguraSDK } from "../../../sdk/lib";
@@ -12,7 +12,15 @@ export const useSwap = () => {
   const { data: signer } = useSigner();
   const { address } = useAccount();
 
-  const offer = async (protocol: OrderType, direction: OrderDirection, nft: NFT, price: string, tip: string) => {
+  const offer = async (
+    protocol: OrderType,
+    direction: OrderDirection,
+    chainId: string,
+    contractAddress: string,
+    tokenId: string,
+    price: string,
+    tip: string
+  ) => {
     if (!signer || !address) {
       return;
     }
@@ -22,8 +30,8 @@ export const useSwap = () => {
       protocol,
       direction,
       {
-        contractAddress: nft.contractAddress,
-        tokenId: nft.tokenId,
+        contractAddress: contractAddress,
+        tokenId: tokenId,
       },
       {
         amount: ethers.utils.parseEther(price).toString(),
@@ -34,7 +42,9 @@ export const useSwap = () => {
     const { data } = await axios.post("http://localhost:3000/api/order/create", {
       protocol,
       direction,
-      nft,
+      chainId,
+      contractAddress,
+      tokenId,
       signedOrder,
     });
     return data.id as string;
