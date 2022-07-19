@@ -46,7 +46,7 @@ jobs:
       - uses: chromaui/action@v1
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          workingDir: "./packages/web"
+          workingDir: "./packages/next-app"
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -57,6 +57,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 16.x.x
+      
       - run: yarn build-vercel --prod
         if: github.event_name == 'push'
       - uses: amondnet/vercel-action@v20
