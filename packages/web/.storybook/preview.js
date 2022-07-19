@@ -1,5 +1,4 @@
 import "./polyfill";
-import { ChainId, ThirdwebProvider } from "@thirdweb-dev/react";
 
 const desiredChainId = ChainId.Rinkeby;
 export const parameters = {
@@ -11,11 +10,3 @@ export const parameters = {
     },
   },
 };
-
-export const decorators = [
-  (Story) => (
-    <ThirdwebProvider desiredChainId={desiredChainId}>
-      <Story />
-    </ThirdwebProvider>
-  ),
-];
