@@ -4,7 +4,7 @@ import { MdFilterList } from "react-icons/md";
 
 import networks from "../../../../../common/configs/networks.json";
 import { AssetsFragment } from "../../../../../common/dist/graphql";
-import { ChainId } from "../../../../../common/entities/network";
+import { ChainId } from "../../../../../common/types/network";
 import { Link } from "../../atoms/Link";
 import { AddNFT } from "../../molecules/AddNFT";
 import { AssetListItem } from "../../molecules/AssetListItem";

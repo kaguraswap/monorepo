@@ -4,7 +4,7 @@ import { models } from "lib/sequelize";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import networks from "../../../../../common/configs/networks.json";
-import { isChainId } from "../../../../../common/entities/network";
+import { isChainId } from "../../../../../common/types/network";
 import { INVALID_ARGUMENT, NOT_IMPLEMENTED, ORDER_VERIFICATION_FAILED } from "../../../../../common/utils/error";
 import { KaguraSDK } from "../../../../../sdk/lib";
 

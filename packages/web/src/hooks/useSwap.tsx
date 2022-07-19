@@ -3,8 +3,7 @@ import { ethers } from "ethers";
 import { useAccount, useSigner } from "wagmi";
 
 import { TIP_RECIPIENT } from "../../../common/configs/app";
-// import { NFT } from "../../../common/entities/asset";
-import { OrderDirection, OrderType, SignedOrder } from "../../../common/entities/order";
+import { OrderDirection, OrderType, SignedOrder } from "../../../common/types/order";
 import { PERCENTAGE_BASE } from "../../../common/utils/constant";
 import { KaguraSDK } from "../../../sdk/lib";
 

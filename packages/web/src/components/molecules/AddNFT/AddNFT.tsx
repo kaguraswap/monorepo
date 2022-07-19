@@ -4,7 +4,7 @@ import React from "react";
 import { MdAdd } from "react-icons/md";
 
 import networks from "../../../../../common/configs/networks.json";
-import { ChainId } from "../../../../../common/entities/network";
+import { ChainId } from "../../../../../common/types/network";
 import { useInput } from "../../../hooks/useInput";
 import { Link } from "../../atoms/Link";
 import { Modal } from "../Modal";

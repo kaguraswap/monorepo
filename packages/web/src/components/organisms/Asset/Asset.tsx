@@ -23,8 +23,8 @@ import { DEFAULT_PRICE, DEFAULT_TIP } from "../../../../../common/configs/app";
 import networks from "../../../../../common/configs/networks.json";
 import protocols from "../../../../../common/configs/protocols.json";
 import { AssetFragment } from "../../../../../common/dist/graphql";
-import { ChainId } from "../../../../../common/entities/network";
-import { OrderType } from "../../../../../common/entities/order";
+import { ChainId } from "../../../../../common/types/network";
+import { OrderType } from "../../../../../common/types/order";
 import { useInput } from "../../../hooks/useInput";
 
 export interface AssetProps {
