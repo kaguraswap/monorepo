@@ -6,7 +6,7 @@ import { AssetsFragment, useHomeSubscription } from "../../../common/dist/graphq
 
 const HomePage: NextPage<HomeTemplateProps> = () => {
   const [assets, setAssets] = React.useState<AssetsFragment[]>([]);
-  const { data } = useHomeSubscription();
+  const { data } = useHomeSubscription({ variables: { condition: {} } });
   React.useEffect(() => {
     if (!data) {
       return;

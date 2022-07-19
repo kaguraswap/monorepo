@@ -13,9 +13,7 @@ const AssetPage: NextPage<AssetPageProps> = ({ chainId, contractAddress, tokenId
 
   const { data } = useAssetSubscription({
     variables: {
-      chainId: chainId,
-      contractAddress: contractAddress,
-      tokenId: tokenId,
+      condition: { chainId: { _eq: chainId }, contractAddress: { _eq: contractAddress }, tokenId: { _eq: tokenId } },
     },
   });
 
