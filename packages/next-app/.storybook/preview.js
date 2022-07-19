@@ -1,6 +1,13 @@
 import "./polyfill";
 
-const desiredChainId = ChainId.Rinkeby;
+import { WagmiConfig, createClient } from "wagmi";
+import { getDefaultProvider } from "ethers";
+
+const client = createClient({
+  autoConnect: true,
+  provider: getDefaultProvider(),
+});
+
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
   controls: {
@@ -10,3 +17,11 @@ export const parameters = {
     },
   },
 };
+
+export const decorators = [
+  (Story) => (
+    <WagmiConfig client={client}>
+      <Story />
+    </WagmiConfig>
+  ),
+];
