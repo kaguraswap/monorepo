@@ -49,6 +49,7 @@ jobs:
           workingDir: "./packages/web"
   deploy:
     needs: build
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
