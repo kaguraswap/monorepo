@@ -1,22 +1,39 @@
 {
   "1": {
     "name": "Ethereum",
-    "chainId": 1,
     "symbol": "ETH",
     "type": "evm",
     "env": "mainnet",
     "rpc": "https://rpc.ankr.com/eth",
     "explorer": "https://etherscan.io/",
-    "protocols": ["seaport"]
+    "protocols": ["seaport", "zeroEx"]
   },
   "4": {
     "name": "Rinkeby",
-    "chainId": 4,
     "symbol": "ETH",
     "type": "evm",
     "env": "testnet",
     "rpc": "https://rinkeby.infura.io/v3/95f65ab099894076814e8526f52c9149",
     "explorer": "https://rinkeby.etherscan.io/",
+    "protocols": ["seaport"]
+  },
+  "5": {
+    "name": "Goerli",
+    "symbol": "ETH",
+    "type": "evm",
+    "env": "testnet",
+    "rpc": "https://goerli.infura.io/v3/95f65ab099894076814e8526f52c9149",
+    "explorer": "https://goerli.etherscan.io/",
+    "protocols": ["seaport"]
+  },
+  "10": {
+    "name": "Optimism",
+    "chainId": 10,
+    "symbol": "ETH",
+    "type": "evm",
+    "env": "mainnet",
+    "rpc": "https://mainnet.optimism.io",
+    "explorer": "https://optimistic.etherscan.io/",
     "protocols": ["seaport"]
   },
   "42": {
@@ -28,6 +45,42 @@
     "explorer": "https://kovan.etherscan.io/",
     "protocols": ["seaport"]
   },
+  "56": {
+    "name": "Binance Smart Chain",
+    "symbol": "BNB",
+    "type": "evm",
+    "env": "mainnet",
+    "rpc": "https://bsc-dataseed.binance.org/",
+    "explorer": "https://bscscan.com/",
+    "protocols": ["zeroEx"]
+  },
+  "69": {
+    "name": "Optimistic Kovan",
+    "symbol": "ETH",
+    "type": "evm",
+    "env": "testnet",
+    "rpc": "https://kovan.optimism.io",
+    "explorer": "https://kovan-optimistic.etherscan.io/",
+    "protocols": ["seaport"]
+  },
+  "100": {
+    "name": "Gnosis Chain",
+    "symbol": "xDai",
+    "type": "evm",
+    "env": "mainnet",
+    "rpc": "https://rpc.gnosischain.com/",
+    "explorer": "https://blockscout.com/xdai/mainnet/",
+    "protocols": ["seaport"]
+  },
+  "250": {
+    "name": "Fantom",
+    "symbol": "FTM",
+    "type": "evm",
+    "env": "mainnet",
+    "rpc": "https://rpc.ankr.com/fantom/",
+    "explorer": "https://ftmscan.com/",
+    "protocols": ["zeroEx"]
+  },
   "137": {
     "name": "Polygon",
     "symbol": "MATIC",
@@ -37,6 +90,33 @@
     "explorer": "https://polygonscan.com/",
     "protocols": ["seaport", "zeroEx"]
   },
+  "42161": {
+    "name": "Arbitrum One",
+    "symbol": "ETH",
+    "type": "evm",
+    "env": "mainnet",
+    "rpc": "https://arbitrum-mainnet.infura.io/v3/95f65ab099894076814e8526f52c9149",
+    "explorer": "https://arbiscan.io/",
+    "protocols": ["seaport"]
+  },
+  "42220": {
+    "name": "Celo",
+    "symbol": "CELO",
+    "type": "evm",
+    "env": "mainnet",
+    "rpc": "https://forno.celo.org",
+    "explorer": "https://explorer.celo.org/",
+    "protocols": ["zeroEx"]
+  },
+  "421611": {
+    "name": "Arbitrum Testnet",
+    "symbol": "ETH",
+    "type": "evm",
+    "env": "testnet",
+    "rpc": "https://rinkeby.arbitrum.io/rpc",
+    "explorer": "https://testnet.arbiscan.io/",
+    "protocols": ["seaport"]
+  },
   "43113": {
     "name": "Avalanche Fuji",
     "symbol": "AVAX",
@@ -44,7 +124,7 @@
     "env": "testnet",
     "rpc": "https://api.avax-test.network/ext/bc/C/rpc",
     "explorer": "https://testnet.snowtrace.io/",
-    "protocols": ["seaport"]
+    "protocols": ["seaport", "zeroEx"]
   },
   "43114": {
     "name": "Avalanche C-Chain",
@@ -53,7 +133,7 @@
     "env": "mainnet",
     "rpc": "https://api.avax.network/ext/bc/C/rpc",
     "explorer": "https://snowtrace.io/",
-    "protocols": ["seaport"]
+    "protocols": ["seaport", "zeroEx"]
   },
   "80001": {
     "name": "Mumbai",
