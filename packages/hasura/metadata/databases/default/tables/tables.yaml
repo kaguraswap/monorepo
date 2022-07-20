@@ -1,4 +1,6 @@
 - "!include public_assets.yaml"
 - "!include public_contracts.yaml"
+- "!include public_orderDirection.yaml"
+- "!include public_orderProtocol.yaml"
 - "!include public_orders.yaml"
 - "!include public_validOrders.yaml"

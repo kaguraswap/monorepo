@@ -13,6 +13,12 @@ object_relationships:
           contractAddress: contractAddress
           chainId: chainId
           tokenId: tokenId
+  - name: orderDirection
+    using:
+      foreign_key_constraint_on: direction
+  - name: orderProtocol
+    using:
+      foreign_key_constraint_on: protocol
 select_permissions:
   - role: anonymous
     permission:
