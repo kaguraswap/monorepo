@@ -5,6 +5,7 @@ import path from "path";
 
 import networks from "../../../shared/src/configs/networks.json";
 import { AssetAttributes, OrderAttributes } from "../../dist/entity/init-models";
+import { OrderProtocol_Enum } from "../../dist/graphql";
 
 const main = () => {
   const possibleContractAddress = [];
@@ -41,7 +42,7 @@ const main = () => {
     const hash = ethers.utils.hexlify(ethers.utils.randomBytes(32));
     orders.push({
       id: hash,
-      protocol: faker.helpers.arrayElement(["seaport", "zeroEx"]),
+      protocol: faker.helpers.arrayElement([OrderProtocol_Enum.Seaport, "zeroEx"]),
       direction: faker.helpers.arrayElement(["sell"]),
       chainId: asset.chainId,
       contractAddress: asset.contractAddress,

@@ -5,15 +5,16 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 import { KaguraSDK } from "../../../../../hardhat/lib";
 import { OrderAttributes } from "../../../../../hasura/dist/entity/init-models";
+import { OrderDirection_Enum, OrderProtocol_Enum } from "../../../../../hasura/dist/graphql";
 import { models } from "../../../../../hasura/src/sequelize";
 import networks from "../../../../../shared/src/configs/networks.json";
 import { ChainId } from "../../../../../shared/src/types/network";
-import { OrderDirection, OrderType, SignedOrder } from "../../../../../shared/src/types/order";
+import { SignedOrder } from "../../../../../shared/src/types/order";
 import { INVALID_ARGUMENT, NOT_IMPLEMENTED } from "../../../../../shared/src/utils/error";
 
 export interface OrderCreateProps extends Pick<OrderAttributes, "contractAddress" | "tokenId"> {
-  direction: OrderDirection;
-  protocol: OrderType;
+  direction: OrderDirection_Enum;
+  protocol: OrderProtocol_Enum;
   chainId: ChainId;
   signedOrder: SignedOrder;
 }
@@ -53,7 +54,7 @@ export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   let price;
   let sortablePrice;
 
-  if (protocol === "seaport") {
+  if (protocol === OrderProtocol_Enum.Seaport) {
     const { parameters } = signedOrder as OrderWithCounter;
     const items = direction === "sell" ? parameters.consideration : parameters.offer;
     // TODO: better type

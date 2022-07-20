@@ -3,16 +3,17 @@ import { ethers } from "ethers";
 import { useAccount, useSigner } from "wagmi";
 
 import { KaguraSDK } from "../../../hardhat/lib";
+import { OrderDirection_Enum, OrderProtocol_Enum } from "../../../hasura/dist/graphql";
 import { PERCENTAGE_BASE, TIP_RECIPIENT } from "../../../shared/src/configs/app";
-import { OrderDirection, OrderType, SignedOrder } from "../../../shared/src/types/order";
+import { SignedOrder } from "../../../shared/src/types/order";
 
 export const useSwap = () => {
   const { data: signer } = useSigner();
   const { address } = useAccount();
 
   const offer = async (
-    protocol: OrderType,
-    direction: OrderDirection,
+    protocol: OrderProtocol_Enum,
+    direction: OrderDirection_Enum,
     chainId: string,
     contractAddress: string,
     tokenId: string,
@@ -48,7 +49,7 @@ export const useSwap = () => {
     return data.id as string;
   };
 
-  const cancel = async (protocol: OrderType, signedOrder: SignedOrder) => {
+  const cancel = async (protocol: OrderProtocol_Enum, signedOrder: SignedOrder) => {
     if (!signer || !address) {
       return;
     }
@@ -57,7 +58,7 @@ export const useSwap = () => {
     await sdk.order.cancel(protocol, signedOrder);
   };
 
-  const fulfill = async (protocol: OrderType, signedOrder: SignedOrder) => {
+  const fulfill = async (protocol: OrderProtocol_Enum, signedOrder: SignedOrder) => {
     if (!signer || !address) {
       return;
     }

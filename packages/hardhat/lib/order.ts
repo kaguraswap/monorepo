@@ -4,7 +4,8 @@ import { CreateInputItem, OrderWithCounter } from "@opensea/seaport-js/lib/types
 import { ERC721OrderStructSerialized, NftSwapV4 as ZeroEx, SignedERC721OrderStruct } from "@traderxyz/nft-swap-sdk";
 import { ethers } from "ethers";
 
-import { OrderDirection, OrderFee, OrderType, SignedOrder } from "../../shared/src/types/order";
+import { OrderDirection_Enum, OrderProtocol_Enum } from "../../hasura/dist/graphql";
+import { OrderFee, SignedOrder } from "../../shared/src/types/order";
 import { INVALID_ARGUMENT } from "../../shared/src/utils/error";
 
 export interface Overrides {
@@ -35,8 +36,8 @@ export class Order {
     });
   };
 
-  public hash = async (protocol: OrderType, signedOrder: SignedOrder) => {
-    if (protocol === "seaport") {
+  public hash = async (protocol: OrderProtocol_Enum, signedOrder: SignedOrder) => {
+    if (protocol === OrderProtocol_Enum.Seaport) {
       signedOrder = signedOrder as OrderWithCounter;
       return this._seaport.getOrderHash(signedOrder.parameters);
     } else {
@@ -47,8 +48,8 @@ export class Order {
   };
 
   public offer = async (
-    protocol: OrderType,
-    direction: OrderDirection,
+    protocol: OrderProtocol_Enum,
+    direction: OrderDirection_Enum,
     erc721Item: {
       contractAddress: string;
       tokenId: string;
@@ -60,7 +61,7 @@ export class Order {
     offerer: string,
     fees?: OrderFee[]
   ) => {
-    if (protocol === "seaport") {
+    if (protocol === OrderProtocol_Enum.Seaport) {
       const erc721ItemAdjusted: CreateInputItem = {
         itemType: ItemType.ERC721,
         token: erc721Item.contractAddress,
@@ -71,7 +72,7 @@ export class Order {
         amount: currencyItem.amount,
       };
       const order =
-        direction === "sell"
+        direction === OrderDirection_Enum.Sell
           ? {
               offer: [erc721ItemAdjusted],
               consideration: [{ ...erc20ItemAdjusted, recipient: offerer }],
@@ -111,8 +112,8 @@ export class Order {
     }
   };
 
-  public validate = async (protocol: OrderType, signedOrder: SignedOrder) => {
-    if (protocol === "seaport") {
+  public validate = async (protocol: OrderProtocol_Enum, signedOrder: SignedOrder) => {
+    if (protocol === OrderProtocol_Enum.Seaport) {
       signedOrder = signedOrder as OrderWithCounter;
       return await this._seaport
         .validate([signedOrder], signedOrder.parameters.offerer)
@@ -126,8 +127,8 @@ export class Order {
     }
   };
 
-  public cancel = async (protocol: OrderType, signedOrder: SignedOrder) => {
-    if (protocol === "seaport") {
+  public cancel = async (protocol: OrderProtocol_Enum, signedOrder: SignedOrder) => {
+    if (protocol === OrderProtocol_Enum.Seaport) {
       signedOrder = signedOrder as OrderWithCounter;
       await this._seaport.cancelOrders([signedOrder.parameters], signedOrder.parameters.offerer).transact();
     } else {
@@ -137,8 +138,8 @@ export class Order {
     }
   };
 
-  public fulfill = async (protocol: OrderType, signedOrder: SignedOrder, fulfiller: string) => {
-    if (protocol === "seaport") {
+  public fulfill = async (protocol: OrderProtocol_Enum, signedOrder: SignedOrder, fulfiller: string) => {
+    if (protocol === OrderProtocol_Enum.Seaport) {
       signedOrder = signedOrder as OrderWithCounter;
       const { executeAllActions } = await this._seaport.fulfillOrders({
         fulfillOrderDetails: [{ order: signedOrder }],
