@@ -43,6 +43,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 16.x.x
+      - run: yarn prebuild
       - uses: chromaui/action@v1
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
