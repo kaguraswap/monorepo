@@ -1,6 +1,7 @@
 import axios from "axios";
 import { AssetTemplate } from "components/templates/Asset";
 import { ajv, assetSchema } from "lib/ajv";
+import { toHasuraCondition } from "lib/hasura";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import React from "react";
 
@@ -26,11 +27,13 @@ export interface AssetPageProps extends Pick<AssetAttributes, "contractAddress" 
 const AssetPage: NextPage<AssetPageProps> = ({ chainId, contractAddress, tokenId }) => {
   const [asset, setAssets] = React.useState<AssetFragment>();
 
+  const { where } = React.useMemo(() => {
+    return toHasuraCondition({ chainId, contractAddress, tokenId });
+  }, [chainId, contractAddress, tokenId]);
+
   const { data } = useAssetSubscription({
     variables: {
-      chainId: chainId,
-      contractAddress: contractAddress,
-      tokenId: tokenId,
+      where,
     },
   });
 

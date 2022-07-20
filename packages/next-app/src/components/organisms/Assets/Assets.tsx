@@ -4,6 +4,9 @@ import { AddNFT } from "components/molecules/AddNFT";
 import { AssetListItem } from "components/molecules/AssetListItem";
 import { CheckboxFilter } from "components/molecules/CheckBoxFIlter";
 import { FilterDrawer } from "components/molecules/FilterDrawer";
+import { arrayify } from "lib/utils";
+import { useRouter } from "next/router";
+import qs from "query-string";
 import React from "react";
 import { MdFilterList } from "react-icons/md";
 
@@ -12,12 +15,22 @@ import { AssetsFragment } from "../../../../../common/dist/graphql";
 import { ChainId } from "../../../../../common/types/network";
 import { networkFilter, protocolFilter, sortByOptions, statusFilter } from "./data";
 
+export interface QueryCondition {
+  [key: string]: string | string[];
+}
+
 export interface AssetsProps {
   assets: AssetsFragment[];
 }
 
 export const Assets: React.FC<AssetsProps> = ({ assets }) => {
   const { isOpen, onToggle, onClose } = useDisclosure();
+  const router = useRouter();
+
+  const handleConditionChange = (key: string, value: string[]) => {
+    const query = qs.stringify({ ...router.query, [key]: value });
+    router.push(`/?${query}`, undefined, { shallow: true });
+  };
 
   return (
     <Box>
@@ -27,7 +40,15 @@ export const Assets: React.FC<AssetsProps> = ({ assets }) => {
           <Text>Filters</Text>
         </HStack>
         <HStack>
-          <Select defaultValue={sortByOptions.defaultValue} rounded="xl" width="180px">
+          <Select
+            defaultValue={sortByOptions.defaultValue}
+            rounded="xl"
+            width="180px"
+            placeholder="Sort"
+            onChange={(e) => {
+              handleConditionChange("orderBy", [e.target.value]);
+            }}
+          >
             {sortByOptions.options.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
@@ -39,9 +60,30 @@ export const Assets: React.FC<AssetsProps> = ({ assets }) => {
       </Flex>
       <FilterDrawer isOpen={isOpen} onClose={onClose}>
         <Stack spacing={"4"}>
-          <CheckboxFilter options={statusFilter.options} label="Status" />
-          <CheckboxFilter options={protocolFilter.options} label="Protocol" />
-          <CheckboxFilter options={networkFilter.options} label="Network" />
+          <CheckboxFilter
+            options={networkFilter.options}
+            label="Network"
+            onChange={(value) => {
+              handleConditionChange("chainId", value);
+            }}
+            value={arrayify(router.query.chainId)}
+          />
+          <CheckboxFilter
+            options={statusFilter.options}
+            label="Status"
+            onChange={(value) => {
+              handleConditionChange("validOrders-direction", value);
+            }}
+            value={arrayify(router.query["validOrders-direction"])}
+          />
+          <CheckboxFilter
+            options={protocolFilter.options}
+            label="Protocol"
+            onChange={(value) => {
+              handleConditionChange("validOrders-protocol", value);
+            }}
+            value={arrayify(router.query["validOrders-protocol"])}
+          />
           {/* TODO: Contract Address */}
         </Stack>
       </FilterDrawer>
