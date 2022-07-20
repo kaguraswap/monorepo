@@ -19,7 +19,7 @@ export interface OfferProps {
 }
 
 // TODO: add clear
-export const AddNFT: React.FC<OfferProps> = () => {
+export const AddAsset: React.FC<OfferProps> = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { value: selectedInputNFTMethod, handleInput: handleSelectedInputNFTMethod } = useInput<InputNFTMethod>("url");

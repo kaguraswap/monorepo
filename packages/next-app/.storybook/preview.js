@@ -2,6 +2,7 @@ import "./polyfill";
 
 import { WagmiConfig, createClient } from "wagmi";
 import { getDefaultProvider } from "ethers";
+import { RecoilRoot } from "recoil";
 
 const client = createClient({
   autoConnect: true,
@@ -20,8 +21,10 @@ export const parameters = {
 
 export const decorators = [
   (Story) => (
-    <WagmiConfig client={client}>
-      <Story />
-    </WagmiConfig>
+    <RecoilRoot>
+      <WagmiConfig client={client}>
+        <Story />
+      </WagmiConfig>
+    </RecoilRoot>
   ),
 ];
