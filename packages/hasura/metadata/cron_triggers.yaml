@@ -1,1 +1,5 @@
-[]
+- name: order_cleaning
+  webhook: http://localhost:3000/api/order/cleaning
+  schedule: '*/5 * * * *'
+  include_in_metadata: true
+  payload: {}
