@@ -1,37 +1,19 @@
 import axios from "axios";
 import { ethers } from "ethers";
 import httpError from "http-errors";
-import { ajv } from "lib/ajv";
+import { validate } from "lib/ajv";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import IERC721MetadataArtifact from "../../../../../hardhat/artifacts/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol/IERC721Metadata.json";
 import IERC721Artifact from "../../../../../hardhat/artifacts/@openzeppelin/contracts/token/ERC721/IERC721.sol/IERC721.json";
 import { IERC721, IERC721Metadata } from "../../../../../hardhat/typechain";
-import { AssetAttributes } from "../../../../../hasura/dist/entity/init-models";
 import { models } from "../../../../../hasura/src/sequelize";
 import { AssetMetadata } from "../../../../../hasura/src/types/asset-metadata";
 import networks from "../../../../../shared/src/configs/networks.json";
-import { ChainId } from "../../../../../shared/src/types/network";
 import { error } from "../../../../../shared/src/utils/error";
 
-const assetSyncPropsSchema = {
-  type: "object",
-  properties: {
-    chainId: { type: "string", format: "chainId" },
-    contractAddress: { type: "string", format: "address" },
-    tokenId: { type: "string", format: "tokenId" },
-  },
-  required: ["chainId", "contractAddress", "tokenId"],
-  additionalProperties: false,
-};
-
-export interface AssetSyncProps extends Pick<AssetAttributes, "contractAddress" | "tokenId"> {
-  chainId: ChainId;
-}
-
 export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const validate = ajv.compile<AssetSyncProps>(assetSyncPropsSchema);
-  if (!validate(req.body)) {
+  if (!validate.assetKey(req.body)) {
     throw httpError(error.invalidArgument.code, error.invalidArgument.message);
   }
   const { chainId, tokenId } = req.body;

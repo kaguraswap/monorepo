@@ -38,10 +38,10 @@ export class Order {
 
   public hash = async (protocol: OrderProtocol_Enum, signedOrder: SignedOrder) => {
     if (protocol === OrderProtocol_Enum.Seaport) {
-      signedOrder = signedOrder as OrderWithCounter;
+      signedOrder = <OrderWithCounter>signedOrder;
       return this._seaport.getOrderHash(signedOrder.parameters);
     } else {
-      const order = signedOrder as ERC721OrderStructSerialized;
+      const order = <ERC721OrderStructSerialized>signedOrder;
       const zeroEx = await this._getZeroEx();
       return await zeroEx.getOrderHash(order);
     }
@@ -115,13 +115,13 @@ export class Order {
 
   public validate = async (protocol: OrderProtocol_Enum, signedOrder: SignedOrder) => {
     if (protocol === OrderProtocol_Enum.Seaport) {
-      signedOrder = signedOrder as OrderWithCounter;
+      signedOrder = <OrderWithCounter>signedOrder;
       return await this._seaport
         .validate([signedOrder], signedOrder.parameters.offerer)
         .callStatic()
         .catch(() => false);
     } else {
-      signedOrder = signedOrder as SignedERC721OrderStruct;
+      signedOrder = <SignedERC721OrderStruct>signedOrder;
       const zeroEx = await this._getZeroEx();
       const status = await zeroEx.getOrderStatus(signedOrder);
       return status === 1;
@@ -130,10 +130,10 @@ export class Order {
 
   public cancel = async (protocol: OrderProtocol_Enum, signedOrder: SignedOrder) => {
     if (protocol === OrderProtocol_Enum.Seaport) {
-      signedOrder = signedOrder as OrderWithCounter;
+      signedOrder = <OrderWithCounter>signedOrder;
       await this._seaport.cancelOrders([signedOrder.parameters], signedOrder.parameters.offerer).transact();
     } else {
-      signedOrder = signedOrder as SignedERC721OrderStruct;
+      signedOrder = <SignedERC721OrderStruct>signedOrder;
       const zeroEx = await this._getZeroEx(signedOrder.maker);
       await zeroEx.cancelOrder(signedOrder.nonce, "ERC721");
     }
@@ -141,14 +141,14 @@ export class Order {
 
   public fulfill = async (protocol: OrderProtocol_Enum, signedOrder: SignedOrder, fulfiller: string) => {
     if (protocol === OrderProtocol_Enum.Seaport) {
-      signedOrder = signedOrder as OrderWithCounter;
+      signedOrder = <OrderWithCounter>signedOrder;
       const { executeAllActions } = await this._seaport.fulfillOrders({
         fulfillOrderDetails: [{ order: signedOrder }],
         accountAddress: fulfiller,
       });
       await executeAllActions();
     } else {
-      signedOrder = signedOrder as SignedERC721OrderStruct;
+      signedOrder = <SignedERC721OrderStruct>signedOrder;
       const zeroEx = await this._getZeroEx(fulfiller);
       const item =
         signedOrder.direction === 0

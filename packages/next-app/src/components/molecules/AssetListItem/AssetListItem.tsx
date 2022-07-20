@@ -1,10 +1,10 @@
 import { AspectRatio, Box, Image, Skeleton, Tag, Text } from "@chakra-ui/react";
 import React from "react";
 
-import { AssetAttributes } from "../../../../../hasura/dist/entity/asset";
+import { Assets } from "../../../../../hasura/dist/graphql";
 import { AssetMetadata } from "../../../../../hasura/src/types/asset-metadata";
 
-export interface AssetListItemProps extends Pick<AssetAttributes, "tokenId">, Pick<AssetMetadata, "name" | "image"> {
+export interface AssetListItemProps extends Pick<Assets, "tokenId">, Pick<AssetMetadata, "name" | "image"> {
   network: string;
   price?: string;
 }

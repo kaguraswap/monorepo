@@ -2,24 +2,22 @@ import { Button, FormControl, HStack, IconButton, Input, Select, Text, useDisclo
 import { Link } from "components/atoms/Link";
 import { Modal } from "components/molecules/Modal";
 import { useInput } from "hooks/useInput";
+import { validate } from "lib/ajv";
 import router from "next/router";
 import React from "react";
 import { MdAdd } from "react-icons/md";
 
 import networks from "../../../../../shared/src/configs/networks.json";
 import { ChainId } from "../../../../../shared/src/types/network";
+import { InputNFTMethod, SwapStatus, SwapType } from "./type";
 
-export type SwapStatus = "inputOffer" | "inputPrice" | "preview";
-export type SwapType = "offer" | "fulfill";
-export type InputNFTMethod = "url" | "manual";
-
-export interface OfferProps {
+export interface AddNFTProps {
   status?: SwapStatus;
   type?: SwapType;
 }
 
 // TODO: add clear
-export const AddNFT: React.FC<OfferProps> = () => {
+export const AddNFT: React.FC<AddNFTProps> = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { value: selectedInputNFTMethod, handleInput: handleSelectedInputNFTMethod } = useInput<InputNFTMethod>("url");
@@ -32,8 +30,7 @@ export const AddNFT: React.FC<OfferProps> = () => {
   const handleURLChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setURL(e.target.value);
     const [tokenId, contractAddress, chainId] = e.target.value.split("/").reverse();
-    // TODO: add validate
-    if (tokenId && contractAddress && chainId) {
+    if (validate.assetKey({ chainId, contractAddress, tokenId })) {
       handleChainIdChange(chainId);
       handleContractAddressChange(contractAddress);
       handleTokenIdChange(tokenId);

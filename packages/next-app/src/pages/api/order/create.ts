@@ -1,42 +1,17 @@
 import { Item, OrderWithCounter } from "@opensea/seaport-js/lib/types";
 import { ethers } from "ethers";
 import httpError from "http-errors";
-import { ajv } from "lib/ajv";
+import { validate } from "lib/ajv";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { KaguraSDK } from "../../../../../hardhat/lib";
-import { SignedOrder } from "../../../../../hardhat/types/order";
-import { OrderAttributes } from "../../../../../hasura/dist/entity/init-models";
 import { OrderDirection_Enum, OrderProtocol_Enum } from "../../../../../hasura/dist/graphql";
 import { models } from "../../../../../hasura/src/sequelize";
 import networks from "../../../../../shared/src/configs/networks.json";
-import { ChainId } from "../../../../../shared/src/types/network";
 import { error } from "../../../../../shared/src/utils/error";
 
-export interface OrderCreateProps extends Pick<OrderAttributes, "contractAddress" | "tokenId"> {
-  direction: OrderDirection_Enum;
-  protocol: OrderProtocol_Enum;
-  chainId: ChainId;
-  signedOrder: SignedOrder;
-}
-
-const orderCreatePropsSchema = {
-  type: "object",
-  properties: {
-    protocol: { type: "string", format: "protocol" },
-    direction: { type: "string", format: "direction" },
-    chainId: { type: "string", format: "chainId" },
-    contractAddress: { type: "string", format: "address" },
-    tokenId: { type: "string", format: "tokenId" },
-    signedOrder: { type: "object" },
-  },
-  required: ["protocol", "direction", "chainId", "contractAddress", "tokenId", "signedOrder"],
-  additionalProperties: false,
-};
-
 export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const validate = ajv.compile<OrderCreateProps>(orderCreatePropsSchema);
-  if (!validate(req.body)) {
+  if (!validate.createOrderProps(req.body)) {
     throw httpError(error.invalidArgument.code, error.invalidArgument.message);
   }
   const { protocol, direction, chainId, contractAddress, tokenId, signedOrder } = req.body;
