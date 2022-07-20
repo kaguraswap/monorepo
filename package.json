@@ -25,6 +25,7 @@
     "dev:common": "yarn workspace @kaguraswap/common dev",
     "dev:hasura": "yarn workspace @kaguraswap/hasura dev",
     "dev:next-app": "yarn workspace @kaguraswap/next-app dev",
+    "dev:storybook": "yarn workspace @kaguraswap/next-app storybook",
     "prebuild": "run-p prebuild:*",
     "prebuild:common": "yarn workspace @kaguraswap/common build",
     "prebuild:hardhat": "yarn workspace @kaguraswap/hardhat build",
