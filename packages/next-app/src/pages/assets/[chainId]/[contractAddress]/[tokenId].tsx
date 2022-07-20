@@ -1,26 +1,27 @@
 import axios from "axios";
 import { AssetTemplate } from "components/templates/Asset";
-import { ajv } from "lib/ajv";
+import { ajv, assetSchema } from "lib/ajv";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import React from "react";
 
 import { AssetAttributes } from "../../../../../../common/dist/entity/init-models";
 import { AssetFragment, useAssetSubscription } from "../../../../../../common/dist/graphql";
+import { ChainId } from "../../../../../../common/types/network";
 import { INVALID_ARGUMENT } from "../../../../../../common/utils/error";
 
-// TODO: chainId
+// TODO: error handling
 const assetPagePropsSchema = {
   type: "object",
   properties: {
-    chainId: { type: "string" },
-    contractAddress: { type: "string" },
-    tokenId: { type: "string" },
+    ...assetSchema.properties,
   },
-  required: ["chainId", "contractAddress", "tokenId"],
+  required: assetSchema.required,
   additionalProperties: false,
 };
 
-export type AssetPageProps = Pick<AssetAttributes, "chainId" | "contractAddress" | "tokenId">;
+export interface AssetPageProps extends Pick<AssetAttributes, "contractAddress" | "tokenId"> {
+  chainId: ChainId;
+}
 
 const AssetPage: NextPage<AssetPageProps> = ({ chainId, contractAddress, tokenId }) => {
   const [asset, setAssets] = React.useState<AssetFragment>();

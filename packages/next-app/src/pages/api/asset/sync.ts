@@ -1,6 +1,6 @@
 import axios from "axios";
 import { ethers } from "ethers";
-import { ajv } from "lib/ajv";
+import { ajv, assetSchema } from "lib/ajv";
 import { models } from "lib/sequelize";
 import type { NextApiRequest, NextApiResponse } from "next";
 
@@ -13,21 +13,19 @@ import IERC721MetadataArtifact from "../../../../../hardhat/artifacts/@openzeppe
 import IERC721Artifact from "../../../../../hardhat/artifacts/@openzeppelin/contracts/token/ERC721/IERC721.sol/IERC721.json";
 import { IERC721, IERC721Metadata } from "../../../../../hardhat/typechain";
 
-// TODO: error
-// TODO: common asset schema
-
+// TODO: error handling
 const assetSyncPropsSchema = {
   type: "object",
   properties: {
-    chainId: { type: "string" },
-    contractAddress: { type: "string" },
-    tokenId: { type: "string" },
+    ...assetSchema.properties,
   },
-  required: ["chainId", "contractAddress", "tokenId"],
+  required: assetSchema.required,
   additionalProperties: false,
 };
 
-export type AssetSyncProps = Pick<AssetAttributes, "chainId" | "contractAddress" | "tokenId">;
+export interface AssetSyncProps extends Pick<AssetAttributes, "contractAddress" | "tokenId"> {
+  chainId: ChainId;
+}
 
 export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const validate = ajv.compile<AssetSyncProps>(assetSyncPropsSchema);
@@ -38,7 +36,7 @@ export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   let { contractAddress } = req.body;
   contractAddress = contractAddress.toLowerCase();
 
-  const { rpc } = networks[chainId as ChainId];
+  const { rpc } = networks[chainId];
   const provider = new ethers.providers.JsonRpcProvider(rpc);
   const erc721 = <IERC721>new ethers.Contract(contractAddress, IERC721Artifact.abi, provider);
   const erc721Metadata = <IERC721Metadata>new ethers.Contract(contractAddress, IERC721MetadataArtifact.abi, provider);
