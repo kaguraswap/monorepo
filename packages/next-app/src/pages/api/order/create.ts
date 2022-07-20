@@ -4,9 +4,9 @@ import { ajv, assetSchema } from "lib/ajv";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { KaguraSDK } from "../../../../../hardhat/lib";
-import { OrderAttributes } from "../../../../../shared/dist/entity/init-models";
+import { OrderAttributes } from "../../../../../hasura/dist/entity/init-models";
+import { models } from "../../../../../hasura/src/sequelize";
 import networks from "../../../../../shared/src/configs/networks.json";
-import { models } from "../../../../../shared/src/sequelize";
 import { ChainId } from "../../../../../shared/src/types/network";
 import { OrderDirection, OrderType, SignedOrder } from "../../../../../shared/src/types/order";
 import { INVALID_ARGUMENT, NOT_IMPLEMENTED } from "../../../../../shared/src/utils/error";

@@ -2,8 +2,8 @@ import { ethers } from "ethers";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { KaguraSDK } from "../../../../../hardhat/lib";
+import { models } from "../../../../../hasura/src/sequelize";
 import networks from "../../../../../shared/src/configs/networks.json";
-import { models } from "../../../../../shared/src/sequelize";
 import { ChainId } from "../../../../../shared/src/types/network";
 import { OrderType, SignedOrder } from "../../../../../shared/src/types/order";
 

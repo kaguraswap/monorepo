@@ -4,10 +4,56 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "hasura console --no-browser"
+    "dev": "run-p dev:*",
+    "dev:hasura": "hasura console --no-browser",
+    "dev:watch": "npm-watch",
+    "dev:fixtures": "ts-node ./src/scripts/migrate-fixtures.ts",
+    "build": "run-p build:*",
+    "build:graphql": "graphql-codegen --config codegen.yml",
+    "build:orm": "sequelize-auto --host localhost --user postgres --pass postgrespassword --port 5432 --output ./dist/entity --dialect postgres --database postgres --lang ts --caseModel p --caseProp c --caseFile k --schema public --views --singularize",
+    "build:fixtures": "ts-node ./src/scripts/generate-fixtures.ts"
   },
-  "dependencies": {},
+  "watch": {
+    "build:graphql": {
+      "patterns": [
+        "./src/metadata",
+        "./src/graphql"
+      ],
+      "extensions": [
+        "yaml",
+        "graphql"
+      ],
+      "runOnChangeOnly": true
+    },
+    "build:orm": {
+      "patterns": [
+        "./src/migrations"
+      ],
+      "extensions": [
+        "sql"
+      ],
+      "runOnChangeOnly": true
+    },
+    "build:fixtures": {
+      "patterns": [
+        "./src/scripts/generate-fixtures.ts"
+      ],
+      "extensions": [
+        "ts"
+      ],
+      "runOnChangeOnly": true
+    }
+  },
   "devDependencies": {
-    "hasura-cli": "^2.8.4"
+    "@graphql-codegen/cli": "^2.8.0",
+    "@graphql-codegen/typescript": "^2.7.1",
+    "@graphql-codegen/typescript-operations": "^2.5.1",
+    "@graphql-codegen/typescript-react-apollo": "^3.3.1",
+    "hasura-cli": "^2.8.4",
+    "graphql": "^16.5.0",
+    "pg": "^8.7.3",
+    "sequelize": "^6.21.3",
+    "sequelize-auto": "^0.8.8",
+    "ts-node": "^10.9.1"
   }
 }

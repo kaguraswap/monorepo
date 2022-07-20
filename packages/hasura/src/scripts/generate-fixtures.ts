@@ -3,8 +3,8 @@ import { ethers } from "ethers";
 import fs from "fs";
 import path from "path";
 
+import networks from "../../../shared/src/configs/networks.json";
 import { AssetAttributes, OrderAttributes } from "../../dist/entity/init-models";
-import networks from "../configs/networks.json";
 
 const main = () => {
   const possibleContractAddress = [];
@@ -53,9 +53,9 @@ const main = () => {
       isValid: faker.helpers.arrayElement([true, false]),
     });
   }
-  fs.mkdirSync(path.join(__dirname, "../dist/seeds"), { recursive: true });
-  fs.writeFileSync(path.join(__dirname, "../dist/seeds/assets.json"), JSON.stringify(assets));
-  fs.writeFileSync(path.join(__dirname, "../dist/seeds/orders.json"), JSON.stringify(orders));
+  fs.mkdirSync(path.join(__dirname, "../dist/fixtures"), { recursive: true });
+  fs.writeFileSync(path.join(__dirname, "../dist/fixtures/assets.json"), JSON.stringify(assets));
+  fs.writeFileSync(path.join(__dirname, "../dist/fixtures/orders.json"), JSON.stringify(orders));
 };
 
 main();

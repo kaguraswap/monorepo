@@ -5,7 +5,7 @@ import { toHasuraCondition } from "lib/hasura";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import React from "react";
 
-import { AssetAttributes } from "../../../../../../shared/dist/entity/init-models";
+import { AssetAttributes } from "../../../../../../hasura/dist/entity/init-models";
 import { AssetFragment, useAssetSubscription } from "../../../../../../shared/dist/graphql";
 import { ChainId } from "../../../../../../shared/src/types/network";
 import { INVALID_ARGUMENT } from "../../../../../../shared/src/utils/error";
