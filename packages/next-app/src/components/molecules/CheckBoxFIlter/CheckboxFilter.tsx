@@ -1,6 +1,6 @@
 import { Checkbox, CheckboxGroup, FormLabel, Stack } from "@chakra-ui/react";
 import React from "react";
-import { SelectOption } from "types/SelectOption";
+import { SelectOption } from "types/ui";
 
 interface CheckboxFilterProps {
   options: SelectOption[];

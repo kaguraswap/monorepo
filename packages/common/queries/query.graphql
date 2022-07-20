@@ -1,5 +1,5 @@
-subscription Home($condition: assets_bool_exp) {
-  assets(where: $condition) {
+subscription Home($where: assets_bool_exp, $orderBy: [assets_order_by!]) {
+  assets(where: $where, order_by: $orderBy) {
     ...Assets
   }
 }
@@ -15,8 +15,8 @@ fragment Assets on assets {
   }
 }
 
-subscription Asset($condition: assets_bool_exp) {
-  assets(where: $condition) {
+subscription Asset($where: assets_bool_exp) {
+  assets(where: $where) {
     ...Asset
   }
 }

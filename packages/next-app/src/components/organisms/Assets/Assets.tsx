@@ -14,6 +14,13 @@ import { AssetsFragment } from "../../../../../common/dist/graphql";
 import { ChainId } from "../../../../../common/types/network";
 import { networkFilter, protocolFilter, sortByOptions, statusFilter } from "./data";
 
+export interface QueryCondition {
+  chainId: string[];
+  "orders_is_valid-protocol": string[];
+  "orders_is_valid-direction": string[];
+  orderBy?: string;
+}
+
 export interface AssetsProps {
   assets: AssetsFragment[];
 }
@@ -22,10 +29,21 @@ export const Assets: React.FC<AssetsProps> = ({ assets }) => {
   const { isOpen, onToggle, onClose } = useDisclosure();
   const router = useRouter();
 
-  const handleChainIdChange = (chainId: string[]) => {
-    const query = qs.stringify({ chainId });
-    router.push(`/?${query}`, undefined, { shallow: true });
+  const [conditions, setConditions] = React.useState<QueryCondition>({
+    chainId: [],
+    "orders_is_valid-protocol": [],
+    "orders_is_valid-direction": [],
+  });
+
+  const handleConditionChange = (key: string, value: string | string[]) => {
+    setConditions({ ...conditions, [key]: value });
   };
+
+  React.useEffect(() => {
+    console.log(conditions);
+    const query = qs.stringify(conditions);
+    router.push(`/?${query}`, undefined, { shallow: true });
+  }, [conditions]);
 
   return (
     <Box>
@@ -35,7 +53,15 @@ export const Assets: React.FC<AssetsProps> = ({ assets }) => {
           <Text>Filters</Text>
         </HStack>
         <HStack>
-          <Select defaultValue={sortByOptions.defaultValue} rounded="xl" width="180px">
+          <Select
+            defaultValue={sortByOptions.defaultValue}
+            rounded="xl"
+            width="180px"
+            placeholder="Sort"
+            onChange={(e) => {
+              handleConditionChange("orderBy", e.target.value);
+            }}
+          >
             {sortByOptions.options.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
@@ -47,9 +73,28 @@ export const Assets: React.FC<AssetsProps> = ({ assets }) => {
       </Flex>
       <FilterDrawer isOpen={isOpen} onClose={onClose}>
         <Stack spacing={"4"}>
-          <CheckboxFilter options={statusFilter.options} label="Status" />
-          <CheckboxFilter options={protocolFilter.options} label="Protocol" />
-          <CheckboxFilter options={networkFilter.options} label="Network" onChange={handleChainIdChange} />
+          <CheckboxFilter
+            options={networkFilter.options}
+            label="Network"
+            onChange={(value) => {
+              handleConditionChange("chainId", value);
+            }}
+          />
+          <CheckboxFilter
+            options={statusFilter.options}
+            label="Status"
+            onChange={(value) => {
+              handleConditionChange("orders_is_valid-direction", value);
+            }}
+          />
+          <CheckboxFilter
+            options={protocolFilter.options}
+            label="Protocol"
+            onChange={(value) => {
+              handleConditionChange("orders_is_valid-protocol", value);
+            }}
+          />
+
           {/* TODO: Contract Address */}
         </Stack>
       </FilterDrawer>
