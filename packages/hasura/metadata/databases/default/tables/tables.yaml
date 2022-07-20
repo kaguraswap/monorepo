@@ -1,3 +1,3 @@
-- "!include public_contract.yaml"
-- "!include public_nft.yaml"
-- "!include public_order.yaml"
+- "!include public_assets.yaml"
+- "!include public_contracts.yaml"
+- "!include public_orders.yaml"

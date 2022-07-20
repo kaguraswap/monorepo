@@ -1,6 +1,6 @@
 table:
   schema: public
-  name: order
+  name: orders
 object_relationships:
   - name: asset
     using:
