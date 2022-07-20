@@ -5,8 +5,8 @@ import { ERC721OrderStructSerialized, NftSwapV4 as ZeroEx, SignedERC721OrderStru
 import { ethers } from "ethers";
 
 import { OrderDirection_Enum, OrderProtocol_Enum } from "../../hasura/dist/graphql";
-import { OrderFee, SignedOrder } from "../../shared/src/types/order";
 import { INVALID_ARGUMENT } from "../../shared/src/utils/error";
+import { OrderFee, SignedOrder } from "../types/order";
 
 export interface Overrides {
   seaport?: string;
@@ -90,6 +90,7 @@ export class Order {
         throw new Error(INVALID_ARGUMENT);
       }
       const zeroEx = await this._getZeroEx(offerer);
+
       const erc721ItemAdjusted = {
         type: "ERC721" as const,
         tokenAddress: erc721Item.contractAddress,
@@ -100,7 +101,7 @@ export class Order {
         tokenAddress: currencyItem.contractAddress,
         amount: currencyItem.amount,
       };
-      const item = direction === "sell" ? erc721ItemAdjusted : currencyItemAdjusted;
+      const item = direction === OrderDirection_Enum.Sell ? erc721ItemAdjusted : currencyItemAdjusted;
       const { contractApproved } = await zeroEx.loadApprovalStatus(item, offerer);
       if (!contractApproved) {
         const approvalTx = await zeroEx.approveTokenOrNftByAsset(item, offerer);

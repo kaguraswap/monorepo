@@ -1,6 +1,6 @@
 import axios from "axios";
 import { AssetTemplate } from "components/templates/Asset";
-import { ajv, assetSchema } from "lib/ajv";
+import { ajv } from "lib/ajv";
 import { toHasuraCondition } from "lib/hasura";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import React from "react";
@@ -14,9 +14,13 @@ import { INVALID_ARGUMENT } from "../../../../../../shared/src/utils/error";
 const assetPagePropsSchema = {
   type: "object",
   properties: {
-    ...assetSchema.properties,
+    properties: {
+      chainId: { type: "string", format: "chainId" },
+      contractAddress: { type: "string", format: "address" },
+      tokenId: { type: "string", format: "tokenId" },
+    },
   },
-  required: assetSchema.required,
+  required: ["chainId", "contractAddress", "tokenId"],
   additionalProperties: false,
 };
 

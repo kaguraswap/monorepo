@@ -105,6 +105,6 @@ export const describeWithSeaportFixture = (name: string, suiteCb: (fixture: Fixt
       }
       fixture.sdk = new KaguraSDK(provider, overrides);
     });
-    suiteCb(fixture as Fixture);
+    suiteCb(<Fixture>fixture);
   });
 };

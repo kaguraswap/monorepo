@@ -3,9 +3,9 @@ import { ethers } from "ethers";
 import { useAccount, useSigner } from "wagmi";
 
 import { KaguraSDK } from "../../../hardhat/lib";
+import { SignedOrder } from "../../../hardhat/types/order";
 import { OrderDirection_Enum, OrderProtocol_Enum } from "../../../hasura/dist/graphql";
 import { PERCENTAGE_BASE, TIP_RECIPIENT } from "../../../shared/src/configs/app";
-import { SignedOrder } from "../../../shared/src/types/order";
 
 export const useSwap = () => {
   const { data: signer } = useSigner();

@@ -1,6 +1,7 @@
 import Ajv from "ajv";
 import { ethers } from "ethers";
 
+import { isOrderDirection, isOrderProtocol } from "../../../../hasura/src/types/order";
 import { isChainId } from "../../../../shared/src/types/network";
 
 export const ajv = new Ajv();
@@ -27,11 +28,22 @@ ajv.addFormat("tokenId", {
   },
 });
 
-export const assetSchema = {
-  properties: {
-    chainId: { type: "string", format: "chainId" },
-    contractAddress: { type: "string", format: "address" },
-    tokenId: { type: "string", format: "tokenId" },
+ajv.addFormat("protocol", {
+  validate: (protocol: string) => {
+    return isOrderProtocol(protocol);
   },
-  required: ["chainId", "contractAddress", "tokenId"],
+});
+
+ajv.addFormat("direction", {
+  validate: (direction: string) => {
+    return isOrderDirection(direction);
+  },
+});
+
+export const orderSchema = {
+  properties: {
+    protocol: { type: "string", format: "protocol" },
+    direction: { type: "string", format: "direction" },
+  },
+  required: ["protocol", "direction"],
 };

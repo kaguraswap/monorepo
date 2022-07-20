@@ -1,15 +1,15 @@
 import { Item, OrderWithCounter } from "@opensea/seaport-js/lib/types";
 import { ethers } from "ethers";
-import { ajv, assetSchema } from "lib/ajv";
+import { ajv } from "lib/ajv";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { KaguraSDK } from "../../../../../hardhat/lib";
+import { SignedOrder } from "../../../../../hardhat/types/order";
 import { OrderAttributes } from "../../../../../hasura/dist/entity/init-models";
 import { OrderDirection_Enum, OrderProtocol_Enum } from "../../../../../hasura/dist/graphql";
 import { models } from "../../../../../hasura/src/sequelize";
 import networks from "../../../../../shared/src/configs/networks.json";
 import { ChainId } from "../../../../../shared/src/types/network";
-import { SignedOrder } from "../../../../../shared/src/types/order";
 import { INVALID_ARGUMENT, NOT_IMPLEMENTED } from "../../../../../shared/src/utils/error";
 
 export interface OrderCreateProps extends Pick<OrderAttributes, "contractAddress" | "tokenId"> {
@@ -22,12 +22,14 @@ export interface OrderCreateProps extends Pick<OrderAttributes, "contractAddress
 const orderCreatePropsSchema = {
   type: "object",
   properties: {
-    protocol: { type: "string" },
-    direction: { type: "string" },
-    ...assetSchema.properties,
+    protocol: { type: "string", format: "protocol" },
+    direction: { type: "string", format: "direction" },
+    chainId: { type: "string", format: "chainId" },
+    contractAddress: { type: "string", format: "address" },
+    tokenId: { type: "string", format: "tokenId" },
     signedOrder: { type: "object" },
   },
-  required: ["protocol", "direction", "signedOrder"].concat(assetSchema.required),
+  required: ["protocol", "direction", "chainId", "contractAddress", "tokenId", "signedOrder"],
   additionalProperties: false,
 };
 
@@ -56,14 +58,13 @@ export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   if (protocol === OrderProtocol_Enum.Seaport) {
     const { parameters } = signedOrder as OrderWithCounter;
-    const items = direction === "sell" ? parameters.consideration : parameters.offer;
-    // TODO: better type
+    const items = direction === OrderDirection_Enum.Sell ? parameters.consideration : parameters.offer;
     price = items
       .reduce((a: ethers.BigNumber, b: Item) => {
         return a.add(b.startAmount);
       }, ethers.BigNumber.from(0))
       .toString();
-    sortablePrice = price as unknown as number;
+    sortablePrice = Number(price);
     offerer = parameters.offerer;
   } else {
     throw new Error(NOT_IMPLEMENTED);

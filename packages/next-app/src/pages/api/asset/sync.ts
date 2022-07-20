@@ -1,6 +1,6 @@
 import axios from "axios";
 import { ethers } from "ethers";
-import { ajv, assetSchema } from "lib/ajv";
+import { ajv } from "lib/ajv";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import IERC721MetadataArtifact from "../../../../../hardhat/artifacts/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol/IERC721Metadata.json";
@@ -8,8 +8,8 @@ import IERC721Artifact from "../../../../../hardhat/artifacts/@openzeppelin/cont
 import { IERC721, IERC721Metadata } from "../../../../../hardhat/typechain";
 import { AssetAttributes } from "../../../../../hasura/dist/entity/init-models";
 import { models } from "../../../../../hasura/src/sequelize";
+import { AssetMetadata } from "../../../../../hasura/src/types/asset-metadata";
 import networks from "../../../../../shared/src/configs/networks.json";
-import { AssetMetadata } from "../../../../../shared/src/types/asset-metadata";
 import { ChainId } from "../../../../../shared/src/types/network";
 import { INVALID_ARGUMENT } from "../../../../../shared/src/utils/error";
 
@@ -17,9 +17,11 @@ import { INVALID_ARGUMENT } from "../../../../../shared/src/utils/error";
 const assetSyncPropsSchema = {
   type: "object",
   properties: {
-    ...assetSchema.properties,
+    chainId: { type: "string", format: "chainId" },
+    contractAddress: { type: "string", format: "address" },
+    tokenId: { type: "string", format: "tokenId" },
   },
-  required: assetSchema.required,
+  required: ["chainId", "contractAddress", "tokenId"],
   additionalProperties: false,
 };
 
