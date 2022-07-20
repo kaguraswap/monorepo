@@ -3,7 +3,7 @@ import React from "react";
 import { IoWalletOutline } from "react-icons/io5";
 import { useAccount, useDisconnect } from "wagmi";
 
-import { shortenAddress } from "../../../../../common/utils/wallet";
+import { shortenAddress } from "../../../../../shared/src/utils/wallet";
 
 export const Wallet: React.FC = () => {
   const { onOpen, onClose } = useDisclosure({ defaultIsOpen: false });

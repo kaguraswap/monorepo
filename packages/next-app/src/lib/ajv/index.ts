@@ -1,7 +1,7 @@
 import Ajv from "ajv";
 import { ethers } from "ethers";
 
-import { isChainId } from "../../../../common/types/network";
+import { isChainId } from "../../../../shared/src/types/network";
 
 export const ajv = new Ajv();
 

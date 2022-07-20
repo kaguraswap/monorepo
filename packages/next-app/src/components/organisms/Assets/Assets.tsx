@@ -10,9 +10,9 @@ import qs from "query-string";
 import React from "react";
 import { MdFilterList } from "react-icons/md";
 
-import networks from "../../../../../common/configs/networks.json";
-import { AssetsFragment } from "../../../../../common/dist/graphql";
-import { ChainId } from "../../../../../common/types/network";
+import { AssetsFragment } from "../../../../../shared/dist/graphql";
+import networks from "../../../../../shared/src/configs/networks.json";
+import { ChainId } from "../../../../../shared/src/types/network";
 import { networkFilter, protocolFilter, sortByOptions, statusFilter } from "./data";
 
 export interface QueryCondition {

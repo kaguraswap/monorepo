@@ -5,10 +5,10 @@ import { toHasuraCondition } from "lib/hasura";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import React from "react";
 
-import { AssetAttributes } from "../../../../../../common/dist/entity/init-models";
-import { AssetFragment, useAssetSubscription } from "../../../../../../common/dist/graphql";
-import { ChainId } from "../../../../../../common/types/network";
-import { INVALID_ARGUMENT } from "../../../../../../common/utils/error";
+import { AssetAttributes } from "../../../../../../shared/dist/entity/init-models";
+import { AssetFragment, useAssetSubscription } from "../../../../../../shared/dist/graphql";
+import { ChainId } from "../../../../../../shared/src/types/network";
+import { INVALID_ARGUMENT } from "../../../../../../shared/src/utils/error";
 
 // TODO: error handling
 const assetPagePropsSchema = {

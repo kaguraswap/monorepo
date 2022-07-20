@@ -20,12 +20,12 @@ import { useSwap } from "hooks/useSwap";
 import React from "react";
 import { useAccount } from "wagmi";
 
-import { DEFAULT_PRICE, DEFAULT_TIP } from "../../../../../common/configs/app";
-import networks from "../../../../../common/configs/networks.json";
-import protocols from "../../../../../common/configs/protocols.json";
-import { AssetFragment } from "../../../../../common/dist/graphql";
-import { ChainId } from "../../../../../common/types/network";
-import { OrderType } from "../../../../../common/types/order";
+import { AssetFragment } from "../../../../../shared/dist/graphql";
+import { DEFAULT_PRICE, DEFAULT_TIP } from "../../../../../shared/src/configs/app";
+import networks from "../../../../../shared/src/configs/networks.json";
+import protocols from "../../../../../shared/src/configs/protocols.json";
+import { ChainId } from "../../../../../shared/src/types/network";
+import { OrderType } from "../../../../../shared/src/types/order";
 
 export interface AssetProps {
   asset: AssetFragment;

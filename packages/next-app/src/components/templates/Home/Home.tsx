@@ -2,7 +2,7 @@ import { Assets } from "components/organisms/Assets";
 import { DefaultLayout } from "components/utils/layout";
 import React from "react";
 
-import { AssetsFragment } from "../../../../../common/dist/graphql";
+import { AssetsFragment } from "../../../../../shared/dist/graphql";
 
 export interface HomeTemplateProps {
   assets: AssetsFragment[];

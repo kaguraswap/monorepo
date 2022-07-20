@@ -1,5 +1,5 @@
 {
-  "name": "@kaguraswap/common",
+  "name": "@kaguraswap/shared",
   "version": "0.0.1",
   "license": "MIT",
   "private": true,
@@ -7,13 +7,15 @@
     "dev": "npm-watch",
     "build": "run-p build:*",
     "build:graphql": "graphql-codegen --config codegen.yml",
-    "build:orm": "sequelize-auto --host localhost --user postgres --pass postgrespassword --port 5432 --output ./dist/entity --dialect postgres --database postgres --lang ts --caseModel p --caseProp c --caseFile k --schema public --views --singularize"
+    "build:orm": "sequelize-auto --host localhost --user postgres --pass postgrespassword --port 5432 --output ./dist/entity --dialect postgres --database postgres --lang ts --caseModel p --caseProp c --caseFile k --schema public --views --singularize",
+    "build:seed": "ts-node ./src/scripts/generate-seeds.ts",
+    "migrate-seeds": "ts-node ./src/scripts/migrate-seeds.ts"
   },
   "watch": {
     "build:graphql": {
       "patterns": [
         "../hasura/metadata",
-        "./queries"
+        "./src/graphql"
       ],
       "extensions": [
         "yaml",
@@ -29,6 +31,15 @@
         "sql"
       ],
       "runOnChangeOnly": true
+    },
+    "build:seed": {
+      "patterns": [
+        "./src/scripts/generate-seeds.ts"
+      ],
+      "extensions": [
+        "ts"
+      ],
+      "runOnChangeOnly": true
     }
   },
   "dependencies": {},
@@ -40,6 +51,7 @@
     "graphql": "^16.5.0",
     "pg": "^8.7.3",
     "sequelize": "^6.21.3",
-    "sequelize-auto": "^0.8.8"
+    "sequelize-auto": "^0.8.8",
+    "ts-node": "^10.9.1"
   }
 }

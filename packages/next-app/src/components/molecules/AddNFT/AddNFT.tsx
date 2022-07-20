@@ -6,8 +6,8 @@ import router from "next/router";
 import React from "react";
 import { MdAdd } from "react-icons/md";
 
-import networks from "../../../../../common/configs/networks.json";
-import { ChainId } from "../../../../../common/types/network";
+import networks from "../../../../../shared/src/configs/networks.json";
+import { ChainId } from "../../../../../shared/src/types/network";
 
 export type SwapStatus = "inputOffer" | "inputPrice" | "preview";
 export type SwapType = "offer" | "fulfill";

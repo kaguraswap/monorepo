@@ -1,6 +1,6 @@
 overwrite: true
 schema: "http://localhost:8080/v1/graphql"
-documents: queries/*.graphql
+documents: src/graphql/*.graphql
 generates:
   dist/graphql.ts:
     plugins:

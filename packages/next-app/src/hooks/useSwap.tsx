@@ -2,10 +2,9 @@ import axios from "axios";
 import { ethers } from "ethers";
 import { useAccount, useSigner } from "wagmi";
 
-import { TIP_RECIPIENT } from "../../../common/configs/app";
-import { OrderDirection, OrderType, SignedOrder } from "../../../common/types/order";
-import { PERCENTAGE_BASE } from "../../../common/utils/constant";
 import { KaguraSDK } from "../../../hardhat/lib";
+import { PERCENTAGE_BASE, TIP_RECIPIENT } from "../../../shared/src/configs/app";
+import { OrderDirection, OrderType, SignedOrder } from "../../../shared/src/types/order";
 
 export const useSwap = () => {
   const { data: signer } = useSigner();

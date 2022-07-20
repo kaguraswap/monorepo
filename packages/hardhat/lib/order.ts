@@ -4,8 +4,8 @@ import { CreateInputItem, OrderWithCounter } from "@opensea/seaport-js/lib/types
 import { ERC721OrderStructSerialized, NftSwapV4 as ZeroEx, SignedERC721OrderStruct } from "@traderxyz/nft-swap-sdk";
 import { ethers } from "ethers";
 
-import { OrderDirection, OrderFee, OrderType, SignedOrder } from "../../common/types/order";
-import { INVALID_ARGUMENT } from "../../common/utils/error";
+import { OrderDirection, OrderFee, OrderType, SignedOrder } from "../../shared/src/types/order";
+import { INVALID_ARGUMENT } from "../../shared/src/utils/error";
 
 export interface Overrides {
   seaport?: string;
