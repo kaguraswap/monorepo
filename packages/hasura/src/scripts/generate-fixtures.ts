@@ -4,8 +4,6 @@ import fs from "fs";
 import path from "path";
 
 import networks from "../../../shared/src/configs/networks.json";
-import { AssetAttributes, OrderAttributes } from "../../dist/entity/init-models";
-import { OrderProtocol_Enum } from "../../dist/graphql";
 
 const main = () => {
   const possibleContractAddress = [];
@@ -19,7 +17,7 @@ const main = () => {
   }
   possibleWalletAddress.push("0x9af9ee7729efa8f3c0a897b4b8ffc6230e013cd5");
 
-  const assets: AssetAttributes[] = [];
+  const assets = [];
   for (let i = 0; i < 1000; i++) {
     assets.push({
       chainId: faker.helpers.arrayElement(Object.keys(networks)),
@@ -35,14 +33,14 @@ const main = () => {
     });
   }
 
-  const orders: OrderAttributes[] = [];
+  const orders = [];
   for (let i = 0; i < 1000; i++) {
     const asset = faker.helpers.arrayElement(assets);
     const price = ethers.utils.parseEther(String(faker.datatype.number({ min: 0.001, max: 100 }))).toString();
     const hash = ethers.utils.hexlify(ethers.utils.randomBytes(32));
     orders.push({
       id: hash,
-      protocol: faker.helpers.arrayElement([OrderProtocol_Enum.Seaport, "zeroEx"]),
+      protocol: faker.helpers.arrayElement(["seaport", "zeroEx"]),
       direction: faker.helpers.arrayElement(["sell"]),
       chainId: asset.chainId,
       contractAddress: asset.contractAddress,
@@ -54,9 +52,9 @@ const main = () => {
       isValid: faker.helpers.arrayElement([true, false]),
     });
   }
-  fs.mkdirSync(path.join(__dirname, "../dist/fixtures"), { recursive: true });
-  fs.writeFileSync(path.join(__dirname, "../dist/fixtures/assets.json"), JSON.stringify(assets));
-  fs.writeFileSync(path.join(__dirname, "../dist/fixtures/orders.json"), JSON.stringify(orders));
+  fs.mkdirSync(path.join(__dirname, "../../dist/fixtures"), { recursive: true });
+  fs.writeFileSync(path.join(__dirname, "../../dist/fixtures/assets.json"), JSON.stringify(assets));
+  fs.writeFileSync(path.join(__dirname, "../../dist/fixtures/orders.json"), JSON.stringify(orders));
 };
 
 main();

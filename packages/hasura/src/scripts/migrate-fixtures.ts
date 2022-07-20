@@ -1,5 +1,5 @@
-import assets from "../dist/seeds/assets.json";
-import orders from "../dist/seeds/orders.json";
+import assets from "../../dist/fixtures/assets.json";
+import orders from "../../dist/fixtures/orders.json";
 import { models } from "../sequelize";
 
 const main = () => {
