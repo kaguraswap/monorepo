@@ -4,8 +4,8 @@ import protocols from "../../../../../common/configs/protocols.json";
 export const sortByOptions = {
   defaultValue: "",
   options: [
-    { label: "Price Low to High", value: "orders_is_valid_aggregate-min-sortablePrice-asc" },
-    { label: "Price High to Low", value: "orders_is_valid_aggregate-min-sortablePrice-desc" },
+    { label: "Price Low to High", value: "validOrders_aggregate-min-sortablePrice-asc" },
+    { label: "Price High to Low", value: "validOrders_aggregate-min-sortablePrice-desc" },
   ],
 };
 

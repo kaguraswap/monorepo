@@ -16,8 +16,8 @@ import { networkFilter, protocolFilter, sortByOptions, statusFilter } from "./da
 
 export interface QueryCondition {
   chainId: string[];
-  "orders_is_valid-protocol": string[];
-  "orders_is_valid-direction": string[];
+  "validOrders-protocol": string[];
+  "validOrders-direction": string[];
   orderBy?: string;
 }
 
@@ -25,14 +25,16 @@ export interface AssetsProps {
   assets: AssetsFragment[];
 }
 
+// TODO: keep filter and sort
+// TODO: apply filter and sort when loaded
 export const Assets: React.FC<AssetsProps> = ({ assets }) => {
   const { isOpen, onToggle, onClose } = useDisclosure();
   const router = useRouter();
 
   const [conditions, setConditions] = React.useState<QueryCondition>({
     chainId: [],
-    "orders_is_valid-protocol": [],
-    "orders_is_valid-direction": [],
+    "validOrders-protocol": [],
+    "validOrders-direction": [],
   });
 
   const handleConditionChange = (key: string, value: string | string[]) => {
@@ -84,14 +86,14 @@ export const Assets: React.FC<AssetsProps> = ({ assets }) => {
             options={statusFilter.options}
             label="Status"
             onChange={(value) => {
-              handleConditionChange("orders_is_valid-direction", value);
+              handleConditionChange("validOrders-direction", value);
             }}
           />
           <CheckboxFilter
             options={protocolFilter.options}
             label="Protocol"
             onChange={(value) => {
-              handleConditionChange("orders_is_valid-protocol", value);
+              handleConditionChange("validOrders-protocol", value);
             }}
           />
 

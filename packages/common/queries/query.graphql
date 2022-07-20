@@ -10,7 +10,7 @@ fragment Assets on assets {
   tokenId
   holder
   metadata
-  orders {
+  validOrders {
     price
   }
 }
@@ -27,7 +27,7 @@ fragment Asset on assets {
   tokenId
   holder
   metadata
-  orders {
+  validOrders {
     id
     direction
     protocol

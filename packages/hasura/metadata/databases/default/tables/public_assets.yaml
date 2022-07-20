@@ -24,12 +24,12 @@ array_relationships:
           contractAddress: contractAddress
           chainId: chainId
           tokenId: tokenId
-  - name: orders_is_valid
+  - name: validOrders
     using:
       manual_configuration:
         remote_table:
           schema: public
-          name: orders_is_valid
+          name: validOrders
         insertion_order: null
         column_mapping:
           contractAddress: contractAddress
