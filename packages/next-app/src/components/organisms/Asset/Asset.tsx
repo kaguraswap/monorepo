@@ -46,11 +46,11 @@ export const Asset: React.FC<AssetProps> = ({ asset }) => {
   };
 
   const cancel = async () => {
-    await _cancel(selectedProtocol, asset.orders[0].signedOrder);
+    await _cancel(selectedProtocol, asset.validOrders[0].signedOrder);
   };
 
   const fulfill = async () => {
-    await _fulfill(selectedProtocol, asset.orders[0].signedOrder);
+    await _fulfill(selectedProtocol, asset.validOrders[0].signedOrder);
   };
 
   const network = networks[asset.chainId as ChainId].name;
@@ -70,7 +70,7 @@ export const Asset: React.FC<AssetProps> = ({ asset }) => {
             <>
               {asset.holder === address?.toLowerCase() && (
                 <>
-                  {asset.orders.length === 0 && (
+                  {asset.validOrders.length === 0 && (
                     <>
                       <VStack spacing={2} mb="8">
                         <FormControl>
@@ -115,7 +115,7 @@ export const Asset: React.FC<AssetProps> = ({ asset }) => {
                       </Button>
                     </>
                   )}
-                  {asset.orders.length > 0 && (
+                  {asset.validOrders.length > 0 && (
                     <>
                       <Button width="100%" onClick={cancel}>
                         Cancel
@@ -127,8 +127,8 @@ export const Asset: React.FC<AssetProps> = ({ asset }) => {
               {asset.holder !== address?.toLowerCase() && (
                 <>
                   {/* TODO: implement offer */}
-                  {asset.orders.length === 0 && <></>}
-                  {asset.orders.length > 0 && (
+                  {asset.validOrders.length === 0 && <></>}
+                  {asset.validOrders.length > 0 && (
                     <>
                       <Button width="100%" onClick={fulfill}>
                         Buy

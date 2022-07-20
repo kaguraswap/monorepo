@@ -4,6 +4,7 @@ import { AddNFT } from "components/molecules/AddNFT";
 import { AssetListItem } from "components/molecules/AssetListItem";
 import { CheckboxFilter } from "components/molecules/CheckBoxFIlter";
 import { FilterDrawer } from "components/molecules/FilterDrawer";
+import { arrayify } from "lib/utils";
 import { useRouter } from "next/router";
 import qs from "query-string";
 import React from "react";
@@ -15,37 +16,21 @@ import { ChainId } from "../../../../../common/types/network";
 import { networkFilter, protocolFilter, sortByOptions, statusFilter } from "./data";
 
 export interface QueryCondition {
-  chainId: string[];
-  "validOrders-protocol": string[];
-  "validOrders-direction": string[];
-  orderBy?: string;
+  [key: string]: string | string[];
 }
 
 export interface AssetsProps {
   assets: AssetsFragment[];
 }
 
-// TODO: keep filter and sort
-// TODO: apply filter and sort when loaded
 export const Assets: React.FC<AssetsProps> = ({ assets }) => {
   const { isOpen, onToggle, onClose } = useDisclosure();
   const router = useRouter();
 
-  const [conditions, setConditions] = React.useState<QueryCondition>({
-    chainId: [],
-    "validOrders-protocol": [],
-    "validOrders-direction": [],
-  });
-
-  const handleConditionChange = (key: string, value: string | string[]) => {
-    setConditions({ ...conditions, [key]: value });
-  };
-
-  React.useEffect(() => {
-    console.log(conditions);
-    const query = qs.stringify(conditions);
+  const handleConditionChange = (key: string, value: string[]) => {
+    const query = qs.stringify({ ...router.query, [key]: value });
     router.push(`/?${query}`, undefined, { shallow: true });
-  }, [conditions]);
+  };
 
   return (
     <Box>
@@ -61,7 +46,7 @@ export const Assets: React.FC<AssetsProps> = ({ assets }) => {
             width="180px"
             placeholder="Sort"
             onChange={(e) => {
-              handleConditionChange("orderBy", e.target.value);
+              handleConditionChange("orderBy", [e.target.value]);
             }}
           >
             {sortByOptions.options.map((option) => (
@@ -81,6 +66,7 @@ export const Assets: React.FC<AssetsProps> = ({ assets }) => {
             onChange={(value) => {
               handleConditionChange("chainId", value);
             }}
+            value={arrayify(router.query.chainId)}
           />
           <CheckboxFilter
             options={statusFilter.options}
@@ -88,6 +74,7 @@ export const Assets: React.FC<AssetsProps> = ({ assets }) => {
             onChange={(value) => {
               handleConditionChange("validOrders-direction", value);
             }}
+            value={arrayify(router.query["validOrders-direction"])}
           />
           <CheckboxFilter
             options={protocolFilter.options}
@@ -95,8 +82,8 @@ export const Assets: React.FC<AssetsProps> = ({ assets }) => {
             onChange={(value) => {
               handleConditionChange("validOrders-protocol", value);
             }}
+            value={arrayify(router.query["validOrders-protocol"])}
           />
-
           {/* TODO: Contract Address */}
         </Stack>
       </FilterDrawer>

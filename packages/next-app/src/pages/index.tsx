@@ -1,5 +1,6 @@
 import { HomeTemplate, HomeTemplateProps } from "components/templates/Home";
 import { toHasuraCondition } from "lib/hasura";
+import { isEmpty } from "lib/utils";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import React from "react";
@@ -23,6 +24,9 @@ const HomePage: NextPage<HomeTemplateProps> = () => {
   }, [data]);
 
   React.useEffect(() => {
+    if (isEmpty(query)) {
+      return;
+    }
     const variables = toHasuraCondition(query);
     setVariables(variables);
   }, [query]);

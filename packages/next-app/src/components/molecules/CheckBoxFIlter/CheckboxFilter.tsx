@@ -5,17 +5,18 @@ import { SelectOption } from "types/ui";
 interface CheckboxFilterProps {
   options: SelectOption[];
   label: string;
+  value?: string[];
   onChange?: (value: string[]) => void;
 }
 
-export const CheckboxFilter: React.FC<CheckboxFilterProps> = ({ options, label, onChange }) => {
+export const CheckboxFilter: React.FC<CheckboxFilterProps> = ({ options, label, onChange, value }) => {
   return (
     <Stack spacing={"2"}>
       <FormLabel fontWeight="bold">{label}</FormLabel>
-      <CheckboxGroup onChange={onChange}>
+      <CheckboxGroup onChange={onChange} value={value}>
         {options.map((option) => (
           <Checkbox key={option.value} value={option.value}>
-            <span>{option.label}</span>
+            {option.label}
           </Checkbox>
         ))}
       </CheckboxGroup>
