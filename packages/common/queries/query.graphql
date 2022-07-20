@@ -1,5 +1,5 @@
-subscription Home {
-  assets(where: { metadata: { _is_null: false } }) {
+subscription Home($where: assets_bool_exp, $orderBy: [assets_order_by!]) {
+  assets(where: $where, order_by: $orderBy) {
     ...Assets
   }
 }
@@ -10,15 +10,13 @@ fragment Assets on assets {
   tokenId
   holder
   metadata
-  orders(where: { isValid: { _eq: true }, direction: { _eq: "sell" } }, order_by: { sortablePrice: desc }) {
+  validOrders {
     price
   }
 }
 
-subscription Asset($chainId: String, $contractAddress: String, $tokenId: String) {
-  assets(
-    where: { chainId: { _eq: $chainId }, contractAddress: { _eq: $contractAddress }, tokenId: { _eq: $tokenId } }
-  ) {
+subscription Asset($where: assets_bool_exp) {
+  assets(where: $where) {
     ...Asset
   }
 }
@@ -29,7 +27,7 @@ fragment Asset on assets {
   tokenId
   holder
   metadata
-  orders(where: { isValid: { _eq: true }, direction: { _eq: "sell" } }, order_by: { sortablePrice: desc }) {
+  validOrders {
     id
     direction
     protocol

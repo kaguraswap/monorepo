@@ -2,19 +2,16 @@ import networks from "../../../../../common/configs/networks.json";
 import protocols from "../../../../../common/configs/protocols.json";
 
 export const sortByOptions = {
-  defaultValue: "price-low-to-high",
+  defaultValue: "",
   options: [
-    { label: "Price Low to High", value: "price-low-to-high" },
-    { label: "Price High to Low", value: "price-high-to-low" },
+    { label: "Price Low to High", value: "validOrders_aggregate-min-sortablePrice-asc" },
+    { label: "Price High to Low", value: "validOrders_aggregate-min-sortablePrice-desc" },
   ],
 };
 
 export const statusFilter = {
   defaultValue: [],
-  options: [
-    { label: "On Sale", value: "on-sale" },
-    { label: "Has Offers", value: "has-offer" },
-  ],
+  options: [{ label: "On Sale", value: "sell" }],
 };
 
 export const protocolFilter = {

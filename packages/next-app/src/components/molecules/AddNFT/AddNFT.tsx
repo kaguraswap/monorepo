@@ -49,7 +49,7 @@ export const AddNFT: React.FC<OfferProps> = () => {
     if (!isNFTFieldReady) {
       return;
     }
-    router.push(`/nft/${selectedChainId}/${inputContractAddress}/${inputTokenId}`);
+    router.push(`/assets/${selectedChainId}/${inputContractAddress}/${inputTokenId}`);
   };
 
   return (

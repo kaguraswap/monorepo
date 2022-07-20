@@ -24,6 +24,17 @@ array_relationships:
           contractAddress: contractAddress
           chainId: chainId
           tokenId: tokenId
+  - name: validOrders
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: validOrders
+        insertion_order: null
+        column_mapping:
+          contractAddress: contractAddress
+          chainId: chainId
+          tokenId: tokenId
 select_permissions:
   - role: anonymous
     permission:
