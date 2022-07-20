@@ -8,17 +8,13 @@ import React from "react";
 import { AssetAttributes } from "../../../../../../hasura/dist/entity/init-models";
 import { AssetFragment, useAssetSubscription } from "../../../../../../shared/dist/graphql";
 import { ChainId } from "../../../../../../shared/src/types/network";
-import { INVALID_ARGUMENT } from "../../../../../../shared/src/utils/error";
 
-// TODO: error handling
 const assetPagePropsSchema = {
   type: "object",
   properties: {
-    properties: {
-      chainId: { type: "string", format: "chainId" },
-      contractAddress: { type: "string", format: "address" },
-      tokenId: { type: "string", format: "tokenId" },
-    },
+    chainId: { type: "string", format: "chainId" },
+    contractAddress: { type: "string", format: "address" },
+    tokenId: { type: "string", format: "tokenId" },
   },
   required: ["chainId", "contractAddress", "tokenId"],
   additionalProperties: false,
@@ -57,7 +53,12 @@ export default AssetPage;
 export const getStaticProps: GetStaticProps = async (context) => {
   const validate = ajv.compile<AssetPageProps>(assetPagePropsSchema);
   if (!validate(context.params)) {
-    throw new Error(INVALID_ARGUMENT);
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/",
+      },
+    };
   }
   const asset = {
     chainId: context.params.chainId,

@@ -5,7 +5,7 @@ import { ERC721OrderStructSerialized, NftSwapV4 as ZeroEx, SignedERC721OrderStru
 import { ethers } from "ethers";
 
 import { OrderDirection_Enum, OrderProtocol_Enum } from "../../hasura/dist/graphql";
-import { INVALID_ARGUMENT } from "../../shared/src/utils/error";
+import { error } from "../../shared/src/utils/error";
 import { OrderFee, SignedOrder } from "../types/order";
 
 export interface Overrides {
@@ -87,7 +87,7 @@ export class Order {
       return { signedOrder };
     } else {
       if (!currencyItem.contractAddress) {
-        throw new Error(INVALID_ARGUMENT);
+        throw new Error(error.invalidArgument.message);
       }
       const zeroEx = await this._getZeroEx(offerer);
 

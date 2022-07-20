@@ -39,11 +39,3 @@ ajv.addFormat("direction", {
     return isOrderDirection(direction);
   },
 });
-
-export const orderSchema = {
-  properties: {
-    protocol: { type: "string", format: "protocol" },
-    direction: { type: "string", format: "direction" },
-  },
-  required: ["protocol", "direction"],
-};

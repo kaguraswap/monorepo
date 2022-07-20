@@ -1,5 +1,6 @@
 import axios from "axios";
 import { ethers } from "ethers";
+import httpError from "http-errors";
 import { ajv } from "lib/ajv";
 import type { NextApiRequest, NextApiResponse } from "next";
 
@@ -11,9 +12,8 @@ import { models } from "../../../../../hasura/src/sequelize";
 import { AssetMetadata } from "../../../../../hasura/src/types/asset-metadata";
 import networks from "../../../../../shared/src/configs/networks.json";
 import { ChainId } from "../../../../../shared/src/types/network";
-import { INVALID_ARGUMENT } from "../../../../../shared/src/utils/error";
+import { error } from "../../../../../shared/src/utils/error";
 
-// TODO: error handling
 const assetSyncPropsSchema = {
   type: "object",
   properties: {
@@ -32,7 +32,7 @@ export interface AssetSyncProps extends Pick<AssetAttributes, "contractAddress" 
 export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const validate = ajv.compile<AssetSyncProps>(assetSyncPropsSchema);
   if (!validate(req.body)) {
-    throw new Error(INVALID_ARGUMENT);
+    throw httpError(error.invalidArgument.code, error.invalidArgument.message);
   }
   const { chainId, tokenId } = req.body;
   let { contractAddress } = req.body;
