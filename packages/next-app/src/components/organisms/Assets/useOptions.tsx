@@ -2,8 +2,8 @@ import { userModeState } from "lib/recoil/mode";
 import React from "react";
 import { useRecoilValue } from "recoil";
 
-import networks from "../../../../../common/configs/networks.json";
-import protocols from "../../../../../common/configs/protocols.json";
+import networks from "../../../../../shared/src/configs/networks.json";
+import protocols from "../../../../../shared/src/configs/protocols.json";
 
 export const useOptions = () => {
   const { isIncludeTestnetMode } = useRecoilValue(userModeState);

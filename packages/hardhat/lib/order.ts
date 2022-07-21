@@ -4,8 +4,9 @@ import { CreateInputItem, OrderWithCounter } from "@opensea/seaport-js/lib/types
 import { ERC721OrderStructSerialized, NftSwapV4 as ZeroEx, SignedERC721OrderStruct } from "@traderxyz/nft-swap-sdk";
 import { ethers } from "ethers";
 
-import { OrderDirection, OrderFee, OrderType, SignedOrder } from "../../common/types/order";
-import { INVALID_ARGUMENT } from "../../common/utils/error";
+import { OrderDirection_Enum, OrderProtocol_Enum } from "../../hasura/dist/graphql";
+import { error } from "../../shared/src/utils/error";
+import { OrderFee, SignedOrder } from "../types/order";
 
 export interface Overrides {
   seaport?: string;
@@ -35,20 +36,20 @@ export class Order {
     });
   };
 
-  public hash = async (protocol: OrderType, signedOrder: SignedOrder) => {
-    if (protocol === "seaport") {
-      signedOrder = signedOrder as OrderWithCounter;
+  public hash = async (protocol: OrderProtocol_Enum, signedOrder: SignedOrder) => {
+    if (protocol === OrderProtocol_Enum.Seaport) {
+      signedOrder = <OrderWithCounter>signedOrder;
       return this._seaport.getOrderHash(signedOrder.parameters);
     } else {
-      const order = signedOrder as ERC721OrderStructSerialized;
+      const order = <ERC721OrderStructSerialized>signedOrder;
       const zeroEx = await this._getZeroEx();
       return await zeroEx.getOrderHash(order);
     }
   };
 
   public offer = async (
-    protocol: OrderType,
-    direction: OrderDirection,
+    protocol: OrderProtocol_Enum,
+    direction: OrderDirection_Enum,
     erc721Item: {
       contractAddress: string;
       tokenId: string;
@@ -60,7 +61,7 @@ export class Order {
     offerer: string,
     fees?: OrderFee[]
   ) => {
-    if (protocol === "seaport") {
+    if (protocol === OrderProtocol_Enum.Seaport) {
       const erc721ItemAdjusted: CreateInputItem = {
         itemType: ItemType.ERC721,
         token: erc721Item.contractAddress,
@@ -71,7 +72,7 @@ export class Order {
         amount: currencyItem.amount,
       };
       const order =
-        direction === "sell"
+        direction === OrderDirection_Enum.Sell
           ? {
               offer: [erc721ItemAdjusted],
               consideration: [{ ...erc20ItemAdjusted, recipient: offerer }],
@@ -86,9 +87,10 @@ export class Order {
       return { signedOrder };
     } else {
       if (!currencyItem.contractAddress) {
-        throw new Error(INVALID_ARGUMENT);
+        throw new Error(error.invalidArgument.message);
       }
       const zeroEx = await this._getZeroEx(offerer);
+
       const erc721ItemAdjusted = {
         type: "ERC721" as const,
         tokenAddress: erc721Item.contractAddress,
@@ -99,7 +101,7 @@ export class Order {
         tokenAddress: currencyItem.contractAddress,
         amount: currencyItem.amount,
       };
-      const item = direction === "sell" ? erc721ItemAdjusted : currencyItemAdjusted;
+      const item = direction === OrderDirection_Enum.Sell ? erc721ItemAdjusted : currencyItemAdjusted;
       const { contractApproved } = await zeroEx.loadApprovalStatus(item, offerer);
       if (!contractApproved) {
         const approvalTx = await zeroEx.approveTokenOrNftByAsset(item, offerer);
@@ -111,42 +113,42 @@ export class Order {
     }
   };
 
-  public validate = async (protocol: OrderType, signedOrder: SignedOrder) => {
-    if (protocol === "seaport") {
-      signedOrder = signedOrder as OrderWithCounter;
+  public validate = async (protocol: OrderProtocol_Enum, signedOrder: SignedOrder) => {
+    if (protocol === OrderProtocol_Enum.Seaport) {
+      signedOrder = <OrderWithCounter>signedOrder;
       return await this._seaport
         .validate([signedOrder], signedOrder.parameters.offerer)
         .callStatic()
         .catch(() => false);
     } else {
-      signedOrder = signedOrder as SignedERC721OrderStruct;
+      signedOrder = <SignedERC721OrderStruct>signedOrder;
       const zeroEx = await this._getZeroEx();
       const status = await zeroEx.getOrderStatus(signedOrder);
       return status === 1;
     }
   };
 
-  public cancel = async (protocol: OrderType, signedOrder: SignedOrder) => {
-    if (protocol === "seaport") {
-      signedOrder = signedOrder as OrderWithCounter;
+  public cancel = async (protocol: OrderProtocol_Enum, signedOrder: SignedOrder) => {
+    if (protocol === OrderProtocol_Enum.Seaport) {
+      signedOrder = <OrderWithCounter>signedOrder;
       await this._seaport.cancelOrders([signedOrder.parameters], signedOrder.parameters.offerer).transact();
     } else {
-      signedOrder = signedOrder as SignedERC721OrderStruct;
+      signedOrder = <SignedERC721OrderStruct>signedOrder;
       const zeroEx = await this._getZeroEx(signedOrder.maker);
       await zeroEx.cancelOrder(signedOrder.nonce, "ERC721");
     }
   };
 
-  public fulfill = async (protocol: OrderType, signedOrder: SignedOrder, fulfiller: string) => {
-    if (protocol === "seaport") {
-      signedOrder = signedOrder as OrderWithCounter;
+  public fulfill = async (protocol: OrderProtocol_Enum, signedOrder: SignedOrder, fulfiller: string) => {
+    if (protocol === OrderProtocol_Enum.Seaport) {
+      signedOrder = <OrderWithCounter>signedOrder;
       const { executeAllActions } = await this._seaport.fulfillOrders({
         fulfillOrderDetails: [{ order: signedOrder }],
         accountAddress: fulfiller,
       });
       await executeAllActions();
     } else {
-      signedOrder = signedOrder as SignedERC721OrderStruct;
+      signedOrder = <SignedERC721OrderStruct>signedOrder;
       const zeroEx = await this._getZeroEx(fulfiller);
       const item =
         signedOrder.direction === 0

@@ -1,0 +1,37 @@
+table:
+  schema: public
+  name: orders
+object_relationships:
+  - name: asset
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: assets
+        insertion_order: null
+        column_mapping:
+          contractAddress: contractAddress
+          chainId: chainId
+          tokenId: tokenId
+  - name: orderDirection
+    using:
+      foreign_key_constraint_on: direction
+  - name: orderProtocol
+    using:
+      foreign_key_constraint_on: protocol
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - id
+        - chainId
+        - contractAddress
+        - tokenId
+        - protocol
+        - isValid
+        - signedOrder
+        - offerer
+        - sortablePrice
+        - price
+        - direction
+      filter: {}

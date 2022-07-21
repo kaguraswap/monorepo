@@ -1,6 +1,3 @@
-import networks from "../../../../../common/configs/networks.json";
-import protocols from "../../../../../common/configs/protocols.json";
-
 export const sortByOptions = {
   defaultValue: "",
   options: [

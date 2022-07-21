@@ -1,28 +1,13 @@
 import axios from "axios";
 import { AssetTemplate } from "components/templates/Asset";
-import { ajv, assetSchema } from "lib/ajv";
+import { AssetKey, validate } from "lib/ajv";
 import { toHasuraCondition } from "lib/hasura";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import React from "react";
 
-import { AssetAttributes } from "../../../../../../common/dist/entity/init-models";
-import { AssetFragment, useAssetSubscription } from "../../../../../../common/dist/graphql";
-import { ChainId } from "../../../../../../common/types/network";
-import { INVALID_ARGUMENT } from "../../../../../../common/utils/error";
+import { AssetFragment, useAssetSubscription } from "../../../../../../hasura/dist/graphql";
 
-// TODO: error handling
-const assetPagePropsSchema = {
-  type: "object",
-  properties: {
-    ...assetSchema.properties,
-  },
-  required: assetSchema.required,
-  additionalProperties: false,
-};
-
-export interface AssetPageProps extends Pick<AssetAttributes, "contractAddress" | "tokenId"> {
-  chainId: ChainId;
-}
+export type AssetPageProps = AssetKey;
 
 const AssetPage: NextPage<AssetPageProps> = ({ chainId, contractAddress, tokenId }) => {
   const [asset, setAssets] = React.useState<AssetFragment>();
@@ -51,9 +36,13 @@ const AssetPage: NextPage<AssetPageProps> = ({ chainId, contractAddress, tokenId
 export default AssetPage;
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  const validate = ajv.compile<AssetPageProps>(assetPagePropsSchema);
-  if (!validate(context.params)) {
-    throw new Error(INVALID_ARGUMENT);
+  if (!validate.assetKey(context.params)) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/",
+      },
+    };
   }
   const asset = {
     chainId: context.params.chainId,

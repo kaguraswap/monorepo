@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import { HasuraVariables } from "types/hasura";
 
-import { AssetsFragment, useHomeSubscription } from "../../../common/dist/graphql";
+import { AssetsFragment, useHomeSubscription } from "../../../hasura/dist/graphql";
 
 // TODO: add load
 const HomePage: NextPage<HomeTemplateProps> = () => {

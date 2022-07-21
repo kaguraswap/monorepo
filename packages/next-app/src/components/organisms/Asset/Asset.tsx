@@ -20,12 +20,11 @@ import { useSwap } from "hooks/useSwap";
 import React from "react";
 import { useAccount } from "wagmi";
 
-import { DEFAULT_PRICE, DEFAULT_TIP } from "../../../../../common/configs/app";
-import networks from "../../../../../common/configs/networks.json";
-import protocols from "../../../../../common/configs/protocols.json";
-import { AssetFragment } from "../../../../../common/dist/graphql";
-import { ChainId } from "../../../../../common/types/network";
-import { OrderType } from "../../../../../common/types/order";
+import { AssetFragment, OrderDirection_Enum, OrderProtocol_Enum } from "../../../../../hasura/dist/graphql";
+import { DEFAULT_PRICE, DEFAULT_TIP } from "../../../../../shared/src/configs/app";
+import networks from "../../../../../shared/src/configs/networks.json";
+import protocols from "../../../../../shared/src/configs/protocols.json";
+import { ChainId } from "../../../../../shared/src/types/network";
 
 export interface AssetProps {
   asset: AssetFragment;
@@ -33,7 +32,9 @@ export interface AssetProps {
 
 export const Asset: React.FC<AssetProps> = ({ asset }) => {
   const { value: inputPrice, handleInput: handleInputPrice } = useInput(DEFAULT_PRICE);
-  const { value: selectedProtocol, handleInput: handleSelectedProtocol } = useInput<OrderType>("seaport");
+  const { value: selectedProtocol, handleInput: handleSelectedProtocol } = useInput<OrderProtocol_Enum>(
+    OrderProtocol_Enum.Seaport
+  );
   const { value: inputTip, handleInput: handleInputTip } = useInput(DEFAULT_TIP);
 
   const { isWagmiConnected } = useIsWagmiConnected();
@@ -42,7 +43,15 @@ export const Asset: React.FC<AssetProps> = ({ asset }) => {
   const { offer: _offer, cancel: _cancel, fulfill: _fulfill } = useSwap();
 
   const offer = async () => {
-    await _offer(selectedProtocol, "sell", asset.chainId, asset.contractAddress, asset.tokenId, inputPrice, inputTip);
+    await _offer(
+      selectedProtocol,
+      OrderDirection_Enum.Sell,
+      asset.chainId,
+      asset.contractAddress,
+      asset.tokenId,
+      inputPrice,
+      inputTip
+    );
   };
 
   const cancel = async () => {
@@ -105,7 +114,7 @@ export const Asset: React.FC<AssetProps> = ({ asset }) => {
                           <Select onChange={handleSelectedProtocol} value={selectedProtocol}>
                             {networks[asset.chainId as ChainId].protocols.map((protocol) => (
                               <option key={protocol} value={protocol}>
-                                {protocols[protocol as OrderType].name}
+                                {protocols[protocol as "seaport" | "zeroEx"].name}
                               </option>
                             ))}
                           </Select>

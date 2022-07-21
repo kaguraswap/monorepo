@@ -1,36 +1,20 @@
 import axios from "axios";
 import { ethers } from "ethers";
-import { ajv, assetSchema } from "lib/ajv";
-import { models } from "lib/sequelize";
+import httpError from "http-errors";
+import { validate } from "lib/ajv";
 import type { NextApiRequest, NextApiResponse } from "next";
 
-import networks from "../../../../../common/configs/networks.json";
-import { AssetAttributes } from "../../../../../common/dist/entity/init-models";
-import { AssetMetadata } from "../../../../../common/types/asset-metadata";
-import { ChainId } from "../../../../../common/types/network";
-import { INVALID_ARGUMENT } from "../../../../../common/utils/error";
 import IERC721MetadataArtifact from "../../../../../hardhat/artifacts/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol/IERC721Metadata.json";
 import IERC721Artifact from "../../../../../hardhat/artifacts/@openzeppelin/contracts/token/ERC721/IERC721.sol/IERC721.json";
 import { IERC721, IERC721Metadata } from "../../../../../hardhat/typechain";
-
-// TODO: error handling
-const assetSyncPropsSchema = {
-  type: "object",
-  properties: {
-    ...assetSchema.properties,
-  },
-  required: assetSchema.required,
-  additionalProperties: false,
-};
-
-export interface AssetSyncProps extends Pick<AssetAttributes, "contractAddress" | "tokenId"> {
-  chainId: ChainId;
-}
+import { models } from "../../../../../hasura/src/sequelize";
+import { AssetMetadata } from "../../../../../hasura/src/types/asset-metadata";
+import networks from "../../../../../shared/src/configs/networks.json";
+import { error } from "../../../../../shared/src/utils/error";
 
 export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const validate = ajv.compile<AssetSyncProps>(assetSyncPropsSchema);
-  if (!validate(req.body)) {
-    throw new Error(INVALID_ARGUMENT);
+  if (!validate.assetKey(req.body)) {
+    throw httpError(error.invalidArgument.code, error.invalidArgument.message);
   }
   const { chainId, tokenId } = req.body;
   let { contractAddress } = req.body;
