@@ -12,8 +12,8 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { AssetListItem } from "components/molecules/AssetListItem";
-import { ConnectWallet } from "components/molecules/ConnectWallet";
+import { AssetListItem } from "components/organisms/AssetListItem";
+import { ConnectWallet } from "components/organisms/ConnectWallet";
 import { useInput } from "hooks/useInput";
 import { useIsWagmiConnected } from "hooks/useIsWagmiConnected";
 import { useSwap } from "hooks/useSwap";

@@ -1,10 +1,10 @@
-import { FormControl, FormLabel, IconButton, Switch, useColorMode,useDisclosure, VStack } from "@chakra-ui/react";
+import { FormControl, FormLabel, IconButton, Switch, useColorMode, useDisclosure, VStack } from "@chakra-ui/react";
+import { Modal } from "components/molecules/Modal";
 import { userModeState } from "lib/recoil/mode";
 import React from "react";
 import { IoSettingsOutline } from "react-icons/io5";
 import { useRecoilState } from "recoil";
 
-import { Modal } from "../Modal";
 import { isIncludeTestnetModeKey, isNoAssetMetadataModeKey } from "./data";
 
 export const Setting: React.FC = () => {
