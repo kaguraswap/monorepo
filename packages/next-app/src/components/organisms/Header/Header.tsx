@@ -11,7 +11,7 @@ import { Setting } from "../../molecules/Setting";
 export const Header: React.FC = () => {
   const { isWagmiConnected } = useIsWagmiConnected();
   return (
-    <Box as="section">
+    <Box as="header">
       <Box as="nav" alignItems={"center"} bg="bg-surface" p="4">
         <HStack justify="space-between">
           {/* FIXME: want to fix padding in Link */}

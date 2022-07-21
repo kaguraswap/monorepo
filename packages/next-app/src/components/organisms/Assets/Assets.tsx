@@ -36,7 +36,7 @@ export const Assets: React.FC<AssetsProps> = ({ assets }) => {
   const { networkFilterOptions, protocolFilterOptions } = useOptions();
 
   return (
-    <Box>
+    <Box as="section">
       <Flex width="full" justify="space-between">
         <HStack as="button" type="button" px="4" onClick={onToggle} borderWidth="1px" rounded="xl">
           <Icon as={MdFilterList} />

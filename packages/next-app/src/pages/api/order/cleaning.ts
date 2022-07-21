@@ -4,7 +4,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { KaguraSDK } from "../../../../../hardhat/lib";
 import { SignedOrder } from "../../../../../hardhat/types/order";
 import { OrderProtocol_Enum } from "../../../../../hasura/dist/graphql";
-import { models } from "../../../../../hasura/src/sequelize";
+import { models } from "../../../../../hasura/src/lib/sequelize";
 import networks from "../../../../../shared/src/configs/networks.json";
 import { ChainId } from "../../../../../shared/src/types/network";
 

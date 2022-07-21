@@ -7,7 +7,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import IERC721MetadataArtifact from "../../../../../hardhat/artifacts/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol/IERC721Metadata.json";
 import IERC721Artifact from "../../../../../hardhat/artifacts/@openzeppelin/contracts/token/ERC721/IERC721.sol/IERC721.json";
 import { IERC721, IERC721Metadata } from "../../../../../hardhat/typechain";
-import { models } from "../../../../../hasura/src/sequelize";
+import { models } from "../../../../../hasura/src/lib/sequelize";
 import { AssetMetadata } from "../../../../../hasura/src/types/asset-metadata";
 import networks from "../../../../../shared/src/configs/networks.json";
 import { error } from "../../../../../shared/src/utils/error";

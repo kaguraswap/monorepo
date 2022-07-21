@@ -5,7 +5,7 @@ import { icons } from "./data";
 
 export const Footer: React.FC = () => {
   return (
-    <Box>
+    <Box as="footer">
       <Stack p="4" justify="space-between" direction={{ base: "column-reverse", md: "row" }} align="center">
         <Text>&copy; {new Date().getFullYear()} KaguraSwap</Text>
         <ButtonGroup variant={"ghost"}>

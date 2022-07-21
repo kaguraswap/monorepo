@@ -10,8 +10,10 @@
     "build": "run-p build:*",
     "build:graphql": "graphql-codegen --config codegen.yml",
     "build:orm": "sequelize-auto --host localhost --user postgres --pass postgrespassword --port 5432 --output ./dist/entity --dialect postgres --database postgres --lang ts --caseModel p --caseProp c --caseFile k --schema public --views --singularize",
-    "build:fixtures": "ts-node ./src/scripts/generate-fixtures.ts",
-    "migrate-fixtures": "ts-node ./src/scripts/migrate-fixtures.ts"
+    "build:fixtures": "run-s build:fixtures:*",
+    "build:fixtures:generate": "ts-node ./src/fixtures/generate.ts",
+    "build:fixtures:migrate": "ts-node ./src/fixtures/migrate.ts",
+    "build:fixtures:fetch-graphql": "ts-node ./src/fixtures/fetch-graphql.ts"
   },
   "watch": {
     "build:graphql": {
@@ -36,7 +38,7 @@
     },
     "build:fixtures": {
       "patterns": [
-        "./src/scripts/generate-fixtures.ts"
+        "./src/fixtures"
       ],
       "extensions": [
         "ts"
@@ -49,8 +51,9 @@
     "@graphql-codegen/typescript": "^2.7.1",
     "@graphql-codegen/typescript-operations": "^2.5.1",
     "@graphql-codegen/typescript-react-apollo": "^3.3.1",
-    "hasura-cli": "^2.8.4",
+    "cross-fetch": "^3.1.5",
     "graphql": "^16.5.0",
+    "hasura-cli": "^2.8.4",
     "pg": "^8.7.3",
     "sequelize": "^6.21.3",
     "sequelize-auto": "^0.8.8",

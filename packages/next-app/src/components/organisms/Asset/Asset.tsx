@@ -65,7 +65,7 @@ export const Asset: React.FC<AssetProps> = ({ asset }) => {
   const network = networks[asset.chainId as ChainId].name;
 
   return (
-    <SimpleGrid columns={{ base: 1, md: 2 }} gap="8" maxWidth="4xl" mx="auto">
+    <SimpleGrid columns={{ base: 1, md: 2 }} gap="8" maxWidth="4xl" mx="auto" as="section">
       <AssetListItem
         network={network}
         contractAddress={asset.contractAddress}
