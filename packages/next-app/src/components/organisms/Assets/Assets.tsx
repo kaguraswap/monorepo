@@ -1,9 +1,7 @@
 import { Box, Flex, HStack, Icon, Select, SimpleGrid, Stack, Text, useDisclosure } from "@chakra-ui/react";
 import { Link } from "components/atoms/Link";
-import { AddAsset } from "components/molecules/AddAsset";
-import { AssetListItem } from "components/molecules/AssetListItem";
-import { CheckboxFilter } from "components/molecules/CheckBoxFIlter";
-import { FilterDrawer } from "components/molecules/FilterDrawer";
+import { AddAsset } from "components/organisms/AddAsset";
+import { AssetListItem } from "components/organisms/AssetListItem";
 import { arrayify } from "lib/utils";
 import { useRouter } from "next/router";
 import qs from "query-string";
@@ -13,7 +11,9 @@ import { MdFilterList } from "react-icons/md";
 import { AssetsFragment } from "../../../../../hasura/dist/graphql";
 import networks from "../../../../../shared/src/configs/networks.json";
 import { ChainId } from "../../../../../shared/src/types/network";
+import { CheckboxFilter } from "./CheckboxFilter";
 import { sortByOptions, statusFilter } from "./data";
+import { FilterDrawer } from "./FilterDrawer";
 import { useOptions } from "./useOptions";
 
 export interface QueryCondition {
@@ -36,7 +36,7 @@ export const Assets: React.FC<AssetsProps> = ({ assets }) => {
   const { networkFilterOptions, protocolFilterOptions } = useOptions();
 
   return (
-    <Box>
+    <Box as="section">
       <Flex width="full" justify="space-between">
         <HStack as="button" type="button" px="4" onClick={onToggle} borderWidth="1px" rounded="xl">
           <Icon as={MdFilterList} />

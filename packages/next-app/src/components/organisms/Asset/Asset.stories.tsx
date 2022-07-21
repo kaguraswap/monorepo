@@ -1,18 +1,18 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
 
-import { Notification as Component } from "./Notification";
+import asset from "../../../../../hasura/dist/fixtures/graphql/asset.json";
+import { Asset as Component } from "./Asset";
 
 export default {
-  title: "Molecules/Notification",
+  title: "Organisms/Asset",
   component: Component,
 } as ComponentMeta<typeof Component>;
 
 const Template: ComponentStory<typeof Component> = (args) => <Component {...args} />;
 
-export const Notification = Template.bind({});
+export const Asset = Template.bind({});
 
-Notification.args = {
-  message: "Notification Message",
-  link: "http://localhost:6006",
+Asset.args = {
+  asset,
 };

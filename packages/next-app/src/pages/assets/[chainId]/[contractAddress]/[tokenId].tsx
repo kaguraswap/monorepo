@@ -1,11 +1,11 @@
 import axios from "axios";
 import { AssetTemplate } from "components/templates/Asset";
 import { AssetKey, validate } from "lib/ajv";
-import { toHasuraCondition } from "lib/hasura";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import React from "react";
 
-import { AssetFragment, useAssetSubscription } from "../../../../../../hasura/dist/graphql";
+import { AssetFragment, useAssetQuery } from "../../../../../../hasura/dist/graphql";
+import { toHasuraCondition } from "../../../../../../hasura/src/lib/hasura";
 
 export type AssetPageProps = AssetKey;
 
@@ -16,7 +16,7 @@ const AssetPage: NextPage<AssetPageProps> = ({ chainId, contractAddress, tokenId
     return toHasuraCondition({ chainId, contractAddress, tokenId });
   }, [chainId, contractAddress, tokenId]);
 
-  const { data } = useAssetSubscription({
+  const { data } = useAssetQuery({
     variables: {
       where,
     },

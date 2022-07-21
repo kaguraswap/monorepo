@@ -1,14 +1,14 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
 
-import { Setting as Component } from "./Setting";
+import { Fulfill as Component } from "./Fulfill";
 
 export default {
-  title: "Molecules/Setting",
+  title: "Organisms/Fulfill",
   component: Component,
 } as ComponentMeta<typeof Component>;
 
 const Template: ComponentStory<typeof Component> = (args) => <Component {...args} />;
 
-export const Header = Template.bind({});
-Header.args = {};
+export const Fulfill = Template.bind({});
+Fulfill.args = {};
