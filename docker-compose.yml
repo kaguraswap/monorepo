@@ -15,8 +15,8 @@ services:
       - "postgres"
     restart: always
     volumes:
-      - ./packages/hasura/src/migrations:/hasura-migrations
-      - ./packages/hasura/src/metadata:/hasura-metadata
+      - ./packages/hasura/migrations:/hasura-migrations
+      - ./packages/hasura/metadata:/hasura-metadata
     environment:
       ## postgres database to store Hasura metadata
       HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
