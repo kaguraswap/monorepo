@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
+import { OrderDirection_Enum, OrderProtocol_Enum } from "../../hasura/dist/graphql";
 import { describeWithSeaportFixture } from "./utils/setup";
 
 describeWithSeaportFixture(
@@ -13,7 +14,7 @@ describeWithSeaportFixture(
       await erc721Mock.mint(offerer.address, tokenId);
       const { signedOrder } = await sdk.order.offer(
         OrderProtocol_Enum.Seaport,
-        "sell",
+        OrderDirection_Enum.Sell,
         {
           contractAddress: erc721Mock.address,
           tokenId: tokenId,
@@ -40,7 +41,7 @@ describeWithSeaportFixture(
       await erc721Mock.mint(fulfiller.address, tokenId);
       const { signedOrder } = await sdk.order.offer(
         OrderProtocol_Enum.Seaport,
-        "buy",
+        OrderDirection_Enum.Buy,
         {
           contractAddress: erc721Mock.address,
           tokenId: tokenId,
@@ -66,7 +67,7 @@ describeWithSeaportFixture(
       await erc721Mock.mint(offerer.address, tokenId);
       const { signedOrder } = await sdk.order.offer(
         OrderProtocol_Enum.Seaport,
-        "sell",
+        OrderDirection_Enum.Buy,
         {
           contractAddress: erc721Mock.address,
           tokenId: tokenId,
@@ -89,8 +90,8 @@ describeWithSeaportFixture(
       await erc20Mock.mint(fulfiller.address, amount);
       await erc721Mock.mint(offerer.address, tokenId);
       const { signedOrder } = await sdk.order.offer(
-        "zeroEx",
-        "sell",
+        OrderProtocol_Enum.ZeroEx,
+        OrderDirection_Enum.Sell,
         {
           contractAddress: erc721Mock.address,
           tokenId: tokenId,
@@ -103,9 +104,9 @@ describeWithSeaportFixture(
         []
       );
       const previousBalanceOfOfferer = await erc20Mock.balanceOf(offerer.address);
-      expect(await sdk.order.validate("zeroEx", signedOrder)).to.equal(true);
-      await sdk.order.fulfill("zeroEx", signedOrder, fulfiller.address);
-      expect(await sdk.order.validate("zeroEx", signedOrder)).to.equal(false);
+      expect(await sdk.order.validate(OrderProtocol_Enum.ZeroEx, signedOrder)).to.equal(true);
+      await sdk.order.fulfill(OrderProtocol_Enum.ZeroEx, signedOrder, fulfiller.address);
+      expect(await sdk.order.validate(OrderProtocol_Enum.ZeroEx, signedOrder)).to.equal(false);
       expect(await erc20Mock.balanceOf(offerer.address)).to.equal(previousBalanceOfOfferer.add(amount));
       expect(await erc721Mock.ownerOf(tokenId)).to.equal(fulfiller.address);
     });
@@ -117,8 +118,8 @@ describeWithSeaportFixture(
       await erc20Mock.mint(offerer.address, amount);
       await erc721Mock.mint(fulfiller.address, tokenId);
       const { signedOrder } = await sdk.order.offer(
-        "zeroEx",
-        "buy",
+        OrderProtocol_Enum.ZeroEx,
+        OrderDirection_Enum.Buy,
         {
           contractAddress: erc721Mock.address,
           tokenId: tokenId,
@@ -130,9 +131,9 @@ describeWithSeaportFixture(
         offerer.address,
         []
       );
-      expect(await sdk.order.validate("zeroEx", signedOrder)).to.equal(true);
-      await sdk.order.fulfill("zeroEx", signedOrder, fulfiller.address);
-      expect(await sdk.order.validate("zeroEx", signedOrder)).to.equal(false);
+      expect(await sdk.order.validate(OrderProtocol_Enum.ZeroEx, signedOrder)).to.equal(true);
+      await sdk.order.fulfill(OrderProtocol_Enum.ZeroEx, signedOrder, fulfiller.address);
+      expect(await sdk.order.validate(OrderProtocol_Enum.ZeroEx, signedOrder)).to.equal(false);
       expect(await erc721Mock.ownerOf(tokenId)).to.equal(offerer.address);
       expect(await erc20Mock.balanceOf(fulfiller.address)).to.equal(amount);
     });
@@ -143,8 +144,8 @@ describeWithSeaportFixture(
       const amount = "10000";
       await erc721Mock.mint(offerer.address, tokenId);
       const { signedOrder } = await sdk.order.offer(
-        "zeroEx",
-        "sell",
+        OrderProtocol_Enum.ZeroEx,
+        OrderDirection_Enum.Sell,
         {
           contractAddress: erc721Mock.address,
           tokenId: tokenId,
@@ -156,9 +157,9 @@ describeWithSeaportFixture(
         offerer.address,
         []
       );
-      expect(await sdk.order.validate("zeroEx", signedOrder)).to.equal(true);
-      await sdk.order.cancel("zeroEx", signedOrder);
-      expect(await sdk.order.validate("zeroEx", signedOrder)).to.equal(false);
+      expect(await sdk.order.validate(OrderProtocol_Enum.ZeroEx, signedOrder)).to.equal(true);
+      await sdk.order.cancel(OrderProtocol_Enum.ZeroEx, signedOrder);
+      expect(await sdk.order.validate(OrderProtocol_Enum.ZeroEx, signedOrder)).to.equal(false);
     });
   },
   { seaport: true, zeroEx: true }
