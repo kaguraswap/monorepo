@@ -1,5 +1,5 @@
-subscription Home($where: assets_bool_exp, $orderBy: [assets_order_by!]) {
-  assets(where: $where, order_by: $orderBy) {
+subscription Home($where: assets_bool_exp, $orderBy: [assets_order_by!], $offset: Int, $limit: Int) {
+  assets(where: $where, order_by: $orderBy, offset: $offset, limit: $limit) {
     ...Assets
   }
 }

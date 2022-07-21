@@ -11,7 +11,7 @@ import { AssetsFragment, useHomeSubscription } from "../../../hasura/dist/graphq
 // TODO: add load
 const HomePage: NextPage<HomeTemplateProps> = () => {
   const [assets, setAssets] = React.useState<AssetsFragment[]>([]);
-  const [variables, setVariables] = React.useState<HasuraVariables>();
+  const [variables, setVariables] = React.useState<HasuraVariables>({ where: {}, orderBy: {}, limit: 40 });
   const { query } = useRouter();
   const { data } = useHomeSubscription({
     variables,
@@ -31,7 +31,12 @@ const HomePage: NextPage<HomeTemplateProps> = () => {
     setVariables(variables);
   }, [query]);
 
-  return <HomeTemplate assets={assets} />;
+  const loadMore = () => {
+    const newV = { where: variables.where, orderBy: variables.orderBy, limit: variables.limit + 40 };
+    setVariables(newV);
+  };
+
+  return <HomeTemplate assets={assets} loadMore={() => loadMore()} />;
 };
 
 export default HomePage;

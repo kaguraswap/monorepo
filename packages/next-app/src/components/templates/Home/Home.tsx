@@ -6,12 +6,13 @@ import { AssetsFragment } from "../../../../../hasura/dist/graphql";
 
 export interface HomeTemplateProps {
   assets: AssetsFragment[];
+  loadMore: () => void;
 }
 
-export const HomeTemplate: React.FC<HomeTemplateProps> = ({ assets }) => {
+export const HomeTemplate: React.FC<HomeTemplateProps> = ({ assets, loadMore }) => {
   return (
     <DefaultLayout>
-      <Assets assets={assets} />
+      <Assets assets={assets} loadMore={() => loadMore()} />
     </DefaultLayout>
   );
 };
