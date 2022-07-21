@@ -1,0 +1,26 @@
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 16
+        cache: "yarn"
+    - uses: actions/cache@v3
+      id: cache-node_modules
+      with:
+        path: "**/node_modules"
+        key: test-cache-${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+    - if: ${{ steps.cache-node_modules.outputs.cache-hit != 'true' }}
+      run: yarn
+      shell: bash
+    - uses: actions/cache@v3
+      id: cache-dist
+      with:
+        path: "**/dist"
+        key: test-cache-${{ runner.os }}-dist-${{ hashFiles('**/yarn.lock', 'packages/shared/src/configs/**', 'packages/hardhat/contracts/**', 'packages/hasura/metadata/**', 'packages/hasura/migration/**', 'packages/hasura/src/graphql/**', 'packages/hasura/src/fixture/**') }}
+    - if: ${{ steps.cache-dist.outputs.cache-hit != 'true' }}
+      run: docker-compose up -d
+      shell: bash
+    - if: ${{ steps.cache-dist.outputs.cache-hit != 'true' }}
+      run: yarn prebuild
+      shell: bash
