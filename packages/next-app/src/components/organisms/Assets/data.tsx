@@ -1,6 +1,3 @@
-import networks from "../../../../../shared/src/configs/networks.json";
-import protocols from "../../../../../shared/src/configs/protocols.json";
-
 export const sortByOptions = {
   defaultValue: "",
   options: [
@@ -12,18 +9,4 @@ export const sortByOptions = {
 export const statusFilter = {
   defaultValue: [],
   options: [{ label: "On Sale", value: "sell" }],
-};
-
-export const protocolFilter = {
-  defaultValue: [],
-  options: Object.entries(protocols).map(([protocol, { name }]) => {
-    return { label: name, value: protocol };
-  }),
-};
-
-export const networkFilter = {
-  defaultValue: [],
-  options: Object.entries(networks).map(([chainId, { name }]) => {
-    return { label: name, value: chainId };
-  }),
 };

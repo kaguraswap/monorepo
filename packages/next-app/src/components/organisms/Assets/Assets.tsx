@@ -1,6 +1,6 @@
 import { Box, Flex, HStack, Icon, Select, SimpleGrid, Stack, Text, useDisclosure } from "@chakra-ui/react";
 import { Link } from "components/atoms/Link";
-import { AddNFT } from "components/molecules/AddNFT";
+import { AddAsset } from "components/molecules/AddAsset";
 import { AssetListItem } from "components/molecules/AssetListItem";
 import { CheckboxFilter } from "components/molecules/CheckBoxFIlter";
 import { FilterDrawer } from "components/molecules/FilterDrawer";
@@ -13,7 +13,8 @@ import { MdFilterList } from "react-icons/md";
 import { AssetsFragment } from "../../../../../shared/dist/graphql";
 import networks from "../../../../../shared/src/configs/networks.json";
 import { ChainId } from "../../../../../shared/src/types/network";
-import { networkFilter, protocolFilter, sortByOptions, statusFilter } from "./data";
+import { sortByOptions, statusFilter } from "./data";
+import { useOptions } from "./useOptions";
 
 export interface QueryCondition {
   [key: string]: string | string[];
@@ -31,6 +32,8 @@ export const Assets: React.FC<AssetsProps> = ({ assets }) => {
     const query = qs.stringify({ ...router.query, [key]: value });
     router.push(`/?${query}`, undefined, { shallow: true });
   };
+
+  const { networkFilterOptions, protocolFilterOptions } = useOptions();
 
   return (
     <Box>
@@ -55,13 +58,13 @@ export const Assets: React.FC<AssetsProps> = ({ assets }) => {
               </option>
             ))}
           </Select>
-          <AddNFT />
+          <AddAsset />
         </HStack>
       </Flex>
       <FilterDrawer isOpen={isOpen} onClose={onClose}>
         <Stack spacing={"4"}>
           <CheckboxFilter
-            options={networkFilter.options}
+            options={networkFilterOptions}
             label="Network"
             onChange={(value) => {
               handleConditionChange("chainId", value);
@@ -77,7 +80,7 @@ export const Assets: React.FC<AssetsProps> = ({ assets }) => {
             value={arrayify(router.query["validOrders-direction"])}
           />
           <CheckboxFilter
-            options={protocolFilter.options}
+            options={protocolFilterOptions}
             label="Protocol"
             onChange={(value) => {
               handleConditionChange("validOrders-protocol", value);
@@ -95,6 +98,7 @@ export const Assets: React.FC<AssetsProps> = ({ assets }) => {
               <Link key={i} href={`/assets/${asset.chainId}/${asset.contractAddress}/${asset.tokenId}`}>
                 <AssetListItem
                   network={network}
+                  contractAddress={asset.contractAddress}
                   tokenId={asset.tokenId}
                   image={asset.metadata.image}
                   name={asset.metadata.name}

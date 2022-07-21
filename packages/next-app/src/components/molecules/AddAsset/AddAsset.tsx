@@ -11,13 +11,13 @@ import networks from "../../../../../shared/src/configs/networks.json";
 import { ChainId } from "../../../../../shared/src/types/network";
 import { InputNFTMethod, SwapStatus, SwapType } from "./type";
 
-export interface AddNFTProps {
+export interface AddAssetProps {
   status?: SwapStatus;
   type?: SwapType;
 }
 
 // TODO: add clear
-export const AddNFT: React.FC<AddNFTProps> = () => {
+export const AddAsset: React.FC<AddAssetProps> = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { value: selectedInputNFTMethod, handleInput: handleSelectedInputNFTMethod } = useInput<InputNFTMethod>("url");

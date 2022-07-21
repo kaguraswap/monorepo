@@ -69,6 +69,7 @@ export const Asset: React.FC<AssetProps> = ({ asset }) => {
     <SimpleGrid columns={{ base: 1, md: 2 }} gap="8" maxWidth="4xl" mx="auto">
       <AssetListItem
         network={network}
+        contractAddress={asset.contractAddress}
         tokenId={asset.tokenId}
         image={asset.metadata.image}
         name={asset.metadata.name}
