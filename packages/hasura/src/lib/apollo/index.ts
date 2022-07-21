@@ -10,7 +10,7 @@ const http = !process.env.SSL ? "http" : "https";
 export const apolloClient = new ApolloClient({
   link: isServerSide()
     ? new WebSocketLink({
-        uri: process.env.GRAPHQL_ENDPOINT ? `${ws}//${process.env.GRAPHQL_ENDPOINT}` : LOCAL_GRAPHQL_URI_WS,
+        uri: process.env.GRAPHQL_ENDPOINT ? `${ws}://${process.env.GRAPHQL_ENDPOINT}` : LOCAL_GRAPHQL_URI_WS,
         options: {
           reconnect: true,
           connectionParams: {
@@ -19,6 +19,6 @@ export const apolloClient = new ApolloClient({
         },
       })
     : undefined,
-  uri: process.env.GRAPHQL_ENDPOINT ? `${http}//${process.env.GRAPHQL_ENDPOINT}` : LOCAL_GRAPHQL_URI_HTTP,
+  uri: process.env.GRAPHQL_ENDPOINT ? `${http}://${process.env.GRAPHQL_ENDPOINT}` : LOCAL_GRAPHQL_URI_HTTP,
   cache: new InMemoryCache(),
 });
