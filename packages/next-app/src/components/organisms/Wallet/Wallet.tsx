@@ -3,7 +3,7 @@ import React from "react";
 import { IoWalletOutline } from "react-icons/io5";
 import { useAccount, useDisconnect } from "wagmi";
 
-import { shortenAddress } from "../../../../../shared/src/utils/wallet";
+import { truncate } from "../../../../../shared/src/utils/text";
 
 export const Wallet: React.FC = () => {
   const { onOpen, onClose } = useDisclosure({ defaultIsOpen: false });
@@ -19,7 +19,7 @@ export const Wallet: React.FC = () => {
     <Popover trigger="hover" placement={"bottom"} defaultIsOpen={false}>
       <PopoverTrigger>
         <Button rounded="xl" leftIcon={<Icon as={IoWalletOutline} />} onClick={onOpen}>
-          {shortenAddress(address)}
+          {truncate(address, 6, 4)}
         </Button>
       </PopoverTrigger>
       <PopoverContent p="4">

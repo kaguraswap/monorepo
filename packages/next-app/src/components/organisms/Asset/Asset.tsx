@@ -1,156 +1,92 @@
-import {
-  Box,
-  Button,
-  FormControl,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  Select,
-  SimpleGrid,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
-import { AssetListItem } from "components/organisms/AssetListItem";
-import { ConnectWallet } from "components/organisms/ConnectWallet";
-import { useInput } from "hooks/useInput";
+import { AspectRatio, Box, Button, HStack, IconButton, Image, Skeleton, Text } from "@chakra-ui/react";
+import { Link } from "components/atoms/Link";
 import { useIsWagmiConnected } from "hooks/useIsWagmiConnected";
-import { useSwap } from "hooks/useSwap";
+import { isInIframe } from "lib/utils";
+import { useRouter } from "next/router";
 import React from "react";
+import { AiOutlineZoomIn } from "react-icons/ai";
 import { useAccount } from "wagmi";
 
-import { AssetFragment, OrderDirection_Enum, OrderProtocol_Enum } from "../../../../../hasura/dist/graphql";
-import { DEFAULT_PRICE, DEFAULT_TIP } from "../../../../../shared/src/configs/app";
+import { AssetFragment } from "../../../../../hasura/dist/graphql";
 import networks from "../../../../../shared/src/configs/networks.json";
-import protocols from "../../../../../shared/src/configs/protocols.json";
 import { ChainId } from "../../../../../shared/src/types/network";
+import { truncate } from "../../../../../shared/src/utils/text";
 
 export interface AssetProps {
   asset: AssetFragment;
 }
 
 export const Asset: React.FC<AssetProps> = ({ asset }) => {
-  const { value: inputPrice, handleInput: handleInputPrice } = useInput(DEFAULT_PRICE);
-  const { value: selectedProtocol, handleInput: handleSelectedProtocol } = useInput<OrderProtocol_Enum>(
-    OrderProtocol_Enum.Seaport
-  );
-  const { value: inputTip, handleInput: handleInputTip } = useInput(DEFAULT_TIP);
-
   const { isWagmiConnected } = useIsWagmiConnected();
   const { address } = useAccount();
+  const router = useRouter();
 
-  const { offer: _offer, cancel: _cancel, fulfill: _fulfill } = useSwap();
-
-  const offer = async () => {
-    await _offer(
-      selectedProtocol,
-      OrderDirection_Enum.Sell,
-      asset.chainId,
-      asset.contractAddress,
-      asset.tokenId,
-      inputPrice,
-      inputTip
-    );
+  const toAssetPage = () => {
+    const url = `/assets/${asset.chainId}/${asset.contractAddress}/${asset.tokenId}`;
+    if (!isInIframe()) {
+      router.push(url);
+    } else {
+      window.parent.postMessage({ target: "kagura", action: "redirect", value: url }, "*");
+    }
   };
-
-  const cancel = async () => {
-    await _cancel(selectedProtocol, asset.validOrders[0].signedOrder);
-  };
-
-  const fulfill = async () => {
-    await _fulfill(selectedProtocol, asset.validOrders[0].signedOrder);
-  };
-
-  const network = networks[asset.chainId as ChainId].name;
 
   return (
-    <SimpleGrid columns={{ base: 1, md: 2 }} gap="8" maxWidth="4xl" mx="auto" as="section">
-      <AssetListItem
-        network={network}
-        contractAddress={asset.contractAddress}
-        tokenId={asset.tokenId}
-        image={asset.metadata.image}
-        name={asset.metadata.name}
+    <Box
+      border="1px"
+      rounded="xl"
+      borderColor="gray.200"
+      width="100%"
+      as="section"
+      position="relative"
+      className="group"
+      px="2"
+      py="12"
+      maxWidth={"xs"}
+      mx="auto"
+    >
+      <Image
+        position="absolute"
+        top="2"
+        left="2"
+        borderRadius="full"
+        w="4"
+        h="4"
+        src={`/icons/${networks[asset.chainId as ChainId].icon}`}
+        alt="Dan Abramov"
       />
-      <Box>
-        <Box>
-          {!isWagmiConnected && <ConnectWallet buttonProps={{ width: "100%" }} />}
-          {isWagmiConnected && (
-            <>
-              {asset.holder === address?.toLowerCase() && (
-                <>
-                  {asset.validOrders.length === 0 && (
-                    <>
-                      <VStack spacing={2} mb="8">
-                        <FormControl>
-                          <Text fontWeight="bold">Price</Text>
-                          <NumberInput step={0.01} min={0} defaultValue={DEFAULT_PRICE} onChange={handleInputPrice}>
-                            <NumberInputField />
-                            <NumberInputStepper>
-                              <NumberIncrementStepper />
-                              <NumberDecrementStepper />
-                            </NumberInputStepper>
-                          </NumberInput>
-                        </FormControl>
-                        <FormControl>
-                          <Text fontWeight="bold">Tip</Text>
-                          <NumberInput
-                            step={0.5}
-                            min={0}
-                            max={100}
-                            defaultValue={DEFAULT_TIP}
-                            onChange={handleInputTip}
-                          >
-                            <NumberInputField placeholder="Amount" />
-                            <NumberInputStepper>
-                              <NumberIncrementStepper />
-                              <NumberDecrementStepper />
-                            </NumberInputStepper>
-                          </NumberInput>
-                        </FormControl>
-                        <FormControl>
-                          <Text fontWeight="bold">Protocol</Text>
-                          <Select onChange={handleSelectedProtocol} value={selectedProtocol}>
-                            {networks[asset.chainId as ChainId].protocols.map((protocol) => (
-                              <option key={protocol} value={protocol}>
-                                {protocols[protocol as "seaport" | "zeroEx"].name}
-                              </option>
-                            ))}
-                          </Select>
-                        </FormControl>
-                      </VStack>
-                      <Button width="100%" onClick={offer}>
-                        Sell
-                      </Button>
-                    </>
-                  )}
-                  {asset.validOrders.length > 0 && (
-                    <>
-                      <Button width="100%" onClick={cancel}>
-                        Cancel
-                      </Button>
-                    </>
-                  )}
-                </>
-              )}
-              {asset.holder !== address?.toLowerCase() && (
-                <>
-                  {/* TODO: implement offer */}
-                  {asset.validOrders.length === 0 && <></>}
-                  {asset.validOrders.length > 0 && (
-                    <>
-                      <Button width="100%" onClick={fulfill}>
-                        Buy
-                      </Button>
-                    </>
-                  )}
-                </>
-              )}
-            </>
-          )}
-        </Box>
+      <Text position="absolute" top="2" right="2" fontSize={"xs"}>
+        {truncate(asset.contractAddress, 7, 7)}
+      </Text>
+      <Text position="absolute" top="6" right="2" fontSize={"xs"}>
+        # {truncate(asset.tokenId, 5, 5)}
+      </Text>
+      <AspectRatio ratio={1}>
+        <Image
+          mx="auto"
+          width="100%"
+          src={asset.metadata.image}
+          alt={asset.metadata.name}
+          fallback={<Skeleton />}
+          borderRadius="xl"
+        />
+      </AspectRatio>
+      <Box h="12" p="2">
+        <Text fontSize={"xs"}>{truncate(asset.metadata.name, 20)}</Text>
       </Box>
-    </SimpleGrid>
+      <HStack position="absolute" bottom="2" right="2" spacing="2">
+        {isWagmiConnected && (
+          <>
+            {address === asset.holder && (
+              <>
+                {asset.validOrders.length === 0 && <Button>Sell</Button>}
+                {asset.validOrders.length > 0 && <Button>Cancel</Button>}
+              </>
+            )}
+            {address !== asset.holder && <>{asset.validOrders.length > 0 && <Button>Buy</Button>}</>}
+          </>
+        )}
+        <IconButton onClick={toAssetPage} icon={<AiOutlineZoomIn />} aria-label="detail" />
+      </HStack>
+    </Box>
   );
 };

@@ -6,7 +6,8 @@
     "env": "mainnet",
     "rpc": "https://rpc.ankr.com/eth",
     "explorer": "https://etherscan.io/",
-    "protocols": ["seaport", "zeroEx"]
+    "protocols": ["seaport", "zeroEx"],
+    "icon": "ethereum.svg"
   },
   "4": {
     "name": "Rinkeby",
@@ -15,7 +16,8 @@
     "env": "testnet",
     "rpc": "https://rinkeby.infura.io/v3/95f65ab099894076814e8526f52c9149",
     "explorer": "https://rinkeby.etherscan.io/",
-    "protocols": ["seaport"]
+    "protocols": ["seaport"],
+    "icon": "ethereum.svg"
   },
   "5": {
     "name": "Goerli",
@@ -24,7 +26,8 @@
     "env": "testnet",
     "rpc": "https://goerli.infura.io/v3/95f65ab099894076814e8526f52c9149",
     "explorer": "https://goerli.etherscan.io/",
-    "protocols": ["seaport"]
+    "protocols": ["seaport"],
+    "icon": "ethereum.svg"
   },
   "10": {
     "name": "Optimism",
@@ -34,7 +37,8 @@
     "env": "mainnet",
     "rpc": "https://mainnet.optimism.io",
     "explorer": "https://optimistic.etherscan.io/",
-    "protocols": ["seaport"]
+    "protocols": ["seaport"],
+    "icon": "optimism.svg"
   },
   "42": {
     "name": "Kovan",
@@ -43,7 +47,8 @@
     "env": "testnet",
     "rpc": "https://kovan.infura.io/v3/95f65ab099894076814e8526f52c9149",
     "explorer": "https://kovan.etherscan.io/",
-    "protocols": ["seaport"]
+    "protocols": ["seaport"],
+    "icon": "ethereum.svg"
   },
   "56": {
     "name": "Binance Smart Chain",
@@ -52,7 +57,8 @@
     "env": "mainnet",
     "rpc": "https://bsc-dataseed.binance.org/",
     "explorer": "https://bscscan.com/",
-    "protocols": ["zeroEx"]
+    "protocols": ["zeroEx"],
+    "icon": "bsc.svg"
   },
   "69": {
     "name": "Optimistic Kovan",
@@ -61,7 +67,8 @@
     "env": "testnet",
     "rpc": "https://kovan.optimism.io",
     "explorer": "https://kovan-optimistic.etherscan.io/",
-    "protocols": ["seaport"]
+    "protocols": ["seaport"],
+    "icon": "optimism.svg"
   },
   "100": {
     "name": "Gnosis Chain",
@@ -70,7 +77,8 @@
     "env": "mainnet",
     "rpc": "https://rpc.gnosischain.com/",
     "explorer": "https://blockscout.com/xdai/mainnet/",
-    "protocols": ["seaport"]
+    "protocols": ["seaport"],
+    "icon": "gnosis-chain.svg"
   },
   "250": {
     "name": "Fantom",
@@ -79,7 +87,8 @@
     "env": "mainnet",
     "rpc": "https://rpc.ankr.com/fantom/",
     "explorer": "https://ftmscan.com/",
-    "protocols": ["zeroEx"]
+    "protocols": ["zeroEx"],
+    "icon": "fantom.svg"
   },
   "137": {
     "name": "Polygon",
@@ -88,7 +97,8 @@
     "env": "mainnet",
     "rpc": "https://rpc-mainnet.maticvigil.com/",
     "explorer": "https://polygonscan.com/",
-    "protocols": ["seaport", "zeroEx"]
+    "protocols": ["seaport", "zeroEx"],
+    "icon": "polygon.svg"
   },
   "42161": {
     "name": "Arbitrum One",
@@ -97,7 +107,8 @@
     "env": "mainnet",
     "rpc": "https://arbitrum-mainnet.infura.io/v3/95f65ab099894076814e8526f52c9149",
     "explorer": "https://arbiscan.io/",
-    "protocols": ["seaport"]
+    "protocols": ["seaport"],
+    "icon": "arbitrum.svg"
   },
   "42220": {
     "name": "Celo",
@@ -106,7 +117,8 @@
     "env": "mainnet",
     "rpc": "https://forno.celo.org",
     "explorer": "https://explorer.celo.org/",
-    "protocols": ["zeroEx"]
+    "protocols": ["zeroEx"],
+    "icon": "celo.svg"
   },
   "421611": {
     "name": "Arbitrum Testnet",
@@ -115,7 +127,8 @@
     "env": "testnet",
     "rpc": "https://rinkeby.arbitrum.io/rpc",
     "explorer": "https://testnet.arbiscan.io/",
-    "protocols": ["seaport"]
+    "protocols": ["seaport"],
+    "icon": "arbitrum.svg"
   },
   "43113": {
     "name": "Avalanche Fuji",
@@ -124,7 +137,8 @@
     "env": "testnet",
     "rpc": "https://api.avax-test.network/ext/bc/C/rpc",
     "explorer": "https://testnet.snowtrace.io/",
-    "protocols": ["seaport", "zeroEx"]
+    "protocols": ["seaport", "zeroEx"],
+    "icon": "avalanche.svg"
   },
   "43114": {
     "name": "Avalanche C-Chain",
@@ -133,7 +147,8 @@
     "env": "mainnet",
     "rpc": "https://api.avax.network/ext/bc/C/rpc",
     "explorer": "https://snowtrace.io/",
-    "protocols": ["seaport", "zeroEx"]
+    "protocols": ["seaport", "zeroEx"],
+    "icon": "avalanche.svg"
   },
   "80001": {
     "name": "Mumbai",
@@ -142,6 +157,7 @@
     "env": "testnet",
     "rpc": "https://rpc-mumbai.maticvigil.com/",
     "explorer": "https://mumbai.polygonscan.com/",
-    "protocols": ["seaport", "zeroEx"]
+    "protocols": ["seaport", "zeroEx"],
+    "icon": "polygon.svg"
   }
 }
