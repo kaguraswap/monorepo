@@ -1,6 +1,7 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
 
+import asset from "../../../../../hasura/dist/fixtures/graphql/asset.json";
 import { Asset as Component } from "./Asset";
 
 export default {
@@ -13,5 +14,5 @@ const Template: ComponentStory<typeof Component> = (args) => <Component {...args
 export const Asset = Template.bind({});
 
 Asset.args = {
-  // asset: Object.assign(asset, { validOrders: [] }),
+  asset,
 };

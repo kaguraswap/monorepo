@@ -1,18 +1,16 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
 
-import { Notification as Component } from "./Notification";
+import { Modal as Component } from "./Modal";
 
 export default {
-  title: "Molecules/Notification",
+  title: "Molecules/Modal",
   component: Component,
 } as ComponentMeta<typeof Component>;
 
 const Template: ComponentStory<typeof Component> = (args) => <Component {...args} />;
 
-export const Notification = Template.bind({});
-
-Notification.args = {
-  message: "Notification Message",
-  link: "http://localhost:6006",
+export const Modal = Template.bind({});
+Modal.args = {
+  isOpen: true,
 };
