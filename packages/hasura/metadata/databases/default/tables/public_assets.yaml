@@ -39,9 +39,10 @@ select_permissions:
   - role: anonymous
     permission:
       columns:
-        - metadata
         - chainId
         - contractAddress
-        - holder
         - tokenId
+        - amount
+        - holder
+        - metadata
       filter: {}

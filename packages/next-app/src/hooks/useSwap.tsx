@@ -38,7 +38,7 @@ export const useSwap = () => {
       address,
       [{ recipient: TIP_RECIPIENT, basisPoints: Number(tip) * PERCENTAGE_BASE }]
     );
-    const { data } = await axios.post("http://localhost:3000/api/order/create", {
+    const { data } = await axios.post("/api/order/create", {
       protocol,
       direction,
       chainId,

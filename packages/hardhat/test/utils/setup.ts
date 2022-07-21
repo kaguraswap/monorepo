@@ -4,9 +4,9 @@ import { Seaport } from "@opensea/seaport-js";
 import { NftSwapV4 as ZeroEx } from "@traderxyz/nft-swap-sdk";
 import { ethers, network, web3 } from "hardhat";
 
+import { ERC20Mock, ERC721Mock, ERC1155Mock } from "../../dist/types";
 import { KaguraSDK } from "../../lib";
 import { Overrides } from "../../lib/order";
-import { ERC20Mock, ERC721Mock, ERC1155Mock } from "../../typechain";
 
 interface Fixture {
   owner: SignerWithAddress;

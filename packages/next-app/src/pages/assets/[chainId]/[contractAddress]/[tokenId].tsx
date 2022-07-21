@@ -1,4 +1,3 @@
-import axios from "axios";
 import { AssetTemplate } from "components/templates/Asset";
 import { AssetKey, validate } from "lib/ajv";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
@@ -6,6 +5,7 @@ import React from "react";
 
 import { AssetFragment, useAssetQuery } from "../../../../../../hasura/dist/graphql";
 import { toHasuraCondition } from "../../../../../../hasura/src/lib/hasura";
+import { syncAsset } from "../../../api/asset/sync";
 
 export type AssetPageProps = AssetKey;
 
@@ -49,7 +49,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     contractAddress: context.params.contractAddress,
     tokenId: context.params.tokenId,
   };
-  axios.post("http://localhost:3000/api/asset/sync", asset);
+  syncAsset(asset);
   return {
     props: asset,
   };

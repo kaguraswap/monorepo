@@ -12,11 +12,3 @@ array_relationships:
         column_mapping:
           contractAddress: contractAddress
           chainId: chainId
-select_permissions:
-  - role: anonymous
-    permission:
-      columns:
-        - chainId
-        - contractAddress
-        - supportsInterface
-      filter: {}

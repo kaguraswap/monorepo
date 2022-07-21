@@ -1,23 +1,23 @@
 import axios from "axios";
 import { ethers } from "ethers";
 import httpError from "http-errors";
-import { validate } from "lib/ajv";
+import { AssetKey, validate } from "lib/ajv";
 import type { NextApiRequest, NextApiResponse } from "next";
 
-import IERC721MetadataArtifact from "../../../../../hardhat/artifacts/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol/IERC721Metadata.json";
-import IERC721Artifact from "../../../../../hardhat/artifacts/@openzeppelin/contracts/token/ERC721/IERC721.sol/IERC721.json";
-import { IERC721, IERC721Metadata } from "../../../../../hardhat/typechain";
+import IERC721MetadataArtifact from "../../../../../hardhat/dist/artifacts/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol/IERC721Metadata.json";
+import IERC721Artifact from "../../../../../hardhat/dist/artifacts/@openzeppelin/contracts/token/ERC721/IERC721.sol/IERC721.json";
+import { IERC721, IERC721Metadata } from "../../../../../hardhat/dist/types";
 import { models } from "../../../../../hasura/src/lib/sequelize";
 import { AssetMetadata } from "../../../../../hasura/src/types/asset-metadata";
 import networks from "../../../../../shared/src/configs/networks.json";
 import { error } from "../../../../../shared/src/utils/error";
 
-export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  if (!validate.assetKey(req.body)) {
+export const syncAsset = async (params: AssetKey) => {
+  if (!validate.assetKey(params)) {
     throw httpError(error.invalidArgument.code, error.invalidArgument.message);
   }
-  const { chainId, tokenId } = req.body;
-  let { contractAddress } = req.body;
+  const { chainId, tokenId } = params;
+  let { contractAddress } = params;
   contractAddress = contractAddress.toLowerCase();
 
   const { rpc } = networks[chainId];
@@ -50,6 +50,11 @@ export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     metadata,
     amount: 1,
   });
+  return { asset };
+};
+
+export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  const asset = await syncAsset(req.body);
   res.status(200).json({ asset });
 };
 
