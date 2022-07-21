@@ -49,6 +49,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     contractAddress: context.params.contractAddress,
     tokenId: context.params.tokenId,
   };
+  // TODO: is this request good?
   axios.post("http://localhost:3000/api/asset/sync", asset);
   return {
     props: asset,

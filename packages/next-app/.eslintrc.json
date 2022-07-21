@@ -2,7 +2,7 @@
   "extends": ["next/core-web-vitals"],
   "settings": {
     "next": {
-      "rootDir": "packages/web"
+      "rootDir": "packages/next-app"
     }
   }
 }
