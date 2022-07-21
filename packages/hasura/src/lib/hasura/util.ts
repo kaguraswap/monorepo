@@ -1,5 +1,8 @@
 import { ParsedUrlQuery } from "querystring";
-import { HasuraCondition } from "types/hasura";
+
+import { HasuraCondition } from "./type";
+
+export * from "./type";
 
 export const toHasuraCondition = (parsedUrlQuery: ParsedUrlQuery) => {
   let where: HasuraCondition = {};

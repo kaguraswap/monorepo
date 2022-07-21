@@ -52,9 +52,9 @@ const main = () => {
       isValid: faker.helpers.arrayElement([true, false]),
     });
   }
-  fs.mkdirSync(path.join(__dirname, "../../dist/fixtures"), { recursive: true });
-  fs.writeFileSync(path.join(__dirname, "../../dist/fixtures/assets.json"), JSON.stringify(assets));
-  fs.writeFileSync(path.join(__dirname, "../../dist/fixtures/orders.json"), JSON.stringify(orders));
+  fs.mkdirSync(path.join(__dirname, "../../dist/fixtures/raw"), { recursive: true });
+  fs.writeFileSync(path.join(__dirname, "../../dist/fixtures/raw/assets.json"), JSON.stringify(assets));
+  fs.writeFileSync(path.join(__dirname, "../../dist/fixtures/raw/orders.json"), JSON.stringify(orders));
 };
 
 main();

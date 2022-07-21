@@ -1,14 +1,18 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
 
-import { ConnectWallet as Component } from "./ConnectWallet";
+import asset from "../../../../../hasura/dist/fixtures/graphql/asset.json";
+import { AssetTemplate as Component } from "./Asset";
 
 export default {
-  title: "Molecules/ConnectWallet",
+  title: "Templates/Asset",
   component: Component,
 } as ComponentMeta<typeof Component>;
 
 const Template: ComponentStory<typeof Component> = (args) => <Component {...args} />;
 
-export const ConnectWalletButton = Template.bind({});
-ConnectWalletButton.args = {};
+export const Asset = Template.bind({});
+
+Asset.args = {
+  asset,
+};

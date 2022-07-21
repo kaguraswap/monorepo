@@ -9,15 +9,10 @@ import { MdAdd } from "react-icons/md";
 
 import networks from "../../../../../shared/src/configs/networks.json";
 import { ChainId } from "../../../../../shared/src/types/network";
-import { InputNFTMethod, SwapStatus, SwapType } from "./type";
-
-export interface AddAssetProps {
-  status?: SwapStatus;
-  type?: SwapType;
-}
+import { InputNFTMethod } from "./type";
 
 // TODO: add clear
-export const AddAsset: React.FC<AddAssetProps> = () => {
+export const AddAsset: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { value: selectedInputNFTMethod, handleInput: handleSelectedInputNFTMethod } = useInput<InputNFTMethod>("url");

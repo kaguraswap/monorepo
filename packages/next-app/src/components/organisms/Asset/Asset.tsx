@@ -12,8 +12,8 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { AssetListItem } from "components/molecules/AssetListItem";
-import { ConnectWallet } from "components/molecules/ConnectWallet";
+import { AssetListItem } from "components/organisms/AssetListItem";
+import { ConnectWallet } from "components/organisms/ConnectWallet";
 import { useInput } from "hooks/useInput";
 import { useIsWagmiConnected } from "hooks/useIsWagmiConnected";
 import { useSwap } from "hooks/useSwap";
@@ -65,7 +65,7 @@ export const Asset: React.FC<AssetProps> = ({ asset }) => {
   const network = networks[asset.chainId as ChainId].name;
 
   return (
-    <SimpleGrid columns={{ base: 1, md: 2 }} gap="8" maxWidth="4xl" mx="auto">
+    <SimpleGrid columns={{ base: 1, md: 2 }} gap="8" maxWidth="4xl" mx="auto" as="section">
       <AssetListItem
         network={network}
         contractAddress={asset.contractAddress}

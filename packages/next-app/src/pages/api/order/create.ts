@@ -6,7 +6,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 import { KaguraSDK } from "../../../../../hardhat/lib";
 import { OrderDirection_Enum, OrderProtocol_Enum } from "../../../../../hasura/dist/graphql";
-import { models } from "../../../../../hasura/src/sequelize";
+import { models } from "../../../../../hasura/src/lib/sequelize";
 import networks from "../../../../../shared/src/configs/networks.json";
 import { error } from "../../../../../shared/src/utils/error";
 
