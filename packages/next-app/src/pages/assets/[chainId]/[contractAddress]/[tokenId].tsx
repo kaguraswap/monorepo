@@ -5,7 +5,7 @@ import { toHasuraCondition } from "lib/hasura";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import React from "react";
 
-import { AssetFragment, useAssetSubscription } from "../../../../../../shared/dist/graphql";
+import { AssetFragment, useAssetSubscription } from "../../../../../../hasura/dist/graphql";
 
 export type AssetPageProps = AssetKey;
 

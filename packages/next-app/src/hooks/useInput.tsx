@@ -3,12 +3,12 @@ import React from "react";
 export const useInput = <T,>(initialValue: T) => {
   const [value, setValue] = React.useState<T>(initialValue);
 
-  const handleInput = (e: T) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleInput = (e: any) => {
     if (typeof e !== "object") {
       setValue(e);
     } else {
-      const event = e as unknown as React.ChangeEvent<HTMLInputElement>;
-      setValue(event.target.value as unknown as T);
+      setValue(e.target.value);
     }
   };
 

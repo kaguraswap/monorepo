@@ -10,7 +10,7 @@ import qs from "query-string";
 import React from "react";
 import { MdFilterList } from "react-icons/md";
 
-import { AssetsFragment } from "../../../../../shared/dist/graphql";
+import { AssetsFragment } from "../../../../../hasura/dist/graphql";
 import networks from "../../../../../shared/src/configs/networks.json";
 import { ChainId } from "../../../../../shared/src/types/network";
 import { sortByOptions, statusFilter } from "./data";

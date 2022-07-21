@@ -20,8 +20,7 @@ import { useSwap } from "hooks/useSwap";
 import React from "react";
 import { useAccount } from "wagmi";
 
-import { OrderDirection_Enum, OrderProtocol_Enum } from "../../../../../hasura/dist/graphql";
-import { AssetFragment } from "../../../../../shared/dist/graphql";
+import { AssetFragment, OrderDirection_Enum, OrderProtocol_Enum } from "../../../../../hasura/dist/graphql";
 import { DEFAULT_PRICE, DEFAULT_TIP } from "../../../../../shared/src/configs/app";
 import networks from "../../../../../shared/src/configs/networks.json";
 import protocols from "../../../../../shared/src/configs/protocols.json";
