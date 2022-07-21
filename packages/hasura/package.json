@@ -47,6 +47,7 @@
     }
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.3.0",
     "@graphql-codegen/cli": "^2.8.0",
     "@graphql-codegen/typescript": "^2.7.1",
     "@graphql-codegen/typescript-operations": "^2.5.1",
@@ -55,6 +56,7 @@
     "graphql": "^16.5.0",
     "hasura-cli": "^2.8.4",
     "pg": "^8.7.3",
+    "query-string": "^7.1.1",
     "sequelize": "^6.21.3",
     "sequelize-auto": "^0.8.8",
     "ts-node": "^10.9.1"
