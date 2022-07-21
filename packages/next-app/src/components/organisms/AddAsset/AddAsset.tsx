@@ -14,6 +14,7 @@ import { Link } from "components/atoms/Link";
 import { Modal } from "components/molecules/Modal";
 import { useInput } from "hooks/useInput";
 import { validate } from "lib/ajv";
+import { useRouter } from "next/router";
 import React from "react";
 import { MdAdd } from "react-icons/md";
 import Iframe from "react-iframe";
@@ -33,6 +34,8 @@ export const AddAsset: React.FC = () => {
   const [url, setURL] = React.useState("");
   const [status, setStatus] = React.useState<Status>("input");
 
+  const router = useRouter();
+
   const handleURLChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setURL(e.target.value);
     const [tokenId, contractAddress, chainId] = e.target.value.split("/").reverse();
@@ -43,6 +46,16 @@ export const AddAsset: React.FC = () => {
       handleSelectedInputNFTMethod("manual");
     }
   };
+
+  window.addEventListener("message", (e) => {
+    if (!e.data || e.data.target !== "kagura") {
+      return;
+    }
+    if (e.data.action === "redirect") {
+      e.preventDefault();
+      router.push(e.data.value);
+    }
+  });
 
   const isNFTFieldReady = React.useMemo(() => {
     return selectedChainId && inputContractAddress !== "" && inputTokenId !== "";

@@ -11,3 +11,7 @@ export const arrayify = (v?: string | string[]) => {
 export const isEmpty = (obj: object) => {
   return Object.keys(obj).length === 0;
 };
+
+export const isInIframe = () => {
+  return window.location !== window.parent.location;
+};

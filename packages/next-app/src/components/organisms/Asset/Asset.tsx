@@ -1,6 +1,8 @@
 import { AspectRatio, Box, Button, HStack, IconButton, Image, Skeleton, Text } from "@chakra-ui/react";
 import { Link } from "components/atoms/Link";
 import { useIsWagmiConnected } from "hooks/useIsWagmiConnected";
+import { isInIframe } from "lib/utils";
+import { useRouter } from "next/router";
 import React from "react";
 import { AiOutlineZoomIn } from "react-icons/ai";
 import { useAccount } from "wagmi";
@@ -17,6 +19,16 @@ export interface AssetProps {
 export const Asset: React.FC<AssetProps> = ({ asset }) => {
   const { isWagmiConnected } = useIsWagmiConnected();
   const { address } = useAccount();
+  const router = useRouter();
+
+  const toAssetPage = () => {
+    const url = `/assets/${asset.chainId}/${asset.contractAddress}/${asset.tokenId}`;
+    if (!isInIframe()) {
+      router.push(url);
+    } else {
+      window.parent.postMessage({ target: "kagura", action: "redirect", value: url }, "*");
+    }
+  };
 
   return (
     <Box
@@ -73,9 +85,7 @@ export const Asset: React.FC<AssetProps> = ({ asset }) => {
             {address !== asset.holder && <>{asset.validOrders.length > 0 && <Button>Buy</Button>}</>}
           </>
         )}
-        <Link href={`/assets/${asset.chainId}/${asset.contractAddress}/${asset.tokenId}`}>
-          <IconButton icon={<AiOutlineZoomIn />} aria-label="detail" />
-        </Link>
+        <IconButton onClick={toAssetPage} icon={<AiOutlineZoomIn />} aria-label="detail" />
       </HStack>
     </Box>
   );
