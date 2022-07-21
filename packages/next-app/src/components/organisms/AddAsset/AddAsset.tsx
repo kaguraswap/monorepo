@@ -1,17 +1,27 @@
-import { Button, FormControl, HStack, IconButton, Input, Select, Text, useDisclosure, VStack } from "@chakra-ui/react";
+import {
+  Button,
+  Flex,
+  FormControl,
+  HStack,
+  IconButton,
+  Input,
+  Select,
+  Text,
+  useDisclosure,
+  VStack,
+} from "@chakra-ui/react";
 import { Link } from "components/atoms/Link";
 import { Modal } from "components/molecules/Modal";
 import { useInput } from "hooks/useInput";
 import { validate } from "lib/ajv";
-import router from "next/router";
 import React from "react";
 import { MdAdd } from "react-icons/md";
+import Iframe from "react-iframe";
 
 import networks from "../../../../../shared/src/configs/networks.json";
 import { ChainId } from "../../../../../shared/src/types/network";
-import { InputNFTMethod } from "./type";
+import { InputNFTMethod, Status } from "./type";
 
-// TODO: add clear
 export const AddAsset: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -21,6 +31,7 @@ export const AddAsset: React.FC = () => {
   const { value: inputTokenId, handleInput: handleTokenIdChange } = useInput("");
 
   const [url, setURL] = React.useState("");
+  const [status, setStatus] = React.useState<Status>("input");
 
   const handleURLChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setURL(e.target.value);
@@ -37,64 +48,69 @@ export const AddAsset: React.FC = () => {
     return selectedChainId && inputContractAddress !== "" && inputTokenId !== "";
   }, [selectedChainId, inputContractAddress, inputTokenId]);
 
-  const addNFT = () => {
-    if (!isNFTFieldReady) {
-      return;
-    }
-    router.push(`/assets/${selectedChainId}/${inputContractAddress}/${inputTokenId}`);
-  };
-
   return (
     <>
       <IconButton aria-label="Add" rounded="xl" icon={<MdAdd />} onClick={onOpen}>
         Add
       </IconButton>
       <Modal onClose={onClose} isOpen={isOpen} modalContentProps={{ maxWidth: "xl" }}>
-        <VStack spacing={2} mb="8">
-          {selectedInputNFTMethod === "url" && (
-            <FormControl>
-              <HStack justify={"space-between"}>
-                <Text fontWeight="bold">URL</Text>
-                <Text fontSize="xs" textAlign={"right"}>
-                  <Link chakraLinkProps={{ onClick: () => handleSelectedInputNFTMethod("manual") }}>
-                    Input manually
-                  </Link>
-                </Text>
-              </HStack>
-              <Input onChange={handleURLChange} value={url} />
-            </FormControl>
-          )}
-          {selectedInputNFTMethod === "manual" && (
-            <>
-              <FormControl>
-                <HStack justify={"space-between"}>
-                  <Text fontWeight="bold">Network</Text>
-                  <Text fontSize="xs" textAlign={"right"}>
-                    <Link chakraLinkProps={{ onClick: () => handleSelectedInputNFTMethod("url") }}>from URL</Link>
-                  </Text>
-                </HStack>
-                <Select onChange={handleChainIdChange} value={selectedChainId}>
-                  {Object.entries(networks).map(([chainId, { name }]) => (
-                    <option key={chainId} value={chainId}>
-                      {name}
-                    </option>
-                  ))}
-                </Select>
-              </FormControl>
-              <FormControl>
-                <Text fontWeight="bold">Contract Address</Text>
-                <Input onChange={handleContractAddressChange} value={inputContractAddress} />
-              </FormControl>
-              <FormControl>
-                <Text fontWeight="bold">Token ID</Text>
-                <Input onChange={handleTokenIdChange} value={inputTokenId} />
-              </FormControl>
-            </>
-          )}
-        </VStack>
-        <Button onClick={addNFT} width="100%" disabled={!isNFTFieldReady}>
-          Add NFT
-        </Button>
+        {status === "input" && (
+          <>
+            <VStack spacing={2} mb="8">
+              {selectedInputNFTMethod === "url" && (
+                <FormControl>
+                  <HStack justify={"space-between"}>
+                    <Text fontWeight="bold">URL</Text>
+                    <Text fontSize="xs" textAlign={"right"}>
+                      <Link chakraLinkProps={{ onClick: () => handleSelectedInputNFTMethod("manual") }}>
+                        Input manually
+                      </Link>
+                    </Text>
+                  </HStack>
+                  <Input onChange={handleURLChange} value={url} />
+                </FormControl>
+              )}
+              {selectedInputNFTMethod === "manual" && (
+                <>
+                  <FormControl>
+                    <HStack justify={"space-between"}>
+                      <Text fontWeight="bold">Network</Text>
+                      <Text fontSize="xs" textAlign={"right"}>
+                        <Link chakraLinkProps={{ onClick: () => handleSelectedInputNFTMethod("url") }}>from URL</Link>
+                      </Text>
+                    </HStack>
+                    <Select onChange={handleChainIdChange} value={selectedChainId}>
+                      {Object.entries(networks).map(([chainId, { name }]) => (
+                        <option key={chainId} value={chainId}>
+                          {name}
+                        </option>
+                      ))}
+                    </Select>
+                  </FormControl>
+                  <FormControl>
+                    <Text fontWeight="bold">Contract Address</Text>
+                    <Input onChange={handleContractAddressChange} value={inputContractAddress} />
+                  </FormControl>
+                  <FormControl>
+                    <Text fontWeight="bold">Token ID</Text>
+                    <Input onChange={handleTokenIdChange} value={inputTokenId} />
+                  </FormControl>
+                </>
+              )}
+            </VStack>
+            <Button onClick={() => setStatus("view")} width="100%" disabled={!isNFTFieldReady}>
+              Add NFT
+            </Button>
+          </>
+        )}
+        {status === "view" && (
+          <Flex justify={"center"}>
+            <Iframe
+              url={`/assets/${selectedChainId}/${inputContractAddress}/${inputTokenId}?mode=embed`}
+              height="430px"
+            />
+          </Flex>
+        )}
       </Modal>
     </>
   );
