@@ -6,65 +6,101 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
+env:
+  cache-version: v3
+
 jobs:
-  build:
+  setup:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v3
         with:
-          node-version: 16.x.x
-      - run: docker-compose up -d
-      - run: yarn
+          node-version: 16
+          cache: "yarn"
+      - uses: actions/cache@v2
+        id: cache-node_modules
+        with:
+          path: "**/node_modules"
+          key: ${{ env.cache-version }}-cache-${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+      - run: echo '${{ toJSON(steps.cache-node_modules.outputs) }}'
+      - if: ${{ steps.cache-node_modules.outputs.cache-hit != 'true' }}
+        run: yarn
+      - uses: actions/cache@v2
+        id: cache-dist
+        with:
+          path: "**/dist"
+          key: ${{ env.cache-version }}-cache-${{ runner.os }}-dist-${{ hashFiles('**/yarn.lock', 'packages/shared/src/configs/**', 'packages/hardhat/contracts/**', 'packages/hasura/metadata/**', 'packages/hasura/migration/**', 'packages/hasura/src/graphql/**', 'packages/hasura/src/fixture/**') }}
+      - run: echo '${{ toJSON(steps.cache-dist.outputs) }}'
+      - if: ${{ steps.cache-dist.outputs.cache-hit != 'true' }}
+        run: docker-compose up -d
       - run: yarn lint
-      - run: yarn prebuild
+      - run: sleep 30s
+      - if: ${{ steps.cache-dist.outputs.cache-hit != 'true' }}
+        run: yarn prebuild
+
+  storybook:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: "yarn"
+      - uses: actions/cache@v2
+        with:
+          path: "**/node_modules"
+          key: ${{ env.cache-version }}-cache-${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+      - uses: actions/cache@v2
+        with:
+          path: "**/dist"
+          key: ${{ env.cache-version }}-cache-${{ runner.os }}-dist-${{ hashFiles('**/yarn.lock', 'packages/shared/src/configs/**', 'packages/hardhat/contracts/**', 'packages/hasura/metadata/**', 'packages/hasura/migration/**', 'packages/hasura/src/graphql/**', 'packages/hasura/src/fixture/**') }}
+      - uses: chromaui/action@v1
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          workingDir: "./packages/next-app"
+
+  app:
+    needs: setup
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID}}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID}}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: "yarn"
+      - uses: actions/cache@v2
+        with:
+          path: "**/node_modules"
+          key: ${{ env.cache-version }}-cache-${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+      - uses: actions/cache@v2
+        with:
+          path: "**/dist"
+          key: ${{ env.cache-version }}-cache-${{ runner.os }}-dist-${{ hashFiles('**/yarn.lock', 'packages/shared/src/configs/**', 'packages/hardhat/contracts/**', 'packages/hasura/metadata/**', 'packages/hasura/migration/**', 'packages/hasura/src/graphql/**', 'packages/hasura/src/fixture/**') }}
       - run: vercel pull -y --token ${{ secrets.VERCEL_TOKEN }}
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID}}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID}}
       - run: yarn build-vercel
         if: github.event_name == 'pull_request'
       - uses: amondnet/vercel-action@v20
         if: github.event_name == 'pull_request'
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
           vercel-args: "--prebuilt"
-  storybook:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 16.x.x
-      - run: yarn
-      - uses: chromaui/action@v1
-        with:
-          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          workingDir: "./packages/next-app"
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 16.x.x
-
       - run: yarn build-vercel --prod
         if: github.event_name == 'push'
       - uses: amondnet/vercel-action@v20
         if: github.event_name == 'push'
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
           vercel-args: "--prebuilt --prod"
