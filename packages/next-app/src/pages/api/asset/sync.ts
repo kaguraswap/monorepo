@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ethers } from "ethers";
 import httpError from "http-errors";
-import { validate } from "lib/ajv";
+import { AssetKey, validate } from "lib/ajv";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import IERC721MetadataArtifact from "../../../../../hardhat/dist/artifacts/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol/IERC721Metadata.json";
@@ -11,7 +11,6 @@ import { models } from "../../../../../hasura/src/lib/sequelize";
 import { AssetMetadata } from "../../../../../hasura/src/types/asset-metadata";
 import networks from "../../../../../shared/src/configs/networks.json";
 import { error } from "../../../../../shared/src/utils/error";
-import { AssetKey } from "../../../lib/ajv";
 
 export const syncAsset = async (params: AssetKey) => {
   if (!validate.assetKey(params)) {
