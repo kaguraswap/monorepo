@@ -4,4 +4,5 @@ export type HasuraVariables = {
   where: HasuraCondition;
   orderBy: HasuraCondition;
   limit: number;
+  offset: number;
 };

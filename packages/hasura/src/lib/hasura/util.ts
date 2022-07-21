@@ -33,5 +33,5 @@ export const toHasuraCondition = (parsedUrlQuery: ParsedUrlQuery) => {
       }, {});
     }
   });
-  return { where, orderBy, limit: 10 };
+  return { where, orderBy, offset: 0, limit: 30 };
 };

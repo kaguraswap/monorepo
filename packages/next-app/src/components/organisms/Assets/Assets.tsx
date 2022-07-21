@@ -23,7 +23,7 @@ export interface QueryCondition {
 
 export interface AssetsProps {
   assets: AssetsFragment[];
-  loadMore: () => void;
+  loadMore?: () => void;
 }
 
 export const Assets: React.FC<AssetsProps> = ({ assets, loadMore }) => {
@@ -93,33 +93,37 @@ export const Assets: React.FC<AssetsProps> = ({ assets, loadMore }) => {
         </Stack>
       </FilterDrawer>
       <Box py="4">
-        <InfiniteScroll
-          pageStart={0}
-          loadMore={() => loadMore()}
-          hasMore={true || false}
-          loader={
-            <div className="loader" key={0}>
-              Loading ...
-            </div>
-          }
-        >
-          <SimpleGrid columns={{ base: 2, md: 8 }} gap="2">
-            {assets.map((asset, i) => {
-              const network = networks[asset.chainId as ChainId].name;
-              return (
-                <Link key={i} href={`/assets/${asset.chainId}/${asset.contractAddress}/${asset.tokenId}`}>
-                  <AssetListItem
-                    network={network}
-                    contractAddress={asset.contractAddress}
-                    tokenId={asset.tokenId}
-                    image={asset.metadata.image}
-                    name={asset.metadata.name}
-                  />
-                </Link>
-              );
-            })}
-          </SimpleGrid>
-        </InfiniteScroll>
+        {loadMore ? (
+          <InfiniteScroll
+            pageStart={0}
+            loadMore={() => loadMore()}
+            hasMore={true || false}
+            loader={
+              <div className="loader" key={0}>
+                Loading ...
+              </div>
+            }
+          >
+            <SimpleGrid columns={{ base: 2, md: 8 }} gap="2">
+              {assets.map((asset, i) => {
+                const network = networks[asset.chainId as ChainId].name;
+                return (
+                  <Link key={i} href={`/assets/${asset.chainId}/${asset.contractAddress}/${asset.tokenId}`}>
+                    <AssetListItem
+                      network={network}
+                      contractAddress={asset.contractAddress}
+                      tokenId={asset.tokenId}
+                      image={asset.metadata.image}
+                      name={asset.metadata.name}
+                    />
+                  </Link>
+                );
+              })}
+            </SimpleGrid>
+          </InfiniteScroll>
+        ) : (
+          <></>
+        )}
       </Box>
     </Box>
   );

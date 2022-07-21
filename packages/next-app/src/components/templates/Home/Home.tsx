@@ -12,7 +12,7 @@ export interface HomeTemplateProps {
 export const HomeTemplate: React.FC<HomeTemplateProps> = ({ assets, loadMore }) => {
   return (
     <DefaultLayout>
-      <Assets assets={assets} loadMore={() => loadMore()} />
+      <Assets assets={assets} loadMore={loadMore} />
     </DefaultLayout>
   );
 };
