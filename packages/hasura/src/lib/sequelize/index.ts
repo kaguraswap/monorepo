@@ -1,18 +1,18 @@
 import { Sequelize } from "sequelize";
 
+import { LOCAL_POSTGRES_CONNECTN } from "../../../../shared/src/configs/app";
 import { initModels } from "../../../dist/entity/init-models";
 
-export const sequelize = new Sequelize(
-  process.env.POSTGRES_CONNECTION || "postgres://postgres:postgrespassword@localhost:5432/postgres",
-  {
-    dialectOptions: process.env.PGSSLMODE
-      ? {
-          ssl: {
-            rejectUnauthorized: false,
-          },
-        }
-      : {},
-  }
-);
+const option = process.env.SSL
+  ? {
+      dialectOptions: {
+        ssl: {
+          rejectUnauthorized: false,
+        },
+      },
+    }
+  : {};
+
+export const sequelize = new Sequelize(process.env.POSTGRES_CONNECTION || LOCAL_POSTGRES_CONNECTN, option);
 
 export const models = initModels(sequelize);

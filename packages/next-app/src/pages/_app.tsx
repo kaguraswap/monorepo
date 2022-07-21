@@ -9,6 +9,9 @@ import { WagmiConfig } from "wagmi";
 import { apolloClient } from "../../../hasura/src/lib/apollo";
 
 function MyApp({ Component, pageProps }: AppProps) {
+  console.log("graphql", process.env.GRAPHQL_ENDPOINT);
+  console.log("ssl", process.env.SSL);
+
   return (
     <RecoilRoot>
       <ApolloProvider client={apolloClient}>
