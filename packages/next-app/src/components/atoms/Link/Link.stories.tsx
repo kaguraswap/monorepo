@@ -12,6 +12,6 @@ const Template: ComponentStory<typeof Component> = (args) => <Component {...args
 
 export const Link = Template.bind({});
 Link.args = {
-  href: "http://localhost:3000",
+  href: "http://localhost:6006",
   children: "Link",
 };

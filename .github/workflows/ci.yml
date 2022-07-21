@@ -40,24 +40,13 @@ jobs:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           workingDir: "./packages/next-app"
 
-  # varcel-prepare:
-  #   needs: setup
-  #   runs-on: ubuntu-latest
-  #   env:
-  #     VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID}}
-  #     VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID}}
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: ./.github/actions/setup
-  #     - run: vercel pull --token ${{ secrets.VERCEL_TOKEN }} -y
-
   varcel-deploy-preview:
     needs: setup
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
     env:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID}}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID}}
-    if: github.event_name == 'pull_request'
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/setup
@@ -67,14 +56,15 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          # vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
-          # vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
           vercel-args: "--prebuilt"
 
   varcel-deploy-production:
-    needs: [setup, lint, test, storybook]
+    needs: [setup, lint, test]
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID}}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID}}
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/setup
@@ -84,6 +74,4 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          # vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
-          # vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
           vercel-args: "--prebuilt --prod"

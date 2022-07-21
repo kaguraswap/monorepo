@@ -11,13 +11,14 @@ import { models } from "../../../../../hasura/src/lib/sequelize";
 import { AssetMetadata } from "../../../../../hasura/src/types/asset-metadata";
 import networks from "../../../../../shared/src/configs/networks.json";
 import { error } from "../../../../../shared/src/utils/error";
+import { AssetKey } from "../../../lib/ajv";
 
-export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  if (!validate.assetKey(req.body)) {
+export const syncAsset = async (params: AssetKey) => {
+  if (!validate.assetKey(params)) {
     throw httpError(error.invalidArgument.code, error.invalidArgument.message);
   }
-  const { chainId, tokenId } = req.body;
-  let { contractAddress } = req.body;
+  const { chainId, tokenId } = params;
+  let { contractAddress } = params;
   contractAddress = contractAddress.toLowerCase();
 
   const { rpc } = networks[chainId];
@@ -50,6 +51,11 @@ export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     metadata,
     amount: 1,
   });
+  return { asset };
+};
+
+export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  const asset = await syncAsset(req.body);
   res.status(200).json({ asset });
 };
 

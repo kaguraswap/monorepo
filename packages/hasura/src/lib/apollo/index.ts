@@ -15,6 +15,6 @@ export const apolloClient = new ApolloClient({
         },
       })
     : undefined,
-  uri: process.env.GRAPH_QL_HTTP || "http://localhost:8080/v1/graphql",
+  uri: process.env.NEXT_PUBLIC_GRAPH_QL_HTTP || "http://localhost:8080/v1/graphql",
   cache: new InMemoryCache(),
 });
