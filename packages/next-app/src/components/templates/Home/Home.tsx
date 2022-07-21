@@ -2,10 +2,10 @@ import { Assets } from "components/organisms/Assets";
 import { DefaultLayout } from "components/utils/layout";
 import React from "react";
 
-import { AssetsFragment } from "../../../../../hasura/dist/graphql";
+import { AssetFragment } from "../../../../../hasura/dist/graphql";
 
 export interface HomeTemplateProps {
-  assets: AssetsFragment[];
+  assets: AssetFragment[];
   loadMore: () => void;
 }
 

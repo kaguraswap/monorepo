@@ -3,6 +3,7 @@ import { ethers } from "ethers";
 import fs from "fs";
 import path from "path";
 
+import { DEV_ADDRESS } from "../../../shared/src/configs/app";
 import networks from "../../../shared/src/configs/networks.json";
 
 const main = () => {
@@ -15,7 +16,7 @@ const main = () => {
   for (let i = 0; i < 4; i++) {
     possibleWalletAddress.push(faker.finance.ethereumAddress());
   }
-  possibleWalletAddress.push("0x9af9ee7729efa8f3c0a897b4b8ffc6230e013cd5");
+  possibleWalletAddress.push(DEV_ADDRESS);
 
   const assets = [];
   for (let i = 0; i < 1000; i++) {

@@ -1,7 +1,6 @@
 import { Box, Flex, HStack, Icon, Select, SimpleGrid, Stack, Text, useDisclosure } from "@chakra-ui/react";
-import { Link } from "components/atoms/Link";
 import { AddAsset } from "components/organisms/AddAsset";
-import { AssetListItem } from "components/organisms/AssetListItem";
+import { Asset } from "components/organisms/Asset";
 import { arrayify } from "lib/utils";
 import { useRouter } from "next/router";
 import qs from "query-string";
@@ -9,9 +8,7 @@ import React from "react";
 import { MdFilterList } from "react-icons/md";
 import InfiniteScroll from "react-infinite-scroller";
 
-import { AssetsFragment } from "../../../../../hasura/dist/graphql";
-import networks from "../../../../../shared/src/configs/networks.json";
-import { ChainId } from "../../../../../shared/src/types/network";
+import { AssetFragment } from "../../../../../hasura/dist/graphql";
 import { CheckboxFilter } from "./CheckboxFilter";
 import { sortByOptions, statusFilter } from "./data";
 import { FilterDrawer } from "./FilterDrawer";
@@ -22,7 +19,7 @@ export interface QueryCondition {
 }
 
 export interface AssetsProps {
-  assets: AssetsFragment[];
+  assets: AssetFragment[];
   loadMore?: () => void;
 }
 
@@ -104,20 +101,9 @@ export const Assets: React.FC<AssetsProps> = ({ assets, loadMore }) => {
               </div>
             }
           >
-            <SimpleGrid columns={{ base: 2, md: 8 }} gap="2">
+            <SimpleGrid columns={{ base: 2, md: 6 }} gap="4">
               {assets.map((asset, i) => {
-                const network = networks[asset.chainId as ChainId].name;
-                return (
-                  <Link key={i} href={`/assets/${asset.chainId}/${asset.contractAddress}/${asset.tokenId}`}>
-                    <AssetListItem
-                      network={network}
-                      contractAddress={asset.contractAddress}
-                      tokenId={asset.tokenId}
-                      image={asset.metadata.image}
-                      name={asset.metadata.name}
-                    />
-                  </Link>
-                );
+                return <Asset key={i} asset={asset} />;
               })}
             </SimpleGrid>
           </InfiniteScroll>
