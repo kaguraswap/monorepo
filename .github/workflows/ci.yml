@@ -27,18 +27,18 @@ jobs:
       - uses: ./.github/actions/setup
       - run: yarn test
 
-  # storybook:
-  #   needs: setup
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #       with:
-  #         fetch-depth: 0
-  #     - uses: ./.github/actions/setup
-  #     - uses: chromaui/action@v1
-  #       with:
-  #         projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-  #         workingDir: "./packages/next-app"
+  storybook:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/setup
+      - uses: chromaui/action@v1
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          workingDir: "./packages/next-app"
 
   # varcel-prepare:
   #   needs: setup
@@ -49,33 +49,41 @@ jobs:
   #   steps:
   #     - uses: actions/checkout@v2
   #     - uses: ./.github/actions/setup
-  #     - run: vercel pull -y --token ${{ secrets.VERCEL_TOKEN }}
+  #     - run: vercel pull --token ${{ secrets.VERCEL_TOKEN }} -y
 
-  # varcel-deploy-preview:
-  #   needs: varcel-prepare
-  #   runs-on: ubuntu-latest
-  #   if: github.event_name == 'pull_request'
-  #   - uses: ./.github/actions/setup
-  #   - run: yarn build-vercel
-  #   - uses: amondnet/vercel-action@v20
-  #     with:
-  #       github-token: ${{ secrets.GITHUB_TOKEN }}
-  #       vercel-token: ${{ secrets.VERCEL_TOKEN }}
-  #       vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
-  #       vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
-  #       vercel-args: "--prebuilt"
+  varcel-deploy-preview:
+    needs: setup
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID}}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID}}
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/setup
+      - run: vercel pull --token ${{ secrets.VERCEL_TOKEN }} -y
+      - run: yarn build-vercel
+      - uses: amondnet/vercel-action@v20
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          # vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
+          # vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
+          vercel-args: "--prebuilt"
 
-  # varcel-deploy-production:
-  #   needs: varcel-prepare
-  #   runs-on: ubuntu-latest
-  #     if: github.event_name == 'push'
-  #   - uses: ./.github/actions/setup
-  #   - run: yarn build-vercel --prod
-  #   - uses: amondnet/vercel-action@v20
-  #     if: github.event_name == 'push'
-  #     with:
-  #       github-token: ${{ secrets.GITHUB_TOKEN }}
-  #       vercel-token: ${{ secrets.VERCEL_TOKEN }}
-  #       vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
-  #       vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
-  #       vercel-args: "--prebuilt --prod"
+  varcel-deploy-production:
+    needs: [setup, lint, test, storybook]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/setup
+      - run: vercel pull --token ${{ secrets.VERCEL_TOKEN }} -y
+      - run: yarn build-vercel --prod
+      - uses: amondnet/vercel-action@v20
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          # vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
+          # vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
+          vercel-args: "--prebuilt --prod"
