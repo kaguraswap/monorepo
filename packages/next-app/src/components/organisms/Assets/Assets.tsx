@@ -1,4 +1,15 @@
-import { Box, Flex, HStack, Icon, Select, SimpleGrid, Stack, Text, useDisclosure } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  HStack,
+  Icon,
+  Select,
+  SimpleGrid,
+  Stack,
+  Text,
+  useColorModeValue,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { AddAsset } from "components/organisms/AddAsset";
 import { Asset } from "components/organisms/Asset";
 import { arrayify } from "lib/utils";
@@ -7,6 +18,7 @@ import qs from "query-string";
 import React from "react";
 import { MdFilterList } from "react-icons/md";
 import InfiniteScroll from "react-infinite-scroller";
+import SyncLoader from "react-spinners/SyncLoader";
 
 import { AssetFragment } from "../../../../../hasura/dist/graphql";
 import { CheckboxFilter } from "./CheckboxFilter";
@@ -27,6 +39,7 @@ export const Assets: React.FC<AssetsProps> = ({ assets, loadMore }) => {
   const { isOpen, onToggle, onClose } = useDisclosure();
   const router = useRouter();
 
+  const loaderColor = useColorModeValue("gray", "white");
   const handleConditionChange = (key: string, value: string[]) => {
     const query = qs.stringify({ ...router.query, [key]: value });
     router.push(`/?${query}`, undefined, { shallow: true });
@@ -96,9 +109,9 @@ export const Assets: React.FC<AssetsProps> = ({ assets, loadMore }) => {
             loadMore={() => loadMore()}
             hasMore={true || false}
             loader={
-              <div className="loader" key={0}>
-                Loading ...
-              </div>
+              <Box textAlign="center" mt="8">
+                <SyncLoader color={loaderColor} />
+              </Box>
             }
           >
             <SimpleGrid columns={{ base: 2, md: 6 }} gap="4">

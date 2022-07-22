@@ -47,15 +47,17 @@ export const AddAsset: React.FC = () => {
     }
   };
 
-  window.addEventListener("message", (e) => {
-    if (!e.data || e.data.target !== "kagura") {
-      return;
-    }
-    if (e.data.action === "redirect") {
-      e.preventDefault();
-      router.push(e.data.value);
-    }
-  });
+  if (typeof window !== "undefined") {
+    window.addEventListener("message", (e) => {
+      if (!e.data || e.data.target !== "kagura") {
+        return;
+      }
+      if (e.data.action === "redirect") {
+        e.preventDefault();
+        router.push(e.data.value);
+      }
+    });
+  }
 
   const isNFTFieldReady = React.useMemo(() => {
     return selectedChainId && inputContractAddress !== "" && inputTokenId !== "";

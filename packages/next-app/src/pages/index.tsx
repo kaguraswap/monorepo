@@ -7,7 +7,6 @@ import React from "react";
 import { AssetFragment, useAssetsQuery } from "../../../hasura/dist/graphql";
 import { HasuraVariables, toHasuraCondition } from "../../../hasura/src/lib/hasura";
 
-// TODO: add load
 const HomePage: NextPage<HomeTemplateProps> = () => {
   const [assets, setAssets] = React.useState<AssetFragment[]>([]);
   const [variables, setVariables] = React.useState<HasuraVariables>({ where: {}, orderBy: {}, offset: 0, limit: 30 });
@@ -33,12 +32,12 @@ const HomePage: NextPage<HomeTemplateProps> = () => {
   const loadMore = () => {
     fetchMore({
       variables: {
-        offset: variables.offset,
+        offset: variables.offset + 30,
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return Object.assign({}, prev, {
-          assets: [...prev.assets, ...fetchMoreResult.assets],
+          assets: prev.assets ? [...prev.assets, ...fetchMoreResult.assets] : [...fetchMoreResult.assets],
         });
       },
     });
