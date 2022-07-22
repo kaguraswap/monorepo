@@ -1,5 +1,5 @@
 import { Box, Flex, HStack, Icon, Select, SimpleGrid, Stack, Text, useDisclosure } from "@chakra-ui/react";
-import { AddAsset } from "components/organisms/AddAsset";
+import { Add } from "components/organisms/Add";
 import { Asset } from "components/organisms/Asset";
 import { arrayify } from "lib/utils";
 import { useRouter } from "next/router";
@@ -57,7 +57,7 @@ export const Assets: React.FC<AssetsProps> = ({ assets, loadMore }) => {
               </option>
             ))}
           </Select>
-          <AddAsset />
+          <Add />
         </HStack>
       </Flex>
       <FilterDrawer isOpen={isOpen} onClose={onClose}>

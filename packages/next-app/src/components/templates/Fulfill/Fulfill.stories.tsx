@@ -1,14 +1,15 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
 
-import { ConnectWallet as Component } from "./ConnectWallet";
+import { FulfillTemplate as Component } from "./Fulfill";
 
 export default {
-  title: "Organisms/Connect Wallet",
+  title: "Templates/Fulfill",
   component: Component,
 } as ComponentMeta<typeof Component>;
 
 const Template: ComponentStory<typeof Component> = (args) => <Component {...args} />;
 
-export const ConnectWallet = Template.bind({});
-ConnectWallet.args = {};
+export const Fulfill = Template.bind({});
+
+Fulfill.args = {};

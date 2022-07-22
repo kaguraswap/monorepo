@@ -1,31 +1,81 @@
-import { AspectRatio, Box, Button, HStack, IconButton, Image, Skeleton, Text } from "@chakra-ui/react";
+import { AspectRatio, Box, Button, HStack, IconButton, Image, Skeleton, Text, useDisclosure } from "@chakra-ui/react";
+import { Modal } from "components/molecules/Modal";
+import { Cancel } from "components/organisms/Cancel";
+import { Fulfill } from "components/organisms/Fulfill";
+import { Offer } from "components/organisms/Offer";
 import { useIframe } from "hooks/useIframe";
 import { useIsWagmiConnected } from "hooks/useIsWagmiConnected";
 import { useRouter } from "next/router";
 import React from "react";
 import { AiOutlineZoomIn } from "react-icons/ai";
+import { Action } from "types/ui";
 import { useAccount } from "wagmi";
 
 import { AssetFragment } from "../../../../../hasura/dist/graphql";
 import networks from "../../../../../shared/src/configs/networks.json";
 import { ChainId } from "../../../../../shared/src/types/network";
 import { truncate } from "../../../../../shared/src/utils/text";
+import { usePath } from "./usePath";
 
 export interface AssetProps {
   asset: AssetFragment;
+  action?: Action;
 }
 
-export const Asset: React.FC<AssetProps> = ({ asset }) => {
+export const Asset: React.FC<AssetProps> = ({ asset, action }) => {
   const { isWagmiConnected } = useIsWagmiConnected();
   const { address } = useAccount();
   const router = useRouter();
+  const {
+    isOpen: isOfferModalOpen,
+    onOpen: onOfferModalOpen,
+    onClose: onOfferModalClose,
+  } = useDisclosure({ defaultIsOpen: action === "offer" });
+  const {
+    isOpen: isFulfillModalOpen,
+    onOpen: onFulfillModalOpen,
+    onClose: onFulfillModalClose,
+  } = useDisclosure({ defaultIsOpen: action === "fulfill" });
+  const {
+    isOpen: isCancelModalOpen,
+    onOpen: onCancelModalOpen,
+    onClose: onCancelModalClose,
+  } = useDisclosure({ defaultIsOpen: action === "cancel" });
 
   const { isIframe, post } = useIframe();
+  const { path } = usePath(asset.chainId, asset.contractAddress, asset.tokenId);
 
   const moveToAsset = () => {
-    const url = `/assets/${asset.chainId}/${asset.contractAddress}/${asset.tokenId}`;
+    const url = `${path}`;
     if (!isIframe) {
       router.push(url);
+    } else {
+      post("redirect", url);
+    }
+  };
+
+  const moveToOffer = () => {
+    const url = `${path}?action=offer`;
+    if (!isIframe) {
+      onOfferModalOpen();
+    } else {
+      post("redirect", url);
+    }
+  };
+
+  const moveToFulfill = () => {
+    const url = `${path}?action=fulfill`;
+    if (!isIframe) {
+      onFulfillModalOpen();
+    } else {
+      post("redirect", url);
+    }
+  };
+
+  const moveToCancel = () => {
+    const url = `${path}?action=cancel`;
+    if (!isIframe) {
+      onCancelModalOpen();
     } else {
       post("redirect", url);
     }
@@ -79,15 +129,26 @@ export const Asset: React.FC<AssetProps> = ({ asset }) => {
           <>
             {address === asset.holder && (
               <>
-                {asset.validOrders.length === 0 && <Button>Sell</Button>}
-                {asset.validOrders.length > 0 && <Button>Cancel</Button>}
+                {asset.validOrders.length === 0 && <Button onClick={moveToOffer}>Sell</Button>}
+                {asset.validOrders.length > 0 && <Button onClick={moveToCancel}>Cancel</Button>}
               </>
             )}
-            {address !== asset.holder && <>{asset.validOrders.length > 0 && <Button>Buy</Button>}</>}
+            {address !== asset.holder && (
+              <>{asset.validOrders.length > 0 && <Button onClick={moveToFulfill}>Buy</Button>}</>
+            )}
           </>
         )}
         <IconButton onClick={moveToAsset} icon={<AiOutlineZoomIn />} aria-label="detail" />
       </HStack>
+      <Modal onClose={onOfferModalClose} isOpen={isOfferModalOpen} modalContentProps={{ maxWidth: "xl" }}>
+        <Offer />
+      </Modal>
+      <Modal onClose={onFulfillModalClose} isOpen={isFulfillModalOpen} modalContentProps={{ maxWidth: "xl" }}>
+        <Fulfill />
+      </Modal>
+      <Modal onClose={onCancelModalClose} isOpen={isCancelModalOpen} modalContentProps={{ maxWidth: "xl" }}>
+        <Cancel />
+      </Modal>
     </Box>
   );
 };

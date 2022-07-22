@@ -24,7 +24,7 @@ import networks from "../../../../../shared/src/configs/networks.json";
 import { ChainId } from "../../../../../shared/src/types/network";
 import { InputNFTMethod, Status } from "./type";
 
-export const AddAsset: React.FC = () => {
+export const Add: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { value: selectedInputNFTMethod, handleInput: handleSelectedInputNFTMethod } = useInput<InputNFTMethod>("url");
@@ -62,7 +62,7 @@ export const AddAsset: React.FC = () => {
 
   return (
     <>
-      <IconButton aria-label="Add" rounded="xl" icon={<MdAdd />} onClick={onOpen}>
+      <IconButton aria-label="add" rounded="xl" icon={<MdAdd />} onClick={onOpen}>
         Add
       </IconButton>
       <Modal onClose={onClose} isOpen={isOpen} modalContentProps={{ maxWidth: "xl" }}>
