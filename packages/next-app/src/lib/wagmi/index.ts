@@ -1,9 +1,7 @@
 import { getDefaultProvider } from "ethers";
-import { createClient } from "wagmi";
+import { createClient, defaultChains } from "wagmi";
 import { InjectedConnector } from "wagmi/connectors/injected";
-
-// TODO: implement wallet connect
-// import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
+import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 
 export const wagmiClient = createClient({
   autoConnect: true,
@@ -12,4 +10,11 @@ export const wagmiClient = createClient({
 
 export const injectedConnector = new InjectedConnector();
 
-// export const walletConnectConnector = new WalletConnectConnector({});
+const chains = defaultChains;
+
+export const walletConnectConnector = new WalletConnectConnector({
+  chains,
+  options: {
+    qrcode: true,
+  },
+});

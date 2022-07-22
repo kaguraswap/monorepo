@@ -16,7 +16,7 @@ export const Wallet: React.FC = () => {
   };
 
   return (
-    <Popover trigger="hover" placement={"bottom"} defaultIsOpen={false}>
+    <Popover trigger="click" placement={"bottom"} defaultIsOpen={false}>
       <PopoverTrigger>
         <Button rounded="xl" leftIcon={<Icon as={IoWalletOutline} />} onClick={onOpen}>
           {truncate(address, 6, 4)}
