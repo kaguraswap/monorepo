@@ -32,12 +32,12 @@ const HomePage: NextPage = () => {
   const loadMore = () => {
     fetchMore({
       variables: {
-        offset: variables.offset,
+        offset: variables.offset + 30,
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return Object.assign({}, prev, {
-          assets: [...prev.assets, ...fetchMoreResult.assets],
+          assets: prev.assets ? [...prev.assets, ...fetchMoreResult.assets] : [...fetchMoreResult.assets],
         });
       },
     });
