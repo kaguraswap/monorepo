@@ -24,8 +24,6 @@ export const DefaultLayout: React.FC<DefaultLayoutProps> = ({
   type,
   mode = "normal",
 }) => {
-  console.log(mode);
-
   return (
     <Flex minHeight={"100vh"} direction={"column"}>
       <Head title={title} description={description} image={image} type={type} />

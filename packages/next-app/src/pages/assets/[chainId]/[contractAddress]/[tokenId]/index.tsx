@@ -2,7 +2,7 @@ import { AssetTemplate } from "components/templates/Asset";
 import { AssetKey, validate } from "lib/ajv";
 import { GetServerSideProps, NextPage } from "next";
 import React from "react";
-import { Action, Mode } from "types/ui";
+import { Mode } from "types/ui";
 
 import { AssetFragment, useAssetQuery } from "../../../../../../../hasura/dist/graphql";
 import { toHasuraCondition } from "../../../../../../../hasura/src/lib/hasura";
@@ -10,10 +10,9 @@ import { syncAsset } from "../../../../api/asset/sync";
 
 export interface AssetPageProps extends AssetKey {
   mode?: Mode;
-  action?: Action;
 }
 
-const AssetPage: NextPage<AssetPageProps> = ({ chainId, contractAddress, tokenId, mode, action }) => {
+const AssetPage: NextPage<AssetPageProps> = ({ chainId, contractAddress, tokenId, mode }) => {
   const [asset, setAssets] = React.useState<AssetFragment>();
 
   const { where } = React.useMemo(() => {
@@ -34,7 +33,7 @@ const AssetPage: NextPage<AssetPageProps> = ({ chainId, contractAddress, tokenId
     setAssets(asset);
   }, [data]);
 
-  return <AssetTemplate asset={asset} mode={mode} action={action} />;
+  return <AssetTemplate asset={asset} mode={mode} />;
 };
 
 export default AssetPage;
@@ -56,6 +55,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   // TODO: better management
   syncAsset(asset);
   return {
-    props: { ...asset, mode: context.query.mode ? context.query.mode : "normal", action: context.query.action || "" },
+    props: { ...asset, mode: context.query.mode ? context.query.mode : "normal" },
   };
 };

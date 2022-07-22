@@ -114,7 +114,7 @@ export const Assets: React.FC<AssetsProps> = ({ assets, loadMore }) => {
               </Box>
             }
           >
-            <SimpleGrid columns={{ base: 2, md: 6 }} gap="4">
+            <SimpleGrid columns={{ base: 1, md: 4 }} gap="4">
               {assets.map((asset, i) => {
                 return <Asset key={i} asset={asset} />;
               })}

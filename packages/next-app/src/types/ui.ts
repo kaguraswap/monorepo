@@ -4,4 +4,3 @@ export interface SelectOption {
 }
 
 export type Mode = "normal" | "embed";
-export type Action = "offer" | "fulfill" | "cancel";
