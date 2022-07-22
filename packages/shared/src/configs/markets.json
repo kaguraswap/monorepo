@@ -1,0 +1,18 @@
+{
+  "opensea": {
+    "name": "OpenSea",
+    "icon": "opensea.svg",
+    "url": {
+      "mainnet": "https://opensea.io/assets/",
+      "testnet": "https://testnets.opensea.io/assets/"
+    }
+  },
+  "tofu": {
+    "name": "TofuNFT",
+    "icon": "tofu.png",
+    "url": {
+      "mainnet": "https://tofunft.com/nft/",
+      "testnet": ""
+    }
+  }
+}

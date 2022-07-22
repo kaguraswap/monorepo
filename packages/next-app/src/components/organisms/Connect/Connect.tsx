@@ -4,11 +4,11 @@ import { injectedConnector, walletConnectConnector } from "lib/wagmi";
 import React from "react";
 import { useConnect } from "wagmi";
 
-export interface ConnectWalletProps {
+export interface ConnectProps {
   buttonProps?: ButtonProps;
 }
 
-export const ConnectWallet: React.FC<ConnectWalletProps> = ({ buttonProps }) => {
+export const Connect: React.FC<ConnectProps> = ({ buttonProps }) => {
   const { connect } = useConnect();
   const { isOpen, onOpen, onClose } = useDisclosure();
 

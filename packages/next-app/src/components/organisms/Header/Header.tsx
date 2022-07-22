@@ -1,6 +1,6 @@
 import { Box, HStack } from "@chakra-ui/react";
 import { Link } from "components/atoms/Link";
-import { ConnectWallet } from "components/organisms/ConnectWallet";
+import { Connect } from "components/organisms/Connect";
 import { Menu } from "components/organisms/Menu";
 import { Setting } from "components/organisms/Setting";
 import { Wallet } from "components/organisms/Wallet";
@@ -20,7 +20,7 @@ export const Header: React.FC = () => {
           </Link>
           <HStack spacing="2">
             <Setting />
-            {!isWagmiConnected && <ConnectWallet />}
+            {!isWagmiConnected && <Connect />}
             {isWagmiConnected && <Wallet />}
             <Menu />
           </HStack>
