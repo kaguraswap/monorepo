@@ -1,6 +1,6 @@
-import { Button, ButtonProps, Stack, useDisclosure } from "@chakra-ui/react";
+import { Button, ButtonProps, Image, Stack, useDisclosure } from "@chakra-ui/react";
 import { Modal } from "components/molecules/Modal";
-import { injectedConnector } from "lib/wagmi";
+import { injectedConnector, walletConnectConnector } from "lib/wagmi";
 import React from "react";
 import { useConnect } from "wagmi";
 
@@ -18,12 +18,22 @@ export const ConnectWallet: React.FC<ConnectWalletProps> = ({ buttonProps }) => 
         Connect Wallet
       </Button>
       <Modal onClose={onClose} isOpen={isOpen}>
-        <Stack spacing="4">
-          <Button width="100%" rounded="xl" onClick={() => connect({ connector: injectedConnector })}>
+        <Stack spacing="4" px="8">
+          <Button
+            width="100%"
+            rounded="xl"
+            leftIcon={<Image src={`/icons/metamask.svg`} alt="metamask-logo" width="6" />}
+            onClick={() => connect({ connector: injectedConnector })}
+          >
             Metamask
           </Button>
           {/* TODO: Wallet Connect */}
-          <Button width="100%" rounded="xl" onClick={() => connect({ connector: injectedConnector })}>
+          <Button
+            width="100%"
+            rounded="xl"
+            leftIcon={<Image src={`/icons/wallet-connect.svg`} alt="wallet-connect-logo" width="6" />}
+            onClick={() => connect({ connector: walletConnectConnector })}
+          >
             Wallet Connect
           </Button>
         </Stack>

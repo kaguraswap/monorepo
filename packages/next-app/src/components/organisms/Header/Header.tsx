@@ -1,6 +1,7 @@
 import { Box, HStack } from "@chakra-ui/react";
 import { Link } from "components/atoms/Link";
 import { ConnectWallet } from "components/organisms/ConnectWallet";
+import { Menu } from "components/organisms/Menu";
 import { Setting } from "components/organisms/Setting";
 import { Wallet } from "components/organisms/Wallet";
 import { useIsWagmiConnected } from "hooks/useIsWagmiConnected";
@@ -21,6 +22,7 @@ export const Header: React.FC = () => {
             <Setting />
             {!isWagmiConnected && <ConnectWallet />}
             {isWagmiConnected && <Wallet />}
+            <Menu />
           </HStack>
         </HStack>
       </Box>
