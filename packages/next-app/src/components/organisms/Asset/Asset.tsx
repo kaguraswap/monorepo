@@ -17,6 +17,7 @@ import { AssetFragment } from "../../../../../hasura/dist/graphql";
 import networks from "../../../../../shared/src/configs/networks.json";
 import { ChainId } from "../../../../../shared/src/types/network";
 import { truncate } from "../../../../../shared/src/utils/text";
+import { useMarketIcons } from "./useMarketIcons";
 import { usePath } from "./usePath";
 
 export interface AssetProps {
@@ -46,6 +47,7 @@ export const Asset: React.FC<AssetProps> = ({ asset, action }) => {
 
   const { isIframe, post } = useIframe();
   const { path } = usePath(asset.chainId, asset.contractAddress, asset.tokenId);
+  const { marketIcons } = useMarketIcons(asset.chainId);
 
   const moveToAsset = () => {
     const url = `${path}`;
@@ -104,7 +106,7 @@ export const Asset: React.FC<AssetProps> = ({ asset, action }) => {
         borderRadius="full"
         w="4"
         h="4"
-        src={`/icons/${networks[asset.chainId as ChainId].icon}`}
+        src={`/icons/networks/${networks[asset.chainId as ChainId].icon}`}
         alt="Dan Abramov"
       />
       <Link href={`${networks[asset.chainId as ChainId].explorer}/address/${asset.contractAddress}`}>
@@ -127,9 +129,14 @@ export const Asset: React.FC<AssetProps> = ({ asset, action }) => {
           borderRadius="xl"
         />
       </AspectRatio>
-      <Box h="12" p="2">
-        <Text fontSize={"xs"}>{truncate(asset.metadata.name, 20)}</Text>
+      <Box h="10" p="2">
+        <Text fontSize={"xs"}>{truncate(asset.metadata.name, 16)}</Text>
       </Box>
+      <HStack position="absolute" bottom="16" right="2" spacing="2">
+        {marketIcons.map((marketIcon: string) => {
+          return <Image key={marketIcon} src={`/icons/markets/${marketIcon}`} alt={marketIcon} w="4" h="4" />;
+        })}
+      </HStack>
       <HStack position="absolute" bottom="2" right="2" spacing="2">
         {isWagmiConnected && (
           <>
