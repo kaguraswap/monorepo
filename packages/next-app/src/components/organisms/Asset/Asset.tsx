@@ -1,4 +1,6 @@
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { AspectRatio, Box, Button, HStack, IconButton, Image, Skeleton, Text, useDisclosure } from "@chakra-ui/react";
+import { Link } from "components/atoms/Link";
 import { Modal } from "components/molecules/Modal";
 import { Cancel } from "components/organisms/Cancel";
 import { Fulfill } from "components/organisms/Fulfill";
@@ -105,12 +107,16 @@ export const Asset: React.FC<AssetProps> = ({ asset, action }) => {
         src={`/icons/${networks[asset.chainId as ChainId].icon}`}
         alt="Dan Abramov"
       />
-      <Text position="absolute" top="2" right="2" fontSize={"xs"}>
-        {truncate(asset.contractAddress, 7, 7)}
-      </Text>
+      <Link href={`${networks[asset.chainId as ChainId].explorer}/address/${asset.contractAddress}`}>
+        <HStack position="absolute" top="2" right="2" color="blue.800" fontSize={"xs"}>
+          <Text>{truncate(asset.contractAddress, 7, 7)}</Text>
+          <ExternalLinkIcon />
+        </HStack>
+      </Link>
       <Text position="absolute" top="6" right="2" fontSize={"xs"}>
         # {truncate(asset.tokenId, 5, 5)}
       </Text>
+
       <AspectRatio ratio={1}>
         <Image
           mx="auto"
