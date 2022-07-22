@@ -1,7 +1,6 @@
 import { AspectRatio, Box, Button, HStack, IconButton, Image, Skeleton, Text } from "@chakra-ui/react";
-import { Link } from "components/atoms/Link";
+import { useIframe } from "hooks/useIframe";
 import { useIsWagmiConnected } from "hooks/useIsWagmiConnected";
-import { isInIframe } from "lib/utils";
 import { useRouter } from "next/router";
 import React from "react";
 import { AiOutlineZoomIn } from "react-icons/ai";
@@ -21,12 +20,14 @@ export const Asset: React.FC<AssetProps> = ({ asset }) => {
   const { address } = useAccount();
   const router = useRouter();
 
-  const toAssetPage = () => {
+  const { isIframe, post } = useIframe();
+
+  const moveToAsset = () => {
     const url = `/assets/${asset.chainId}/${asset.contractAddress}/${asset.tokenId}`;
-    if (!isInIframe()) {
+    if (!isIframe) {
       router.push(url);
     } else {
-      window.parent.postMessage({ target: "kagura", action: "redirect", value: url }, "*");
+      post("redirect", url);
     }
   };
 
@@ -85,7 +86,7 @@ export const Asset: React.FC<AssetProps> = ({ asset }) => {
             {address !== asset.holder && <>{asset.validOrders.length > 0 && <Button>Buy</Button>}</>}
           </>
         )}
-        <IconButton onClick={toAssetPage} icon={<AiOutlineZoomIn />} aria-label="detail" />
+        <IconButton onClick={moveToAsset} icon={<AiOutlineZoomIn />} aria-label="detail" />
       </HStack>
     </Box>
   );

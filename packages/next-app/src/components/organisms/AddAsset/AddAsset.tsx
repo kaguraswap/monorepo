@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { Link } from "components/atoms/Link";
 import { Modal } from "components/molecules/Modal";
+import { useIframe } from "hooks/useIframe";
 import { useInput } from "hooks/useInput";
 import { validate } from "lib/ajv";
 import { useRouter } from "next/router";
@@ -35,6 +36,7 @@ export const AddAsset: React.FC = () => {
   const [status, setStatus] = React.useState<Status>("input");
 
   const router = useRouter();
+  const { subscribe } = useIframe();
 
   const handleURLChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setURL(e.target.value);
@@ -47,15 +49,12 @@ export const AddAsset: React.FC = () => {
     }
   };
 
-  window.addEventListener("message", (e) => {
-    if (!e.data || e.data.target !== "kagura") {
-      return;
-    }
-    if (e.data.action === "redirect") {
-      e.preventDefault();
-      router.push(e.data.value);
-    }
-  });
+  const viewAsset = () => {
+    subscribe("redirect", (value: string) => {
+      router.push(value);
+    });
+    setStatus("view");
+  };
 
   const isNFTFieldReady = React.useMemo(() => {
     return selectedChainId && inputContractAddress !== "" && inputTokenId !== "";
@@ -111,7 +110,7 @@ export const AddAsset: React.FC = () => {
                 </>
               )}
             </VStack>
-            <Button onClick={() => setStatus("view")} width="100%" disabled={!isNFTFieldReady}>
+            <Button onClick={viewAsset} width="100%" disabled={!isNFTFieldReady}>
               Add NFT
             </Button>
           </>
