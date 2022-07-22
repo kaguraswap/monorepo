@@ -4,9 +4,9 @@ import { GetServerSideProps, NextPage } from "next";
 import React from "react";
 import { Mode } from "types/ui";
 
-import { AssetFragment, useAssetQuery } from "../../../../../../hasura/dist/graphql";
-import { toHasuraCondition } from "../../../../../../hasura/src/lib/hasura";
-import { syncAsset } from "../../../api/asset/sync";
+import { AssetFragment, useAssetQuery } from "../../../../../../../hasura/dist/graphql";
+import { toHasuraCondition } from "../../../../../../../hasura/src/lib/hasura";
+import { syncAsset } from "../../../../api/asset/sync";
 
 export interface AssetPageProps extends AssetKey {
   mode?: Mode;
@@ -55,6 +55,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   // TODO: better management
   syncAsset(asset);
   return {
-    props: { ...asset, mode: context.query.mode === "embed" ? "embed" : "normal" },
+    props: { ...asset, mode: context.query.mode ? context.query.mode : "normal" },
   };
 };

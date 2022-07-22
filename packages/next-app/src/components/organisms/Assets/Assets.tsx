@@ -10,7 +10,7 @@ import {
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
-import { AddAsset } from "components/organisms/AddAsset";
+import { Add } from "components/organisms/Add";
 import { Asset } from "components/organisms/Asset";
 import { arrayify } from "lib/utils";
 import { useRouter } from "next/router";
@@ -70,7 +70,7 @@ export const Assets: React.FC<AssetsProps> = ({ assets, loadMore }) => {
               </option>
             ))}
           </Select>
-          <AddAsset />
+          <Add />
         </HStack>
       </Flex>
       <FilterDrawer isOpen={isOpen} onClose={onClose}>
@@ -114,7 +114,7 @@ export const Assets: React.FC<AssetsProps> = ({ assets, loadMore }) => {
               </Box>
             }
           >
-            <SimpleGrid columns={{ base: 2, md: 6 }} gap="4">
+            <SimpleGrid columns={{ base: 1, md: 4 }} gap="4">
               {assets.map((asset, i) => {
                 return <Asset key={i} asset={asset} />;
               })}

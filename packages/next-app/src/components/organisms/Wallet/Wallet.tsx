@@ -10,7 +10,7 @@ export const Wallet: React.FC = () => {
   const { address } = useAccount();
   const { disconnect } = useDisconnect();
 
-  const disconnectWallet = () => {
+  const disConnect = () => {
     disconnect();
     onClose();
   };
@@ -23,7 +23,7 @@ export const Wallet: React.FC = () => {
         </Button>
       </PopoverTrigger>
       <PopoverContent p="4">
-        <Button onClick={disconnectWallet} rounded="xl">
+        <Button onClick={disConnect} rounded="xl">
           Disconnect
         </Button>
       </PopoverContent>
