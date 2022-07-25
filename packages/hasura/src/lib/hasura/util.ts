@@ -1,5 +1,6 @@
 import { ParsedUrlQuery } from "querystring";
 
+import { INFINITE_SCROLL_NUMBER } from "../../../../shared/src/configs/app";
 import { HasuraCondition } from "./type";
 
 export * from "./type";
@@ -33,5 +34,5 @@ export const toHasuraCondition = (parsedUrlQuery: ParsedUrlQuery) => {
       }, {});
     }
   });
-  return { where, orderBy, offset: 0, limit: 30 };
+  return { where, orderBy, offset: 0, limit: INFINITE_SCROLL_NUMBER };
 };

@@ -5,6 +5,7 @@ export const DEFAULT_PRICE = "0.01";
 export const BSP = 250;
 export const SPAN_SYNC_BLOCKCHAIN = "every 30 minutes";
 export const FIREBASE_REGION = "europe-west1";
+export const INFINITE_SCROLL_NUMBER = 30;
 
 export const PERCENTAGE_BASE = 100;
 export const BSP_BASE = 10000;

@@ -32,10 +32,11 @@ export interface QueryCondition {
 
 export interface AssetsProps {
   assets: AssetFragment[];
+  hasMore?: boolean;
   loadMore?: () => void;
 }
 
-export const Assets: React.FC<AssetsProps> = ({ assets, loadMore }) => {
+export const Assets: React.FC<AssetsProps> = ({ assets, loadMore, hasMore }) => {
   const { isOpen, onToggle, onClose } = useDisclosure();
   const router = useRouter();
 
@@ -107,9 +108,9 @@ export const Assets: React.FC<AssetsProps> = ({ assets, loadMore }) => {
           <InfiniteScroll
             pageStart={0}
             loadMore={() => loadMore()}
-            hasMore={true || false}
+            hasMore={hasMore}
             loader={
-              <Box textAlign="center" mt="8">
+              <Box textAlign="center" mt="8" key={0}>
                 <SyncLoader color={loaderColor} />
               </Box>
             }
