@@ -22,16 +22,15 @@ export const Connect: React.FC<ConnectProps> = ({ buttonProps }) => {
           <Button
             width="100%"
             rounded="xl"
-            leftIcon={<Image src={`/icons/metamask.svg`} alt="metamask-logo" width="6" />}
+            leftIcon={<Image src={`/icons/wallets/metamask.svg`} alt="metamask-logo" width="6" />}
             onClick={() => connect({ connector: injectedConnector })}
           >
             Metamask
           </Button>
-          {/* TODO: Wallet Connect */}
           <Button
             width="100%"
             rounded="xl"
-            leftIcon={<Image src={`/icons/wallet-connect.svg`} alt="wallet-connect-logo" width="6" />}
+            leftIcon={<Image src={`/icons/wallets/wallet-connect.svg`} alt="wallet-connect-logo" width="6" />}
             onClick={() => connect({ connector: walletConnectConnector })}
           >
             Wallet Connect
