@@ -1,0 +1,24 @@
+table:
+  schema: public
+  name: blocks
+event_triggers:
+  - name: syncBlock
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+    retry_conf:
+      num_retries: 5
+      interval_sec: 10
+      timeout_sec: 60
+    webhook: http://host.docker.internal:3000/api/block/sync
+    request_transform:
+      body:
+        action: transform
+        template: |-
+          {
+            "chainId": {{$body.event.data.new.chainId}},
+            "blockNumber": {{$body.event.data.new.blockNumber}}
+          }
+      version: 2
+      template_engine: Kriti
