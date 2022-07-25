@@ -92,7 +92,10 @@ export const Asset: React.FC<AssetProps> = ({ asset }) => {
         src={`/icons/networks/${networks[asset.chainId as ChainId].icon}`}
         alt="Dan Abramov"
       />
-      <Link href={`${networks[asset.chainId as ChainId].explorer}/address/${asset.contractAddress}`}>
+      <Link
+        href={`${networks[asset.chainId as ChainId].explorer}/address/${asset.contractAddress}`}
+        chakraLinkProps={{ isExternal: true }}
+      >
         <HStack position="absolute" top="2" right="2" fontSize={"xs"}>
           <Text>{truncate(asset.contractAddress, 7, 7)}</Text>
           <ExternalLinkIcon />
@@ -146,8 +149,16 @@ export const Asset: React.FC<AssetProps> = ({ asset }) => {
         {!isNoAssetMetadataMode && <Text fontSize={"xs"}>{truncate(asset.metadata.name, 16)}</Text>}
       </Box>
       <HStack position="absolute" bottom="16" right="2" spacing="2">
-        {marketIcons.map((marketIcon: string) => {
-          return <Image key={marketIcon} src={`/icons/markets/${marketIcon}`} alt={marketIcon} w="4" h="4" />;
+        {marketIcons.map((marketIcon) => {
+          return (
+            <Link
+              key={marketIcon.icon}
+              href={`${marketIcon.url}/${asset.contractAddress}/${asset.tokenId}`}
+              chakraLinkProps={{ isExternal: true }}
+            >
+              <Image src={`/icons/markets/${marketIcon.icon}`} alt={marketIcon.icon} w="4" h="4" />
+            </Link>
+          );
         })}
         <Image src={`/brand/logo.png`} alt={"logo"} w="4" h="4" onClick={moveToAsset} />
       </HStack>
