@@ -5,18 +5,26 @@ import { validate } from "lib/ajv";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { KaguraSDK } from "../../../../../hardhat/lib";
+import { SignedOrder } from "../../../../../hardhat/types/order";
 import { OrderDirection_Enum, OrderProtocol_Enum } from "../../../../../hasura/dist/graphql";
 import { models } from "../../../../../hasura/src/lib/sequelize";
 import networks from "../../../../../shared/src/configs/networks.json";
+import { AssetKey } from "../../../../../shared/src/types/asset";
 import { error } from "../../../../../shared/src/utils/error";
 
-export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  if (!validate.createOrderProps(req.body)) {
+export interface CreateOrderParams extends AssetKey {
+  direction: OrderDirection_Enum;
+  protocol: OrderProtocol_Enum;
+  signedOrder: SignedOrder;
+}
+
+export const createOrder = async (params: CreateOrderParams) => {
+  if (!validate.createOrderParams(params)) {
     throw httpError(error.invalidArgument.code, error.invalidArgument.message);
   }
-  const { protocol, direction, chainId, contractAddress, tokenId, signedOrder } = req.body;
+  const { protocol, direction, chainId, contractAddress, tokenId, signedOrder } = params;
 
-  // TODO: implement and remove
+  // TODO: #16
   if (protocol !== OrderProtocol_Enum.Seaport) {
     throw httpError(error.notImplemented.code, error.notImplemented.message);
   }
@@ -32,7 +40,6 @@ export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   // TODO: update to event trigger?
   // TODO: consider case which order does not have consideration in first element?
-
   const { parameters } = signedOrder as OrderWithCounter;
   const items = direction === OrderDirection_Enum.Sell ? parameters.consideration : parameters.offer;
   const price = items
@@ -56,6 +63,11 @@ export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     price,
     direction,
   });
+  return { order };
+};
+
+export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  const { order } = await createOrder(req.body);
   res.status(200).json({ order });
 };
 

@@ -10,6 +10,7 @@
     "packages/**"
   ],
   "scripts": {
+    "postinstall": "patch-package",
     "prepare": "husky install",
     "fix": "run-p fix:*",
     "fix:prettier": "yarn lint:prettier --write",
@@ -53,6 +54,7 @@
     "lint-staged": "^12.4.1",
     "npm-run-all": "^4.1.5",
     "npm-watch": "^0.11.0",
+    "patch-package": "^6.4.7",
     "prettier": "^2.7.1",
     "prettier-plugin-solidity": "^1.0.0-beta.19",
     "serve": "^14.0.1",

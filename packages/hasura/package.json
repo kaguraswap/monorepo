@@ -18,7 +18,7 @@
   "watch": {
     "build:graphql": {
       "patterns": [
-        "./src/metadata",
+        "./metadata",
         "./src/graphql"
       ],
       "extensions": [
@@ -29,7 +29,7 @@
     },
     "build:orm": {
       "patterns": [
-        "./src/migrations"
+        "./migrations"
       ],
       "extensions": [
         "sql"
