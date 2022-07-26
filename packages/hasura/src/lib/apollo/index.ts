@@ -26,8 +26,8 @@ export const apolloClient = new ApolloClient({
         fields: {
           assets: {
             keyArgs: false,
-            merge(existing, incoming, options) {
-              const offset = options.args?.offset || 0;
+            merge(existing, incoming, { args }) {
+              const offset = args?.offset || 0;
               if (offset === 0) {
                 return incoming;
               }
