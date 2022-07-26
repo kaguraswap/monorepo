@@ -85,7 +85,7 @@
     "rpc": "https://rpc.gnosischain.com/",
     "explorer": "https://blockscout.com/xdai/mainnet/",
     "protocols": ["seaport"],
-    "markets": ["tofu"],
+    "markets": [],
     "icon": "gnosis-chain.svg"
   },
   "250": {
