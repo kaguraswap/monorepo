@@ -1,86 +1,22 @@
 import Ajv from "ajv";
-import { ethers } from "ethers";
+import { CreateOrderParams } from "pages/api/order/create";
+import { SyncTransactionParams } from "pages/api/transaction/sync";
 
-import { SignedOrder } from "../../../../hardhat/types/order";
-import { AssetAttributes } from "../../../../hasura/dist/entity/asset";
-import { OrderDirection_Enum, OrderProtocol_Enum } from "../../../../hasura/dist/graphql";
-import { isOrderDirection, isOrderProtocol } from "../../../../hasura/src/types/order";
-import { ChainId, isChainId } from "../../../../shared/src/types/network";
+import { AssetKey } from "../../../../shared/src/types/asset";
+import { BlockKey } from "../../../../shared/src/types/block";
+import { ContractKey } from "../../../../shared/src/types/contract";
+import { addFormats } from "./format";
+import { schema } from "./schema";
 
+// @dev this maybe moved to shared when sync logic move to cloud run
 export const ajv = new Ajv();
+addFormats(ajv);
 
-ajv.addFormat("address", {
-  validate: (address: string) => {
-    return ethers.utils.isAddress(address);
-  },
-});
-
-ajv.addFormat("chainId", {
-  validate: (chainId: string) => {
-    return isChainId(chainId);
-  },
-});
-
-ajv.addFormat("tokenId", {
-  validate: (tokenId: string) => {
-    try {
-      return ethers.BigNumber.from(tokenId).gte(0);
-    } catch {
-      return false;
-    }
-  },
-});
-
-ajv.addFormat("protocol", {
-  validate: (protocol: string) => {
-    return isOrderProtocol(protocol);
-  },
-});
-
-ajv.addFormat("direction", {
-  validate: (direction: string) => {
-    return isOrderDirection(direction);
-  },
-});
-
-export interface AssetKey extends Pick<AssetAttributes, "contractAddress" | "tokenId"> {
-  chainId: ChainId;
-  contractAddress: string;
-  tokenId: string;
-}
-
-export interface OrderCreateProps extends AssetKey {
-  direction: OrderDirection_Enum;
-  protocol: OrderProtocol_Enum;
-  signedOrder: SignedOrder;
-}
-
-const assetKeySchema = {
-  type: "object",
-  properties: {
-    chainId: { type: "string", format: "chainId" },
-    contractAddress: { type: "string", format: "address" },
-    tokenId: { type: "string", format: "tokenId" },
-  },
-  required: ["chainId", "contractAddress", "tokenId"],
-  additionalProperties: false,
-};
-
-const orderCreatePropsSchema = {
-  type: "object",
-  properties: {
-    protocol: { type: "string", format: "protocol" },
-    direction: { type: "string", format: "direction" },
-    chainId: { type: "string", format: "chainId" },
-    contractAddress: { type: "string", format: "address" },
-    tokenId: { type: "string", format: "tokenId" },
-    signedOrder: { type: "object" },
-  },
-  required: ["protocol", "direction", "chainId", "contractAddress", "tokenId", "signedOrder"],
-  additionalProperties: false,
-};
-
+// @dev validate is created for each table key and specific action
 export const validate = {
-  assetKey: ajv.compile<AssetKey>(assetKeySchema),
-  createOrderProps: ajv.compile<OrderCreateProps>(orderCreatePropsSchema),
+  blockKey: ajv.compile<BlockKey>(schema.blockKey),
+  contractKey: ajv.compile<ContractKey>(schema.contractKey),
+  assetKey: ajv.compile<AssetKey>(schema.assetKey),
+  syncTransactionParams: ajv.compile<SyncTransactionParams>(schema.syncTransactionParams),
+  createOrderParams: ajv.compile<CreateOrderParams>(schema.orderCreateParams),
 };

@@ -19,7 +19,7 @@ event_triggers:
       insert:
         columns: '*'
     retry_conf:
-      num_retries: 0
+      num_retries: 2
       interval_sec: 10
       timeout_sec: 60
     webhook: http://host.docker.internal:3000/api/contract/sync

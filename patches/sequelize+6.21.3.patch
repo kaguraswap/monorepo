@@ -1,0 +1,14 @@
+diff --git a/node_modules/sequelize/lib/utils.js b/node_modules/sequelize/lib/utils.js
+index 202acf3..ade4beb 100644
+--- a/node_modules/sequelize/lib/utils.js
++++ b/node_modules/sequelize/lib/utils.js
+@@ -278,6 +278,9 @@ function addTicks(s, tickChar) {
+ exports.addTicks = addTicks;
+ function removeTicks(s, tickChar) {
+   tickChar = tickChar || TICK_CHAR;
++  if(s.name){
++    s = s.name
++  }
+   return s.replace(new RegExp(tickChar, "g"), "");
+ }
+ exports.removeTicks = removeTicks;

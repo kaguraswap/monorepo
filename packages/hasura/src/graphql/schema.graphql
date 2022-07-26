@@ -1,4 +1,9 @@
 query Assets($where: assets_bool_exp, $orderBy: [assets_order_by!], $offset: Int, $limit: Int) {
+  assets_aggregate(where: $where) {
+    aggregate {
+      count
+    }
+  }
   assets(where: $where, order_by: $orderBy, offset: $offset, limit: $limit) {
     ...Asset
   }

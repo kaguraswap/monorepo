@@ -8,7 +8,9 @@ import { models } from "../../../../../hasura/src/lib/sequelize";
 import networks from "../../../../../shared/src/configs/networks.json";
 import { ChainId } from "../../../../../shared/src/types/network";
 
-export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+// TODO: apply value return
+// TODO: use bulk update
+export const cleanOrder = async () => {
   const orders = await models.Order.findAll({
     where: {
       isValid: true,
@@ -23,7 +25,12 @@ export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       models.Order.update({ isValid }, { where: { id: order.id } });
     }
   }
-  res.status(200).json("ok");
+  return "ok";
+};
+
+export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  const ok = await cleanOrder();
+  res.status(200).json(ok);
 };
 
 export default handler;

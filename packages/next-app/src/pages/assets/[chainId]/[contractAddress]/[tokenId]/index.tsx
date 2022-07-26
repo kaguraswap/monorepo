@@ -1,11 +1,12 @@
 import { AssetTemplate } from "components/templates/Asset";
-import { AssetKey, validate } from "lib/ajv";
+import { validate } from "lib/ajv";
 import { GetServerSideProps, NextPage } from "next";
 import React from "react";
 import { Mode } from "types/ui";
 
 import { AssetFragment, useAssetQuery } from "../../../../../../../hasura/dist/graphql";
 import { toHasuraCondition } from "../../../../../../../hasura/src/lib/hasura";
+import { AssetKey } from "../../../../../../../hasura/src/types/asset";
 import { syncAsset } from "../../../../api/asset/sync";
 
 export interface AssetPageProps extends AssetKey {

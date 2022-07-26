@@ -1,4 +1,12 @@
 
+-- Could not auto-generate a down migration.
+-- Please write an appropriate down migration for the SQL below:
+-- alter table "public"."assets" add column "isSynced" boolean
+--  null default 'false';
+
+ALTER TABLE "public"."contracts" ALTER COLUMN "isSynced" drop default;
+
+
 alter table "public"."blocks" alter column "isSynced" set not null;
 ALTER TABLE "public"."blocks" ALTER COLUMN "isSynced" drop default;
 
