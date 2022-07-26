@@ -92,7 +92,7 @@ export const Asset: React.FC<AssetProps> = ({ asset }) => {
         alt="Dan Abramov"
       />
       <Link
-        href={`${networks[asset.chainId as ChainId].explorer}/address/${asset.contractAddress}`}
+        href={`${networks[asset.chainId as ChainId].explorer}address/${asset.contractAddress}`}
         chakraLinkProps={{ isExternal: true }}
       >
         <HStack position="absolute" top="2" right="2" fontSize={"xs"}>

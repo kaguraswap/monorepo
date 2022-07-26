@@ -1,3 +1,4 @@
+import { useBoolean } from "@chakra-ui/react";
 import { HomeTemplate } from "components/templates/Home";
 import { isEmpty } from "lib/utils";
 import type { NextPage } from "next";
@@ -18,7 +19,7 @@ const HomePage: NextPage = () => {
   });
   const [offset, setOffset] = React.useState(0);
   const [hasMore, setHasMore] = React.useState(false);
-  const [isLoading, setLoading] = React.useState(false);
+  const [isLoading, setLoading] = useBoolean();
   const { query } = useRouter();
   const { data, fetchMore } = useAssetsQuery({
     variables,
@@ -29,8 +30,10 @@ const HomePage: NextPage = () => {
     }
     setAssets(data.assets);
 
-    if (data.assets_aggregate.aggregate?.count) setHasMore(data.assets_aggregate.aggregate?.count > data.assets.length);
-    setLoading(false);
+    if (data.assets_aggregate.aggregate?.count) {
+      setHasMore(data.assets_aggregate.aggregate?.count > data.assets.length);
+    }
+    setLoading.off();
   }, [data]);
 
   React.useEffect(() => {
@@ -44,7 +47,7 @@ const HomePage: NextPage = () => {
 
   const loadMore = () => {
     if (isLoading) return;
-    setLoading(true);
+    setLoading.on();
     fetchMore({
       variables: {
         offset: offset + INFINITE_SCROLL_NUMBER,
@@ -52,9 +55,10 @@ const HomePage: NextPage = () => {
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         setOffset(offset + INFINITE_SCROLL_NUMBER);
-        return Object.assign({}, prev, {
+        return {
           assets: prev.assets ? [...prev.assets, ...fetchMoreResult.assets] : [...fetchMoreResult.assets],
-        });
+          assets_aggregate: prev.assets_aggregate,
+        };
       },
     });
   };

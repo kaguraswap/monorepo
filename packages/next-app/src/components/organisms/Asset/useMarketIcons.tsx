@@ -15,7 +15,7 @@ export const useMarketIcons = (chainId: string) => {
         if (!isMarket(market)) {
           return { icon: "", url: "" };
         }
-        return { icon: markets[market].icon, url: `${markets[market].url.mainnet}/${markets[market].path[chainId]}` };
+        return { icon: markets[market].icon, url: `${markets[market].url.mainnet}${markets[market].path[chainId]}` };
       })
       .filter((i) => i);
   }, [chainId]);
