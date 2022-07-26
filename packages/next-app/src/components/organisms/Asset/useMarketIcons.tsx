@@ -13,11 +13,11 @@ export const useMarketIcons = (chainId: string) => {
     return networks[chainId].markets
       .map((market: string) => {
         if (!isMarket(market)) {
-          return "";
+          return { icon: "", url: "" };
         }
-        return markets[market].icon;
+        return { icon: markets[market].icon, url: `${markets[market].url.mainnet}/${markets[market].path[chainId]}` };
       })
-      .filter((i: string) => i);
+      .filter((i) => i);
   }, [chainId]);
   return { marketIcons };
 };
