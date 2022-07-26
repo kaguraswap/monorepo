@@ -55,7 +55,6 @@ export const Asset: React.FC<AssetProps> = ({ asset }) => {
   const borderColor = useColorModeValue("gray.200", "gray.700");
 
   const [order] = asset.validOrders;
-  console.log(order);
 
   const moveToAsset = () => {
     const url = `${path}`;
@@ -93,7 +92,7 @@ export const Asset: React.FC<AssetProps> = ({ asset }) => {
         alt="Dan Abramov"
       />
       <Link
-        href={`${networks[asset.chainId as ChainId].explorer}/address/${asset.contractAddress}`}
+        href={`${networks[asset.chainId as ChainId].explorer}address/${asset.contractAddress}`}
         chakraLinkProps={{ isExternal: true }}
       >
         <HStack position="absolute" top="2" right="2" fontSize={"xs"}>

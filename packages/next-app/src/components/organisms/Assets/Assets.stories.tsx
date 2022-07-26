@@ -22,4 +22,5 @@ const loadMore = () => {
 Assets.args = {
   assets: firstAssets,
   loadMore: loadMore,
+  hasMore: true,
 };
