@@ -32,18 +32,18 @@ export interface QueryCondition {
 
 export interface AssetsProps {
   assets: AssetFragment[];
-  hasMore?: boolean;
-  loadMore?: () => void;
+  hasMore: boolean;
+  loadMore: () => void;
 }
 
-export const Assets: React.FC<AssetsProps> = ({ assets, loadMore, hasMore }) => {
+export const Assets: React.FC<AssetsProps> = ({ assets, hasMore, loadMore }) => {
   const { isOpen, onToggle, onClose } = useDisclosure();
   const router = useRouter();
 
   const loaderColor = useColorModeValue("gray", "white");
   const handleConditionChange = (key: string, value: string[]) => {
     const query = qs.stringify({ ...router.query, [key]: value });
-    router.push(`/?${query}`, undefined, { shallow: true });
+    router.push(`${router.pathname === "/" ? "" : router.pathname}/?${query}`, undefined, { shallow: true });
   };
 
   const { networkFilterOptions, protocolFilterOptions } = useOptions();
@@ -104,14 +104,14 @@ export const Assets: React.FC<AssetsProps> = ({ assets, loadMore, hasMore }) => 
         </Stack>
       </FilterDrawer>
       <Box py="4">
-        {loadMore ? (
+        {assets.length > 0 && (
           <InfiniteScroll
             pageStart={0}
-            loadMore={() => loadMore()}
+            loadMore={loadMore}
             hasMore={hasMore}
             loader={
-              <Box textAlign="center" mt="8" key={0}>
-                <SyncLoader color={loaderColor} />
+              <Box textAlign="center" p="8">
+                <SyncLoader color={loaderColor} size="10px" />
               </Box>
             }
           >
@@ -121,8 +121,6 @@ export const Assets: React.FC<AssetsProps> = ({ assets, loadMore, hasMore }) => 
               })}
             </SimpleGrid>
           </InfiniteScroll>
-        ) : (
-          <></>
         )}
       </Box>
     </Box>

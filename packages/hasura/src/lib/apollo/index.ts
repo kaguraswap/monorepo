@@ -20,5 +20,25 @@ export const apolloClient = new ApolloClient({
       })
     : undefined,
   uri: process.env.GRAPHQL_ENDPOINT ? `${http}://${process.env.GRAPHQL_ENDPOINT}` : LOCAL_GRAPHQL_URI_HTTP,
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      Query: {
+        fields: {
+          assets: {
+            keyArgs: false,
+            merge(existing, incoming, options) {
+              const offset = options.args?.offset || 0;
+              if (offset === 0) {
+                return incoming;
+              }
+              if (existing.length === offset + incoming.length) {
+                return existing;
+              }
+              return existing.concat(incoming);
+            },
+          },
+        },
+      },
+    },
+  }),
 });
