@@ -6,7 +6,7 @@ import { Mode } from "types/ui";
 
 import { AssetFragment, useAssetQuery } from "../../../../../../../hasura/dist/graphql";
 import { toHasuraCondition } from "../../../../../../../hasura/src/lib/hasura";
-import { AssetKey } from "../../../../../../../hasura/src/types/asset";
+import { AssetKey } from "../../../../../../../shared/src/types/asset";
 import { syncAsset } from "../../../../api/asset/sync";
 
 export interface AssetPageProps extends AssetKey {
