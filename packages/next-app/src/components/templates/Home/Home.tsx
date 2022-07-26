@@ -7,15 +7,15 @@ import { AssetFragment } from "../../../../../hasura/dist/graphql";
 
 export interface HomeTemplateProps {
   assets: AssetFragment[];
-  loadMore: () => void;
   hasMore: boolean;
+  loadMore: () => void;
   mode?: Mode;
 }
 
-export const HomeTemplate: React.FC<HomeTemplateProps> = ({ assets, loadMore, hasMore, mode }) => {
+export const HomeTemplate: React.FC<HomeTemplateProps> = ({ assets, hasMore, loadMore, mode }) => {
   return (
     <DefaultLayout mode={mode}>
-      <Assets assets={assets} loadMore={() => loadMore()} hasMore={hasMore} />
+      <Assets assets={assets} hasMore={hasMore} loadMore={loadMore} />
     </DefaultLayout>
   );
 };

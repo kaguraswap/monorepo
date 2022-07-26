@@ -1,4 +1,3 @@
-import { useBoolean } from "@chakra-ui/react";
 import { HomeTemplate } from "components/templates/Home";
 import { isEmpty } from "lib/utils";
 import type { NextPage } from "next";
@@ -11,29 +10,23 @@ import { INFINITE_SCROLL_NUMBER } from "../../../shared/src/configs/app";
 
 const HomePage: NextPage = () => {
   const [assets, setAssets] = React.useState<AssetFragment[]>([]);
-  const [variables, setVariables] = React.useState<HasuraVariables>({
-    where: {},
-    orderBy: {},
-    offset: 0,
-    limit: INFINITE_SCROLL_NUMBER,
-  });
-  const [offset, setOffset] = React.useState(0);
-  const [hasMore, setHasMore] = React.useState(false);
-  const [isLoading, setLoading] = useBoolean();
+  const [variables, setVariables] = React.useState<HasuraVariables>();
+  const [hasMore, setHasMore] = React.useState(true);
   const { query } = useRouter();
   const { data, fetchMore } = useAssetsQuery({
-    variables,
+    variables: {
+      ...variables,
+      limit: INFINITE_SCROLL_NUMBER,
+    },
   });
   React.useEffect(() => {
     if (!data) {
       return;
     }
     setAssets(data.assets);
-
     if (data.assets_aggregate.aggregate?.count) {
       setHasMore(data.assets_aggregate.aggregate?.count > data.assets.length);
     }
-    setLoading.off();
   }, [data]);
 
   React.useEffect(() => {
@@ -42,28 +35,22 @@ const HomePage: NextPage = () => {
     }
     const variables = toHasuraCondition(query);
     setVariables(variables);
-    setOffset(0);
   }, [query]);
 
   const loadMore = () => {
-    if (isLoading) return;
-    setLoading.on();
     fetchMore({
       variables: {
-        offset: offset + INFINITE_SCROLL_NUMBER,
-      },
-      updateQuery: (prev, { fetchMoreResult }) => {
-        if (!fetchMoreResult) return prev;
-        setOffset(offset + INFINITE_SCROLL_NUMBER);
-        return {
-          assets: prev.assets ? [...prev.assets, ...fetchMoreResult.assets] : [...fetchMoreResult.assets],
-          assets_aggregate: prev.assets_aggregate,
-        };
+        offset: assets.length,
       },
     });
   };
 
-  return <HomeTemplate assets={assets} loadMore={() => loadMore()} hasMore={hasMore} />;
+  return (
+    <>
+      <>{data && data.assets.length}</>
+      <HomeTemplate assets={assets} loadMore={() => loadMore()} hasMore={hasMore} />;
+    </>
+  );
 };
 
 export default HomePage;
