@@ -3,6 +3,4 @@ export type HasuraCondition = { [key: string]: { [key: string]: string | string[
 export type HasuraVariables = {
   where: HasuraCondition;
   orderBy: HasuraCondition;
-  limit: number;
-  offset: number;
 };

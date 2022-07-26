@@ -1,23 +1,21 @@
 import { HomeTemplate } from "components/templates/Home";
-import { isEmpty } from "lib/utils";
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import React from "react";
 
 import { AssetFragment, useAssetsQuery } from "../../../hasura/dist/graphql";
 import { HasuraVariables, toHasuraCondition } from "../../../hasura/src/lib/hasura";
-import { INFINITE_SCROLL_NUMBER } from "../../../shared/src/configs/app";
 
-const HomePage: NextPage = () => {
+export interface HomePageProps {
+  variables: HasuraVariables;
+}
+
+const HomePage: NextPage<HomePageProps> = ({ variables }) => {
   const [assets, setAssets] = React.useState<AssetFragment[]>([]);
-  const [variables, setVariables] = React.useState<HasuraVariables>();
   const [hasMore, setHasMore] = React.useState(true);
   const { query } = useRouter();
-  const { data, fetchMore } = useAssetsQuery({
-    variables: {
-      ...variables,
-      limit: INFINITE_SCROLL_NUMBER,
-    },
+  const { data, fetchMore, refetch } = useAssetsQuery({
+    variables,
   });
   React.useEffect(() => {
     if (!data) {
@@ -30,12 +28,9 @@ const HomePage: NextPage = () => {
   }, [data]);
 
   React.useEffect(() => {
-    if (isEmpty(query)) {
-      return;
-    }
     const variables = toHasuraCondition(query);
-    setVariables(variables);
-  }, [query]);
+    refetch(variables);
+  }, [refetch, query]);
 
   const loadMore = () => {
     fetchMore({
@@ -45,12 +40,15 @@ const HomePage: NextPage = () => {
     });
   };
 
-  return (
-    <>
-      <>{data && data.assets.length}</>
-      <HomeTemplate assets={assets} loadMore={() => loadMore()} hasMore={hasMore} />;
-    </>
-  );
+  return <HomeTemplate assets={assets} loadMore={loadMore} hasMore={hasMore} />;
 };
 
 export default HomePage;
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const variables = toHasuraCondition(context.query);
+
+  return {
+    props: { variables },
+  };
+};

@@ -104,22 +104,24 @@ export const Assets: React.FC<AssetsProps> = ({ assets, hasMore, loadMore }) => 
         </Stack>
       </FilterDrawer>
       <Box py="4">
-        <InfiniteScroll
-          pageStart={0}
-          loadMore={loadMore}
-          hasMore={hasMore}
-          loader={
-            <Box textAlign="center" p="8">
-              <SyncLoader color={loaderColor} size="10" />
-            </Box>
-          }
-        >
-          <SimpleGrid columns={{ base: 1, md: 4 }} gap="4">
-            {assets.map((asset, i) => {
-              return <Asset key={i} asset={asset} />;
-            })}
-          </SimpleGrid>
-        </InfiniteScroll>
+        {assets.length > 0 && (
+          <InfiniteScroll
+            pageStart={0}
+            loadMore={loadMore}
+            hasMore={hasMore}
+            loader={
+              <Box textAlign="center" p="8">
+                <SyncLoader color={loaderColor} size="10px" />
+              </Box>
+            }
+          >
+            <SimpleGrid columns={{ base: 1, md: 4 }} gap="4">
+              {assets.map((asset, i) => {
+                return <Asset key={i} asset={asset} />;
+              })}
+            </SimpleGrid>
+          </InfiniteScroll>
+        )}
       </Box>
     </Box>
   );

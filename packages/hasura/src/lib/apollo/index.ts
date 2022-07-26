@@ -25,14 +25,16 @@ export const apolloClient = new ApolloClient({
       Query: {
         fields: {
           assets: {
-            keyArgs: [],
+            keyArgs: false,
             merge(existing, incoming, options) {
               const offset = options.args?.offset || 0;
-              const merged = existing ? existing.slice(0) : [];
-              for (let i = 0; i < incoming.length; ++i) {
-                merged[offset + i] = incoming[i];
+              if (offset === 0) {
+                return incoming;
               }
-              return merged;
+              if (existing.length === offset + incoming.length) {
+                return existing;
+              }
+              return existing.concat(incoming);
             },
           },
         },
