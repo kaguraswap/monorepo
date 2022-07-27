@@ -1,5 +1,6 @@
 import axios from "axios";
 import { ethers } from "ethers";
+import React from "react";
 import { useAccount, useSigner } from "wagmi";
 
 import { KaguraSDK } from "../../../hardhat/lib";
@@ -10,6 +11,7 @@ import { PERCENTAGE_BASE, TIP_RECIPIENT } from "../../../shared/src/configs/app"
 export const useSwap = () => {
   const { data: signer } = useSigner();
   const { address } = useAccount();
+  const [txHash, setTxHash] = React.useState("");
 
   const offer = async (
     protocol: OrderProtocol_Enum,
@@ -64,8 +66,9 @@ export const useSwap = () => {
     }
     const provider = signer.provider as ethers.providers.JsonRpcProvider;
     const sdk = new KaguraSDK(provider);
-    await sdk.order.fulfill(protocol, signedOrder, address);
+    const hash = await sdk.order.fulfill(protocol, signedOrder, address);
+    setTxHash(hash);
   };
 
-  return { offer, cancel, fulfill };
+  return { offer, cancel, fulfill, txHash };
 };

@@ -146,7 +146,8 @@ export class Order {
         fulfillOrderDetails: [{ order: signedOrder }],
         accountAddress: fulfiller,
       });
-      await executeAllActions();
+      const tx = await executeAllActions();
+      return tx.hash;
     } else {
       signedOrder = <SignedERC721OrderStruct>signedOrder;
       const zeroEx = await this._getZeroEx(fulfiller);
@@ -169,6 +170,7 @@ export class Order {
       }
       const tx = await zeroEx.fillSignedOrder(signedOrder);
       await zeroEx.awaitTransactionHash(tx.hash);
+      return tx.hash;
     }
   };
 }
