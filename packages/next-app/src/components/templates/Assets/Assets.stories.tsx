@@ -13,6 +13,14 @@ const Template: ComponentStory<typeof Component> = (args) => <Component {...args
 
 export const Assets = Template.bind({});
 
+const firstAssets = assets.slice(0, 30);
+
+const loadMore = () => {
+  console.log("loaded");
+};
+
 Assets.args = {
-  assets,
+  assets: firstAssets,
+  loadMore,
+  hasMore: true,
 };

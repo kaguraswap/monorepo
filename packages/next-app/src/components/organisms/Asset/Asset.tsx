@@ -160,7 +160,7 @@ export const Asset: React.FC<AssetProps> = ({ asset }) => {
               </Flex>
               <FormControl>
                 <Text fontWeight="bold">Price</Text>
-                <Input variant={"outline"} bgColor="white" onChange={handlePriceChange} value={inputPrice} />
+                <Input variant={"outline"} onChange={handlePriceChange} value={inputPrice} />
               </FormControl>
               <FormControl>
                 <HStack>
@@ -169,11 +169,11 @@ export const Asset: React.FC<AssetProps> = ({ asset }) => {
                     set
                   </Button>
                 </HStack>
-                <Input variant={"outline"} bgColor="white" disabled value={royalty} />
+                <Input variant={"outline"} disabled value={royalty} />
               </FormControl>
               <FormControl>
                 <Text fontWeight="bold">Tip %</Text>
-                <Input variant={"outline"} bgColor="white" value={inputTip} onChange={handleTipChange} />
+                <Input variant={"outline"} value={inputTip} onChange={handleTipChange} />
               </FormControl>
             </Box>
           </Box>
