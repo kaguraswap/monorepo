@@ -18,13 +18,16 @@ export const useSwap = () => {
     contractAddress: string,
     tokenId: string,
     price: string,
-    tip: string
+    tip: string,
+    royaltyReciepient: string,
+    royalty: string
   ) => {
     if (!signer || !address) {
       return;
     }
     const provider = signer.provider as ethers.providers.JsonRpcProvider;
     const sdk = new KaguraSDK(provider);
+
     const { signedOrder } = await sdk.order.offer(
       protocol,
       direction,
@@ -36,7 +39,13 @@ export const useSwap = () => {
         amount: ethers.utils.parseEther(price).toString(),
       },
       address,
-      [{ recipient: TIP_RECIPIENT, basisPoints: Number(tip) * PERCENTAGE_BASE }]
+      [
+        { recipient: TIP_RECIPIENT, basisPoints: Number(tip) * PERCENTAGE_BASE },
+        {
+          recipient: royaltyReciepient,
+          basisPoints: Number(royalty) * PERCENTAGE_BASE,
+        },
+      ]
     );
     const { data } = await axios.post("/api/order/create", {
       protocol,
