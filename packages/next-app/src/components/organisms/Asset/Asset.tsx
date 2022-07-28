@@ -8,6 +8,7 @@ import {
   FormControl,
   HStack,
   Image,
+  Input,
   Skeleton,
   SlideFade,
   Text,
@@ -15,10 +16,12 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
+import axios from "axios";
 import { Link } from "components/atoms/Link";
 import { Connect } from "components/organisms/Connect";
 import { ethers } from "ethers";
 import { useIframe } from "hooks/useIframe";
+import { useInput } from "hooks/useInput";
 import { useIsWagmiConnected } from "hooks/useIsWagmiConnected";
 import { useSwap } from "hooks/useSwap";
 import { userModeState } from "lib/recoil/mode";
@@ -28,6 +31,7 @@ import { useRecoilValue } from "recoil";
 import { useAccount } from "wagmi";
 
 import { AssetFragment, OrderDirection_Enum, OrderProtocol_Enum } from "../../../../../hasura/dist/graphql";
+import { ADDRESS_NULL } from "../../../../../shared/src/configs/app";
 import networks from "../../../../../shared/src/configs/networks.json";
 import { ChainId } from "../../../../../shared/src/types/network";
 import { truncate } from "../../../../../shared/src/utils/text";
@@ -53,6 +57,11 @@ export const Asset: React.FC<AssetProps> = ({ asset }) => {
   const { isNoAssetMetadataMode } = useRecoilValue(userModeState);
   const { isOpen: isConfirmOpen, onOpen: onConfirmOpen, onClose: onConfirmClose } = useDisclosure();
 
+  const { value: inputPrice, handleInput: handlePriceChange } = useInput(0.01);
+  const { value: inputTip, handleInput: handleTipChange } = useInput(2.5);
+  const [royalty, setRoyalty] = React.useState(0);
+  const [royaltyReciepient, setRoyaltyReciepient] = React.useState(ADDRESS_NULL);
+
   const overlayBackgroundColor = useColorModeValue("gray.100", "gray.800");
   const borderColor = useColorModeValue("gray.200", "gray.700");
 
@@ -68,6 +77,17 @@ export const Asset: React.FC<AssetProps> = ({ asset }) => {
   };
 
   const { offer, fulfill, cancel, txHash } = useSwap();
+
+  const fetchRoyalty = async () => {
+    const result = await axios.post("/api/royalty/fetch", {
+      chainId: asset.chainId,
+      contractAddress: asset.contractAddress,
+      tokenId: asset.tokenId,
+      price: ethers.utils.parseEther(inputPrice.toString()),
+    });
+    setRoyalty(Number(ethers.utils.formatEther(result.data.royaltyAmount)));
+    setRoyaltyReciepient(result.data.recipient);
+  };
 
   return (
     <Box
@@ -137,10 +157,26 @@ export const Asset: React.FC<AssetProps> = ({ asset }) => {
               offsetY="100%"
             >
               <Flex justify="space-between">
-                <Text>Confirm</Text>
+                <Text></Text>
                 <CloseButton onClick={onConfirmClose} />
               </Flex>
-              <FormControl>Form</FormControl>
+              <FormControl>
+                <Text fontWeight="bold">Price</Text>
+                <Input variant={"outline"} onChange={handlePriceChange} value={inputPrice} />
+              </FormControl>
+              <FormControl>
+                <HStack>
+                  <Text fontWeight="bold">Royalty</Text>
+                  <Button size="xs" onClick={fetchRoyalty}>
+                    set
+                  </Button>
+                </HStack>
+                <Input variant={"outline"} disabled value={royalty} />
+              </FormControl>
+              <FormControl>
+                <Text fontWeight="bold">Tip %</Text>
+                <Input variant={"outline"} value={inputTip} onChange={handleTipChange} />
+              </FormControl>
             </Box>
           </Box>
         </>
@@ -248,8 +284,10 @@ export const Asset: React.FC<AssetProps> = ({ asset }) => {
                             asset.chainId,
                             asset.contractAddress,
                             asset.tokenId,
-                            "0.001",
-                            "2.5"
+                            inputPrice.toString(),
+                            inputTip.toString(),
+                            royaltyReciepient,
+                            (royalty / Number(inputPrice)).toString()
                           )
                             .then(() => {
                               toast({
