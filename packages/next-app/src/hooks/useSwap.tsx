@@ -75,7 +75,7 @@ export const useSwap = () => {
     }
     const provider = signer.provider as ethers.providers.JsonRpcProvider;
     const sdk = new KaguraSDK(provider);
-    const hash = await sdk.order.fulfill(protocol, signedOrder, address);
+    const { hash } = await sdk.order.fulfill(protocol, signedOrder, address);
     setTxHash(hash);
   };
 
