@@ -146,7 +146,8 @@ export class Order {
         fulfillOrderDetails: [{ order: signedOrder }],
         accountAddress: fulfiller,
       });
-      await executeAllActions();
+      const { hash } = await executeAllActions();
+      return { hash };
     } else {
       signedOrder = <SignedERC721OrderStruct>signedOrder;
       const zeroEx = await this._getZeroEx(fulfiller);
@@ -167,8 +168,9 @@ export class Order {
         const approvalTx = await zeroEx.approveTokenOrNftByAsset(item, fulfiller);
         await approvalTx.wait();
       }
-      const tx = await zeroEx.fillSignedOrder(signedOrder);
-      await zeroEx.awaitTransactionHash(tx.hash);
+      const { hash } = await zeroEx.fillSignedOrder(signedOrder);
+      await zeroEx.awaitTransactionHash(hash);
+      return { hash };
     }
   };
 }

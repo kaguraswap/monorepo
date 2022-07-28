@@ -14,6 +14,7 @@ import {
   Text,
   useColorModeValue,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { Link } from "components/atoms/Link";
@@ -47,6 +48,7 @@ export const Asset: React.FC<AssetProps> = ({ asset }) => {
   // TODO: make it better
   address = address?.toLowerCase();
   const router = useRouter();
+  const toast = useToast();
 
   const { isIframe, post } = useIframe();
   const { path } = usePath(asset.chainId, asset.contractAddress, asset.tokenId);
@@ -74,7 +76,7 @@ export const Asset: React.FC<AssetProps> = ({ asset }) => {
     }
   };
 
-  const { offer, fulfill, cancel } = useSwap();
+  const { offer, fulfill, cancel, txHash } = useSwap();
 
   const fetchRoyalty = async () => {
     const result = await axios.post("/api/royalty/fetch", {
@@ -212,14 +214,47 @@ export const Asset: React.FC<AssetProps> = ({ asset }) => {
                   <>
                     {!isWagmiConnected && <Connect />}
                     {isWagmiConnected && (
-                      <Button
-                        rounded="xl"
-                        onClick={() => {
-                          fulfill(order.protocol as any, order.signedOrder as any);
-                        }}
-                      >
-                        Confirm
-                      </Button>
+                      <>
+                        {txHash ? (
+                          <Link
+                            href={`${networks[asset.chainId as ChainId].explorer}tx/${txHash}`}
+                            chakraLinkProps={{ isExternal: true }}
+                          >
+                            <HStack fontSize={"xs"}>
+                              <Text>tx: {`${truncate(txHash, 7)}`}</Text>
+                              <ExternalLinkIcon />
+                            </HStack>
+                          </Link>
+                        ) : (
+                          <Button
+                            rounded="xl"
+                            onClick={() => {
+                              fulfill(order.protocol as any, order.signedOrder as any)
+                                .then(() => {
+                                  toast({
+                                    title: "Order fulfilled",
+                                    status: "success",
+                                    duration: 9000,
+                                    isClosable: true,
+                                  });
+                                })
+                                .catch((err) => {
+                                  toast({
+                                    title: "Failed fulfilling",
+                                    description: `${err.message}`,
+                                    status: "error",
+                                    duration: 9000,
+                                    isClosable: true,
+                                  });
+                                });
+
+                              onConfirmClose();
+                            }}
+                          >
+                            Confirm
+                          </Button>
+                        )}
+                      </>
                     )}
                   </>
                 )}
@@ -253,7 +288,24 @@ export const Asset: React.FC<AssetProps> = ({ asset }) => {
                             inputTip.toString(),
                             royaltyReciepient,
                             (royalty / Number(inputPrice)).toString()
-                          );
+                          )
+                            .then(() => {
+                              toast({
+                                title: "Order created",
+                                status: "success",
+                                duration: 9000,
+                                isClosable: true,
+                              });
+                            })
+                            .catch((err) => {
+                              toast({
+                                title: "Failed fulfilling",
+                                description: `${err.message}`,
+                                status: "error",
+                                duration: 9000,
+                                isClosable: true,
+                              });
+                            });
                         }}
                       >
                         Confirm
