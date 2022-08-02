@@ -128,17 +128,21 @@ export const Asset: React.FC<AssetProps> = ({ asset }) => {
 
       <AspectRatio ratio={1} position="relative">
         <>
-          {!isNoAssetMetadataMode && (
+          {!isNoAssetMetadataMode && asset.metadata.image && (
             <Image
               mx="auto"
               width="100%"
-              src={asset.metadata.image}
+              src={
+                asset.metadata.image.startsWith("ipfs://")
+                  ? asset.metadata.image.replace("ipfs://", "https://ipfs.io/ipfs/")
+                  : asset.metadata.image
+              }
               alt={asset.metadata.name}
               fallback={<Skeleton />}
               borderRadius="xl"
             />
           )}
-          {isNoAssetMetadataMode && (
+          {(isNoAssetMetadataMode || !asset.metadata.image) && (
             <Box>
               {/* //TODO: better design and make it fallback */}
               <Text fontSize={"xs"}>

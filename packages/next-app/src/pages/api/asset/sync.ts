@@ -1,6 +1,7 @@
 import axios from "axios";
 import { ethers } from "ethers";
 import httpError from "http-errors";
+import { Base64 } from "js-base64";
 import { validate } from "lib/ajv";
 import { isEmpty } from "lib/utils";
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -33,18 +34,25 @@ export const syncAsset = async (params: AssetKey) => {
   holder = holder.toLowerCase();
   const metadata: AssetMetadata = {};
 
-  /*
-   * TODO: #277
-   */
   if (tokenURI) {
-    const { data } = await axios.get(tokenURI).catch(() => {
-      return { data: undefined };
-    });
-    if (data) {
-      metadata.name = data.name || "";
-      metadata.description = data.description || "";
-      metadata.image = data.image || "";
-      metadata.animationUrl = data.animation_url || "";
+    let fetchedData: any;
+    if (tokenURI.startsWith("data:application/json;base64")) {
+      fetchedData = JSON.parse(Base64.decode(tokenURI.split(",")[1]));
+    } else {
+      if (tokenURI.startsWith("ipfs://")) {
+        tokenURI = tokenURI.replace("ipfs://", "https://ipfs.io/ipfs/");
+      }
+      const { data } = await axios.get(tokenURI).catch(() => {
+        return { data: undefined };
+      });
+      fetchedData = data;
+    }
+
+    if (fetchedData) {
+      metadata.name = fetchedData.name || "";
+      metadata.description = fetchedData.description || "";
+      metadata.image = fetchedData.image || "";
+      metadata.animationUrl = fetchedData.animation_url || "";
     }
   }
   const { asset } = await sequelize.transaction(async (t) => {
